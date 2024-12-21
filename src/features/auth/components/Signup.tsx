@@ -57,16 +57,18 @@ const Signup: React.FC = () => {
         if (!validate()) return;
         try {
             const response = await register(formData);
-            console.log("signup.tsx response " + response?.status);
+            console.log("signup.tsx response " + response);
             if (response?.status === 201) {
                 setSuccessMessage('Registration successful!');
                 setErrorMessage(null);
                 setTimeout(() => navigate('/login'), 1000); 
             } else {
+                console.log("else signup "+response?.data?.message)
                 setErrorMessage(response?.data?.message || "Registration failed");
                 setSuccessMessage(null);
             }
         } catch (err: any) {
+            console.log("Signup err "+err)
             setErrorMessage(err.message || 'Registration failed.');
             setSuccessMessage(null);
         }

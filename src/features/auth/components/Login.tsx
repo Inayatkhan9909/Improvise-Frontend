@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import {
     Box,
     Button,
@@ -17,14 +16,8 @@ import { useNavigate } from 'react-router-dom';
 const Login: React.FC = () => {
     const { login, loading } = useAuth();
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-    });
-    const [errors, setErrors] = useState({
-        email: '',
-        password: '',
-    });
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [errors, setErrors] = useState({ email: '', password: '' });
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
 
@@ -34,12 +27,11 @@ const Login: React.FC = () => {
     };
 
     const validate = () => {
-        let tempErrors = { ...errors };
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-        tempErrors.email = formData.email ? (emailRegex.test(formData.email) ? '' : 'Invalid email format') : 'Email is required';
-        tempErrors.password = formData.password ? '' : 'Password is required';
-
+        const tempErrors = {
+            email: formData.email ? (emailRegex.test(formData.email) ? '' : 'Invalid email format') : 'Email is required',
+            password: formData.password ? '' : 'Password is required',
+        };
         setErrors(tempErrors);
         return Object.values(tempErrors).every((x) => x === '');
     };
@@ -49,19 +41,12 @@ const Login: React.FC = () => {
         if (!validate()) return;
 
         try {
-            const res = await login(formData.email, formData.password);
-            if (res?.token) {
-                const token = res?.token;
-                const response = await axios.post('https://your-backend.com/api/auth/login', { token });
-                if (response.status === 200) {
-                    navigate('/dashboard');
-                }
-            } else {
-                setErrorMessage('Login failed: No token received.');
+            const response = await login(formData.email, formData.password);
+            if (response) {
+                navigate('/dashboard'); // Redirect to a protected route
             }
-
         } catch (err: any) {
-            setErrorMessage(err.response?.data?.message || 'Login failed.');
+            setErrorMessage(err.message);
         }
     };
 
@@ -105,10 +90,7 @@ const Login: React.FC = () => {
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
-                            <IconButton
-                                onClick={() => setShowPassword(!showPassword)}
-                                edge="end"
-                            >
+                            <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
                         </InputAdornment>
@@ -126,11 +108,7 @@ const Login: React.FC = () => {
                 {loading ? 'Logging in...' : 'Login'}
             </Button>
             {errorMessage && (
-                <Snackbar
-                    open={!!errorMessage}
-                    autoHideDuration={6000}
-                    onClose={() => setErrorMessage(null)}
-                >
+                <Snackbar open={!!errorMessage} autoHideDuration={6000} onClose={() => setErrorMessage(null)}>
                     <Alert onClose={() => setErrorMessage(null)} severity="error" sx={{ width: '100%' }}>
                         {errorMessage}
                     </Alert>

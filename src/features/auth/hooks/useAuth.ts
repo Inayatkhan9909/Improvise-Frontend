@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { signup } from '../services/authService';
-import { auth } from '../../../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../firebase/firebaseConfig';
+import axios from 'axios';
 
 export const useAuth = () => {
     const [loading, setLoading] = useState(false);
@@ -32,15 +33,23 @@ export const useAuth = () => {
 
     const login = async (email: string, password: string) => {
         setLoading(true);
+        setError(null);
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const token = await userCredential.user.getIdToken(); // Fetch Firebase Auth token
+
+            if (!userCredential.user.emailVerified) {
+                setLoading(false);
+                throw new Error('Please verify your email before logging in.');
+            }
+
+            const token = await userCredential.user.getIdToken();
+            const response = await axios.post('http://localhost:4000/user/login', { token });
             setLoading(false);
-            return { token };
+            return response.data;
         } catch (err: any) {
             setError(err.message || 'Login failed');
             setLoading(false);
-            return error;
+            throw err;
         }
     };
 
