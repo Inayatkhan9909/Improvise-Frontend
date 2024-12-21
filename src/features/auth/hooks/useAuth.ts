@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { createContext,useContext, useState } from 'react';
 import { signup } from '../services/authService';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebase/firebaseConfig';
 import axios from 'axios';
+import { UserContext } from '../Context/userContext';
+
 
 export const useAuth = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
+    const {setUser} = useContext(UserContext)
     const register = async (userData: {
         email: string;
         password: string;
@@ -32,6 +34,7 @@ export const useAuth = () => {
     };
 
     const login = async (email: string, password: string) => {
+        
         setLoading(true);
         setError(null);
         try {
@@ -45,6 +48,7 @@ export const useAuth = () => {
             const token = await userCredential.user.getIdToken();
             const response = await axios.post('http://localhost:4000/user/login', { token });
             setLoading(false);
+           setUser(response.data);
             return response.data;
         } catch (err: any) {
             setError(err.message || 'Login failed');
@@ -55,3 +59,9 @@ export const useAuth = () => {
 
     return { register, login, loading, error };
 };
+
+
+
+
+
+
