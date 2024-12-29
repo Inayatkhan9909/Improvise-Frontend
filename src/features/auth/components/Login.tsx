@@ -8,8 +8,9 @@ import {
     Alert,
     IconButton,
     InputAdornment,
+    Divider,
 } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff, Google } from '@mui/icons-material';
 import { useAuth } from '../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 
@@ -48,6 +49,24 @@ const Login: React.FC = () => {
         } catch (err: any) {
             setErrorMessage(err.message);
         }
+    };
+
+    const handleForgotPassword = () => {
+        navigate('/forgot-password'); // Redirect to the forgot password page
+    };
+
+    const handleGoogleLogin = async () => {
+        try {
+            // Implement Google login logic
+            console.log('Logging in with Google...');
+            navigate('/dashboard'); // Redirect to a protected route after successful login
+        } catch (err: any) {
+            setErrorMessage(err.message);
+        }
+    };
+
+    const handleSignupRedirect = () => {
+        navigate('/signup'); // Redirect to the signup page
     };
 
     return (
@@ -107,6 +126,31 @@ const Login: React.FC = () => {
             >
                 {loading ? 'Logging in...' : 'Login'}
             </Button>
+            <Button
+                onClick={handleForgotPassword}
+                variant="text"
+                color="secondary"
+                fullWidth
+                sx={{ mt: 1 }}
+            >
+                Forgot Password?
+            </Button>
+            <Divider sx={{ my: 2 }}>or</Divider>
+            <Button
+                onClick={handleGoogleLogin}
+                variant="outlined"
+                color="primary"
+                fullWidth
+                startIcon={<Google />}
+            >
+                Login with Google
+            </Button>
+            <Typography variant="body2" align="center" sx={{ mt: 2 }}>
+                Don't have an account?{' '}
+                <Button variant="text" onClick={handleSignupRedirect} color="primary">
+                    Sign up
+                </Button>
+            </Typography>
             {errorMessage && (
                 <Snackbar open={!!errorMessage} autoHideDuration={6000} onClose={() => setErrorMessage(null)}>
                     <Alert onClose={() => setErrorMessage(null)} severity="error" sx={{ width: '100%' }}>

@@ -42,7 +42,7 @@ const Signup: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
 
     const sanitizeInput = (value: string) => {
-        return value.replace(/<[^>]*>?/gm, ''); // Basic sanitization to remove HTML tags
+        return value.replace(/<[^>]*>?/gm, ''); 
     };
 
     const handleChange = (
@@ -63,7 +63,9 @@ const Signup: React.FC = () => {
                 setErrorMessage(null);
                 setTimeout(() => navigate('/login'), 1000); 
             } else {
+                console.log("res in signup "+response)
                 console.log("else signup "+response?.data?.message)
+                
                 setErrorMessage(response?.data?.message || "Registration failed");
                 setSuccessMessage(null);
             }
@@ -91,6 +93,10 @@ const Signup: React.FC = () => {
         setErrors(tempErrors);
         return Object.values(tempErrors).every((x) => x === '');
     };
+
+    const handleGoogleSignIn = ()=>{
+
+    }
 
     return (
         <Box
@@ -198,7 +204,7 @@ const Signup: React.FC = () => {
                         error={!!errors.dob}
                         helperText={errors.dob}
                         InputLabelProps={{
-                            shrink: true, // Ensures the label does not overlap with the input
+                            shrink: true, 
                         }}
                     />
                 </Grid2>
@@ -221,6 +227,7 @@ const Signup: React.FC = () => {
                         <MenuItem value="other">Other</MenuItem>
                     </TextField>
                 </Grid2>
+
                 <Grid2 size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'center' }}>
                     <Button
                         type="submit"
@@ -231,6 +238,27 @@ const Signup: React.FC = () => {
                         {loading ? 'Registering...' : 'Sign Up'}
                     </Button>
                 </Grid2>
+
+                <Grid2 size={{xs:12}} sx={{ textAlign: 'center', mt: 2 }}>
+                    <Typography variant="body2">
+                        Already registered?{' '}
+                        <Button onClick={() => navigate('/login')} size="small">
+                            Sign In
+                        </Button>
+                    </Typography>
+                </Grid2>
+                <Grid2 size={{xs:12}} sx={{ textAlign: 'center', mt: 2 }}>
+                    <Button
+                        variant="outlined"
+                        color="secondary"
+                        onClick={handleGoogleSignIn}
+                        fullWidth
+                    >
+                        Sign Up with Google
+                    </Button>
+                </Grid2>
+            
+                
             </Grid2>
             <Snackbar
                 open={!!successMessage}

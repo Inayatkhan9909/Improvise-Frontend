@@ -18,7 +18,6 @@ export const useAuth = () => {
         role: string;
         dob: string;
         gender: string;
-        profilePic: File | null;
     }) => {
         setLoading(true);
         setError(null);
@@ -27,6 +26,7 @@ export const useAuth = () => {
             setLoading(false);
             return response;
         } catch (err: any) {
+            console.log(err)
             setError(err.response || 'Registration failed');
             setLoading(false);
             return error;
@@ -48,6 +48,7 @@ export const useAuth = () => {
             const token = await userCredential.user.getIdToken();
             const response = await axios.post('http://localhost:4000/user/login', { token });
             setLoading(false);
+            localStorage.setItem('authToken', token);
            setUser(response.data);
             return response.data;
         } catch (err: any) {
@@ -57,7 +58,14 @@ export const useAuth = () => {
         }
     };
 
-    return { register, login, loading, error };
+    const logout = async() => {
+        setLoading(true);
+        setUser(null); 
+       await localStorage.removeItem("authToken");
+       setLoading(false);
+    };
+
+    return { register, login,logout, loading, error };
 };
 
 
