@@ -46,7 +46,7 @@ export const useAuth = () => {
             }
 
             const token = await userCredential.user.getIdToken();
-            const response = await axios.post('http://localhost:4000/user/login', { token });
+            const response = await axios.post('http://localhost:4000/auth/login', { token });
             setLoading(false);
             localStorage.setItem('authToken', token);
            setUser(response.data);
