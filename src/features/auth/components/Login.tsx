@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         try {
             const response = await login(formData.email, formData.password);
             if (response) {
-                navigate('/dashboard'); // Redirect to a protected route
+                navigate('/profile'); // Redirect to a protected route
             }
         } catch (err: any) {
             setErrorMessage(err.message);

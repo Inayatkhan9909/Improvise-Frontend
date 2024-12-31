@@ -5,6 +5,7 @@ import LoginPage from './features/auth/pages/LoginPage.tsx'
 import {UserContextProvider} from './features/auth/Context/UserContextProvider.tsx'
 import Navbar from './features/layout/Navbar.tsx'
 import {HomePage} from './features/pages/HomePage.tsx'
+import {ProfilePage} from './features/pages/ProfilePage.tsx'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<HomePage/>} />
           <Route path="/signup" element={<SignupPage/>} />
           <Route path="/login" element={<LoginPage/>} />
+          <Route path="/profile" element={<ProfilePage/>} />
         </Routes>
       </Router>
       </UserContextProvider>

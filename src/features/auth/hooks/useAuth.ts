@@ -1,4 +1,4 @@
-import { createContext,useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import { signup } from '../services/authService';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebase/firebaseConfig';
@@ -49,7 +49,7 @@ export const useAuth = () => {
             const response = await axios.post('http://localhost:4000/auth/login', { token });
             setLoading(false);
             localStorage.setItem('authToken', token);
-           setUser(response.data);
+           setUser(response.data.user);
             return response.data;
         } catch (err: any) {
             setError(err.message || 'Login failed');

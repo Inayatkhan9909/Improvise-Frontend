@@ -1,4 +1,7 @@
 import axios from 'axios';
+import { signInWithPopup, GoogleAuthProvider, User } from "firebase/auth";
+import { auth, googleProvider } from "../../../firebase/firebaseConfig";
+
 
 const API_URL = 'http://localhost:4000';
 
@@ -22,12 +25,30 @@ export const signup = async (userData: {
   });
        
   const response = await axios.post(`${API_URL}/auth/signup`, formData, {
-    
     headers: {
       'Content-Type': 'application/json',
     },
-
   });
 
   return response;
+};
+
+export const signInWithGoogle = async () =>{
+try {
+  const result = await signInWithPopup(auth,googleProvider);
+  const user = result.user;
+
+  const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/auth/google`, {
+    uid: user.uid,
+    name: user.displayName,
+    email: user.email,
+    profileImage: user.photoURL,
+});
+
+return response.data;
+
+} catch (error) {
+  console.error("Google Sign-In Error:", error);
+  throw error;
+}
 };
