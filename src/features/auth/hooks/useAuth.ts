@@ -9,7 +9,7 @@ import { UserContext } from '../Context/userContext';
 export const useAuth = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const {setUser} = useContext(UserContext)
+    const { setUser } = useContext(UserContext)
     const register = async (userData: {
         email: string;
         password: string;
@@ -34,7 +34,7 @@ export const useAuth = () => {
     };
 
     const login = async (email: string, password: string) => {
-        
+
         setLoading(true);
         setError(null);
         try {
@@ -49,7 +49,7 @@ export const useAuth = () => {
             const response = await axios.post('http://localhost:4000/auth/login', { token });
             setLoading(false);
             localStorage.setItem('authToken', token);
-           setUser(response.data.user);
+            setUser(response.data.user);
             return response.data;
         } catch (err: any) {
             setError(err.message || 'Login failed');
@@ -58,14 +58,14 @@ export const useAuth = () => {
         }
     };
 
-    const logout = async() => {
+    const logout = async () => {
         setLoading(true);
-        setUser(null); 
-       await localStorage.removeItem("authToken");
-       setLoading(false);
+        setUser(null);
+        await localStorage.removeItem("authToken");
+        setLoading(false);
     };
 
-    return { register, login,logout, loading, error };
+    return { register, login, logout, loading, error };
 };
 
 

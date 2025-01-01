@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         try {
             const response = await login(formData.email, formData.password);
             if (response) {
-                navigate('/profile'); // Redirect to a protected route
+                navigate('/profile');
             }
         } catch (err: any) {
             setErrorMessage(err.message);
@@ -52,14 +52,14 @@ const Login: React.FC = () => {
     };
 
     const handleForgotPassword = () => {
-        navigate('/forgot-password'); // Redirect to the forgot password page
+        navigate('/forgot-password');
     };
 
     const handleGoogleLogin = async () => {
         try {
-            // Implement Google login logic
+
             console.log('Logging in with Google...');
-            navigate('/dashboard'); // Redirect to a protected route after successful login
+            navigate('/dashboard');
         } catch (err: any) {
             setErrorMessage(err.message);
         }
