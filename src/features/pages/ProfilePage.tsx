@@ -8,7 +8,6 @@ import { AdminDashboard } from '../components/Profile/AdminDashboard';
 export const ProfilePage = () => {
     const { user } = useContext(UserContext);
     const [activeComponent, setActiveComponent] = useState<string>('Dashboard');
-
     const renderComponent = () => {
         switch (activeComponent) {
             case 'Dashboard':
@@ -64,13 +63,16 @@ export const ProfilePage = () => {
                     >
                         My Classes
                     </button>
-                    <button
-                        className={`py-2 px-4 text-center rounded-md ${activeComponent === 'InstructorPanel' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'
-                            }`}
-                        onClick={() => setActiveComponent('InstructorPanel')}
-                    >
-                        Instructor Panel
-                    </button>
+                    {
+                        user?.role.includes('instructor') && <button
+                            className={`py-2 px-4 text-center rounded-md ${activeComponent === 'InstructorPanel' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'
+                                }`}
+                            onClick={() => setActiveComponent('InstructorPanel')}
+                        >
+                            Instructor Panel
+                        </button>
+                    }
+
                     {
                         user?.isAdmin && <button
                             className={`py-2 px-4 text-center rounded-md ${activeComponent === 'AdminPanel' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'
@@ -91,7 +93,7 @@ export const ProfilePage = () => {
 
                 {/* Logout Button */}
                 <button
-                    className="mt-auto bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-md w-1/2"
+                    className="mt-6 bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded-md w-1/2"
                     onClick={() => console.log('Logout')}
                 >
                     Logout
