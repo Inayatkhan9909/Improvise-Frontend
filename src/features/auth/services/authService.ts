@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { signInWithPopup, GoogleAuthProvider, User } from "firebase/auth";
-import { auth, googleProvider } from "../../../firebase/firebaseConfig";
+import { auth, googleProvider } from "../../lib/firebase/firebaseConfig";
 
 
 const API_URL = 'http://localhost:4000';

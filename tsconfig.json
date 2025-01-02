@@ -6,9 +6,6 @@
     "forceConsistentCasingInFileNames": true,            
     "jsx": "react",
     "strict": true,                                      
-  },
-  "include": [
-    "src",
-    "path/to/your/images.d.ts"
-  ]
+  }
+ 
 }

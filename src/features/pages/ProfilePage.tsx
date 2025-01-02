@@ -7,6 +7,7 @@ import { AdminDashboard } from '../components/Profile/AdminDashboard';
 
 export const ProfilePage = () => {
     const { user } = useContext(UserContext);
+    console.log(user)
     const [activeComponent, setActiveComponent] = useState<string>('Dashboard');
     const renderComponent = () => {
         switch (activeComponent) {

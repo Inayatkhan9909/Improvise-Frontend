@@ -10,17 +10,19 @@ import {
     Alert,
 } from '@mui/material';
 
-import { classAuth } from '../hooks/classAuth';
+import { useClassAuth } from '../hooks/useClassAuth';
 import { useNavigate } from 'react-router-dom';
+import { getFilePreview, uploadFile } from '../../lib/appwrite/uploadImage';
 
 const CreateClass = () => {
-    const { register, loading } = classAuth();
+    const { createclass, loading } = useClassAuth();
     const navigate = useNavigate();
+    const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         date: '',
-        timing: '', 
+        timing: '',
         duration: '',
         maxStudents: '',
         category: '',
@@ -31,60 +33,104 @@ const CreateClass = () => {
         title: '',
         description: '',
         date: '',
-        timing: '', // Changed from price to time
+        timing: '',
         duration: '',
         maxStudents: '',
         category: '',
         level: '',
-        thumbnail: '',
+        thumbnailFile: '',
     });
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const sanitizeInput = (value: string) => {
-        return value.replace(/<[^>]*>?/gm, ''); 
+        return value.replace(/<[^>]*>?/gm, '');
     };
+
+    const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setThumbnailFile(file);
+        }
+    };
+
+    const uploadImage = async (): Promise<string | null> => {
+        if (!thumbnailFile) {
+            setErrorMessage('No file selected for upload.');
+            return null;
+        }
+        try {
+            const uploadedFile = await uploadFile(thumbnailFile);
+            if (!uploadedFile || !uploadedFile.$id) {
+                throw new Error('Failed to retrieve file ID after upload.');
+            }
+            const profilePictureUrl = getFilePreview(uploadedFile.$id);
+            if (!profilePictureUrl) {
+                setErrorMessage('Image upload failed. Please try again.');
+                return null;
+            }
+            return profilePictureUrl;
+        } catch (error) {
+            console.error('Image upload failed:', error);
+            setErrorMessage('Image upload failed. Please try again.');
+            return null;
+        }
+    };
+
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
-        const { name, value } = e.target as HTMLInputElement;
+        const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: sanitizeInput(value) }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
         if (!validate()) return;
+
         try {
-            const response = await register(formData);
-            console.log("CreateClass response " + response);
+            // Upload the thumbnail image first
+            const thumbnailUrl = await uploadImage();
+            if (!thumbnailUrl) {
+                setErrorMessage('Thumbnail upload failed. Please check the file.');
+                return;
+            }
+
+            // Update formData with the uploaded thumbnail URL
+            const updatedFormData = { ...formData, thumbnail: thumbnailUrl };
+
+            // Call the create class function
+            const response = await createclass(updatedFormData);
+            console.log('CreateClass response', response);
+
             if (response?.status === 201) {
                 setSuccessMessage('Class created successfully!');
                 setErrorMessage(null);
-                setTimeout(() => navigate('/classes'), 1000); 
+                setTimeout(() => navigate('/classes'), 1000);
             } else {
-                console.log("Response in CreateClass " + response);
-                setErrorMessage(response?.data?.message || "Class creation failed");
+                setErrorMessage(response?.data?.message || 'Class creation failed.');
                 setSuccessMessage(null);
             }
         } catch (err: any) {
-            console.log("CreateClass error " + err);
+            console.error('CreateClass error', err);
             setErrorMessage(err.message || 'Class creation failed.');
             setSuccessMessage(null);
         }
     };
 
     const validate = () => {
-        let tempErrors = { ...errors };
+        const tempErrors = { ...errors };
         tempErrors.title = formData.title ? '' : 'Title is required';
         tempErrors.description = formData.description ? '' : 'Description is required';
         tempErrors.date = formData.date ? '' : 'Date is required';
-        tempErrors.timing = formData.timing ? '' : 'Timing is required'; // Validation for time
+        tempErrors.timing = formData.timing ? '' : 'Timing is required';
         tempErrors.duration = formData.duration ? '' : 'Duration is required';
         tempErrors.maxStudents = formData.maxStudents ? '' : 'Max students is required';
         tempErrors.category = formData.category ? '' : 'Category is required';
         tempErrors.level = formData.level ? '' : 'Level is required';
-        tempErrors.thumbnail = formData.thumbnail ? '' : 'Thumbnail is required';
+        tempErrors.thumbnailFile = thumbnailFile ? '' : 'Thumbnail is required';
         setErrors(tempErrors);
         return Object.values(tempErrors).every((x) => x === '');
     };
@@ -139,7 +185,10 @@ const CreateClass = () => {
                         onChange={handleChange}
                         error={!!errors.date}
                         helperText={errors.date}
-                        MuiInputLabel-shrink={true}
+                        
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Grid2>
                 <Grid2 size={{ xs: 12 }}>
@@ -147,13 +196,13 @@ const CreateClass = () => {
                         fullWidth
                         label="Timing"
                         name="timing"
-                        type="time" 
+                        type="time"
                         value={formData.timing}
                         onChange={handleChange}
                         error={!!errors.timing}
                         helperText={errors.timing}
                         InputLabelProps={{
-                            shrink: true, 
+                            shrink: true,
                         }}
                     />
                 </Grid2>
@@ -224,12 +273,15 @@ const CreateClass = () => {
                 <Grid2 size={{ xs: 12 }}>
                     <TextField
                         fullWidth
-                        label="Thumbnail URL"
-                        name="thumbnail"
-                        value={formData.thumbnail}
-                        onChange={handleChange}
-                        error={!!errors.thumbnail}
-                        helperText={errors.thumbnail}
+                        label="Thumbnail Image"
+                        name="thumbnailFile"
+                        type='file'
+                        onChange={handleChangeFile}
+                        error={!!errors.thumbnailFile}
+                        helperText={errors.thumbnailFile}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     />
                 </Grid2>
 

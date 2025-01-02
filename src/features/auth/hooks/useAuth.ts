@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { signup } from '../services/authService';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../../firebase/firebaseConfig';
+import { auth } from '../../lib/firebase/firebaseConfig';
 import axios from 'axios';
 import { UserContext } from '../../Context/userContext';
 

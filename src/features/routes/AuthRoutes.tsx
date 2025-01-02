@@ -10,9 +10,9 @@ const AuthRoutes = () => {
         if (user) {
             navigate('/unauthorized');
         }
-    }, [user, navigate]); // Dependency array includes user and navigate
+    }, [user, navigate]); 
 
-    return !user ? <Outlet /> : null; // Render Outlet if user is not present
+    return !user ? <Outlet /> : null;
 }
 
 export default AuthRoutes;
