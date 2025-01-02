@@ -8,8 +8,6 @@ import {
     Typography,
     Snackbar,
     Alert,
-    IconButton,
-    InputAdornment,
 } from '@mui/material';
 
 import { classAuth } from '../hooks/classAuth';
@@ -22,7 +20,7 @@ const CreateClass = () => {
         title: '',
         description: '',
         date: '',
-        timing: '', // Changed from price to time
+        timing: '', 
         duration: '',
         maxStudents: '',
         category: '',

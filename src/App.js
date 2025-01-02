@@ -7,6 +7,8 @@ import Navbar from './features/layout/Navbar.tsx'
 import {HomePage} from './features/pages/HomePage.tsx'
 import {ProfilePage} from './features/pages/ProfilePage.tsx'
 import {CreateClassPage} from './features/instructor/pages/CreateClassPage.tsx'
+import {Unauthorized} from './features/pages/Unauthorized.tsx'
+import AuthRoutes from './features/routes/AuthRoutes.tsx'
 
 function App() {
   return (
@@ -17,10 +19,17 @@ function App() {
       <Navbar/>
         <Routes>
           <Route path="/" element={<HomePage/>} />
-          <Route path="/signup" element={<SignupPage/>} />
-          <Route path="/login" element={<LoginPage/>} />
+           
+           <Route element={<AuthRoutes/>}>
+           <Route path="/signup" element={<SignupPage/>} />
+           <Route path="/login" element={<LoginPage/>} />
+           </Route>
+
+
           <Route path="/profile" element={<ProfilePage/>} />
           <Route path="/createclass" element={<CreateClassPage/>} />
+
+          <Route path="/unauthorized" element={<Unauthorized/>} />
         </Routes>
       </Router>
       </UserContextProvider>
