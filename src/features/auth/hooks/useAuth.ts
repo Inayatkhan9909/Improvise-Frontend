@@ -3,7 +3,7 @@ import { signup } from '../services/authService';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../firebase/firebaseConfig';
 import axios from 'axios';
-import { UserContext } from '../Context/userContext';
+import { UserContext } from '../../Context/userContext';
 
 
 export const useAuth = () => {
