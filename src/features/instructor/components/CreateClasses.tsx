@@ -91,17 +91,15 @@ const CreateClass = () => {
         if (!validate()) return;
 
         try {
-            // Upload the thumbnail image first
+
             const thumbnailUrl = await uploadImage();
             if (!thumbnailUrl) {
                 setErrorMessage('Thumbnail upload failed. Please check the file.');
                 return;
             }
 
-            // Update formData with the uploaded thumbnail URL
             const updatedFormData = { ...formData, thumbnail: thumbnailUrl };
 
-            // Call the create class function
             const response = await createclass(updatedFormData);
             console.log('CreateClass response', response);
 
@@ -185,7 +183,7 @@ const CreateClass = () => {
                         onChange={handleChange}
                         error={!!errors.date}
                         helperText={errors.date}
-                        
+
                         InputLabelProps={{
                             shrink: true,
                         }}

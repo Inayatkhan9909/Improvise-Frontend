@@ -3,6 +3,7 @@ import { ID, ImageGravity } from "appwrite"
 
 
 export async function uploadFile(file: File) {
+
     try {
         const uploadedFile = await storage.createFile(
             appwriteConfig.storageId,

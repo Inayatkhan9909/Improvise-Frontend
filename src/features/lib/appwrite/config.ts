@@ -11,6 +11,7 @@ export const appwriteConfig: AppwriteConfig = {
     storageId: process.env.REACT_APP_APPWRITE_STORAGE_ID || "",
     url: process.env.REACT_APP_APPWRITE_URL || "",
 }
+
 export const client = new Client()
 
 client.setEndpoint(appwriteConfig.url)
