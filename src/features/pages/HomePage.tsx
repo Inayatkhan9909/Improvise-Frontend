@@ -1,4 +1,5 @@
 import React from 'react'
+import { Classes } from '../components/common/Classes'
 
 export const HomePage = () => {
   return (
@@ -12,6 +13,13 @@ export const HomePage = () => {
         <div>
           <input type="text" placeholder='Search' />
         </div>
+      </section>
+
+      {/* Classes data */}
+      <section className='flex '>
+    <div className='w-2/3 p-4'>
+    <Classes/>
+    </div>
       </section>
     </>
   )

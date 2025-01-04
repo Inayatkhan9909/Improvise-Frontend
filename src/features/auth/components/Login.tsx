@@ -44,7 +44,7 @@ const Login: React.FC = () => {
         try {
             const response = await login(formData.email, formData.password);
             if (response) {
-                navigate('/profile');
+                navigate('/');
             }
         } catch (err: any) {
             setErrorMessage(err.message);
