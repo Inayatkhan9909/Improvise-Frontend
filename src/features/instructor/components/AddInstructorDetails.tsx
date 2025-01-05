@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { getFilePreview, uploadFile } from "../../../lib/appwrite/uploadImage";
+import { getFilePreview, uploadFile } from "../../lib/appwrite/uploadImage";
 
-const AddDetails = ({ onSubmit }: { onSubmit: (details: any) => void }) => {
+export const AddInstructorDetails = ({ onSubmit }: { onSubmit: (details: any) => void }) => {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     bio: "",
@@ -143,4 +143,4 @@ const AddDetails = ({ onSubmit }: { onSubmit: (details: any) => void }) => {
   );
 };
 
-export default AddDetails;
+

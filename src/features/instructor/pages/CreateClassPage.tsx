@@ -1,5 +1,5 @@
 import React from 'react'
-import CreateClass from '../components/CreateClasses'
+import CreateClass from '../../classes/components/CreateClasses'
 
 export const CreateClassPage = () => {
     return (

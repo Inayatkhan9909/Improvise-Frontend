@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserContext } from "../../../Context/userContext";
+import { UserContext } from "../../Context/userContext";
 import { FaEdit } from "react-icons/fa";
 
 export const InstructorDetails = ({ onEdit }: { onEdit: () => void }) => {
@@ -38,7 +38,7 @@ export const InstructorDetails = ({ onEdit }: { onEdit: () => void }) => {
         <div>
           <h3 className="text-lg font-semibold text-gray-700">Qualifications</h3>
           <p className="text-gray-600">
-            {instructor.qualification || "Not provided"}
+            {instructor.qualifications || "Not provided"}
           </p>
         </div>
 

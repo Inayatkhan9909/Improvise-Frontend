@@ -24,7 +24,7 @@ export const useClassAuth = () => {
         try {
            
             const instructorId = user?._id;
-            const response = await axios.post("http://localhost:4000/instructor/createclass", classData, {
+            const response = await axios.post("http://localhost:4000/classes/createclass", classData, {
                 headers: { Authorization: `Bearer ${instructorId}` },
 
             });
