@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { UserContext } from "../../Context/userContext";
+import { UserContext } from "../../Context/user/userContext";
 import { FaEdit } from "react-icons/fa";
 
 export const InstructorDetails = ({ onEdit }: { onEdit: () => void }) => {

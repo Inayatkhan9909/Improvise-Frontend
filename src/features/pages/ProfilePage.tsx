@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { UserContext } from '../Context/userContext';
+import { UserContext } from '../Context/user/userContext';
 import { Dashboard } from '../components/Profile/Dashboard';
 import { MyClasses } from '../components/Profile/MyClasses';
 import { InstructorDashboard } from '../components/Profile/InstructorDashboard';

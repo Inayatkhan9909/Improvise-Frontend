@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 
 import axios from 'axios';
-import { UserContext } from '../../Context/userContext';
+import { UserContext } from '../../Context/user/userContext';
 
 export const useClassAuth = () => {
 

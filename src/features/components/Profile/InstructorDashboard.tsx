@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from "../../Context/userContext";
-import {AddInstructorDetails} from "../../instructor/components/AddInstructorDetails";
+import { UserContext } from "../../Context/user/userContext";
+import { AddInstructorDetails } from "../../instructor/components/AddInstructorDetails";
 import { InstructorDetails } from "../../instructor/components/InstructorDetails";
 import axios from "axios";
 export const InstructorDashboard = () => {
@@ -9,12 +9,12 @@ export const InstructorDashboard = () => {
   const { user } = useContext(UserContext);
   const [isApproved, setIsApproved] = useState(false);
   const [detailsAvaliable, setDetailsAvaliable] = useState(true);
-  const [instructorId,setInstructorId]=useState(null);
+  const [instructorId, setInstructorId] = useState(null);
 
   useEffect(() => {
     setInstructorId(user?._id)
     console.log(user)
-    if (!user?.roleDetails?.instructor?.bio ||!user?.roleDetails?.instructor?.resume || !user?.roleDetails?.instructor?.qualifications
+    if (!user?.roleDetails?.instructor?.bio || !user?.roleDetails?.instructor?.resume || !user?.roleDetails?.instructor?.qualifications
       || !user?.roleDetails?.instructor?.skills
     ) {
       setDetailsAvaliable(false)
@@ -23,11 +23,11 @@ export const InstructorDashboard = () => {
       setIsApproved(true);
     }
   }, [user]);
-console.log(detailsAvaliable);
+  console.log(detailsAvaliable);
   const handleFormSubmit = async (details: any) => {
     try {
 
-      const response = await axios.post("http://localhost:4000/instructor/addinstructordetails",details, {
+      const response = await axios.post("http://localhost:4000/instructor/addinstructordetails", details, {
         headers: { Authorization: `Bearer ${instructorId}` },
       });
 

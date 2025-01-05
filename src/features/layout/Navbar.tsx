@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useAuth } from '../auth/hooks/useAuth'; // Access global user data
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../Context/userContext';
+import { UserContext } from '../Context/user/userContext';
 
 const Navbar: React.FC = () => {
     const { logout } = useAuth();

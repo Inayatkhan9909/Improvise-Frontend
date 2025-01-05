@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { UserContext } from "./userContext";
+import { UserContext } from "./user/userContext";
 
 
 export const UserContextProvider = ({ children }: any) => {
