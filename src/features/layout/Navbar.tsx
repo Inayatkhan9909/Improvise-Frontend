@@ -5,7 +5,7 @@ import { UserContext } from '../Context/user/userContext';
 
 const Navbar: React.FC = () => {
     const { logout } = useAuth();
-    const { user } = useContext(UserContext);
+    const { user, loading } = useContext(UserContext);
     const navigate = useNavigate();
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -14,18 +14,20 @@ const Navbar: React.FC = () => {
         navigate('/login');
     };
 
+    if (loading) {
+        // Optionally show a loader or nothing until the user data is ready
+        return null;
+    }
+
     return (
-        <header className="border-blue-300 border-2  shadow-md">
+        <header className="border-blue-300 border-2 shadow-md">
             <nav className="flex items-center justify-between px-6 py-4">
-                {/* Logo */}
                 <div
                     className="text-3xl font-bold cursor-pointer text-yellow-400"
                     onClick={() => navigate('/')}
                 >
                     Improvise
                 </div>
-
-                {/* Desktop Links */}
                 <ul className="hidden md:flex gap-6 text-lg">
                     <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/')}>
                         Home
@@ -68,11 +70,9 @@ const Navbar: React.FC = () => {
                         </>
                     )}
                 </ul>
-
-                {/* Mobile Menu Button */}
                 <div className="md:hidden">
                     <button
-                        className=" focus:outline-none"
+                        className="focus:outline-none"
                         onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
                     >
                         <svg
@@ -93,7 +93,6 @@ const Navbar: React.FC = () => {
                 </div>
             </nav>
 
-            {/* Mobile Menu */}
             {isMobileMenuOpen && (
                 <div className="md:hidden bg-blue-400 text-white shadow-lg">
                     <ul className="flex flex-col gap-4 p-4">
@@ -130,7 +129,7 @@ const Navbar: React.FC = () => {
                                     Login
                                 </li>
                                 <li
-                                    className="cursor-pointer hover:text-yellow-400 "
+                                    className="cursor-pointer hover:text-yellow-400"
                                     onClick={() => navigate('/signup')}
                                 >
                                     Join Us

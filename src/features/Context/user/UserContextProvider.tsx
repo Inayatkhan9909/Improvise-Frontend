@@ -1,24 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { UserContext } from "./user/userContext";
+import { UserContext } from "./userContext";
+import axios from "axios";
 
 
 export const UserContextProvider = ({ children }: any) => {
-    const [user, setUser] = useState(() => {
-        const storedUser = localStorage.getItem("user");
-        return storedUser ? JSON.parse(storedUser) : null;
-    });
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    const fetchUser = async () => {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            setLoading(false);
+            return;
+        }
+        try {
+            const response = await axios.get("http://localhost:4000/auth/getuser", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setUser(response?.data?.user);
+        } catch (error) {
+            console.error("Failed to fetch user:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
+        fetchUser();
+    }, []);
 
-        if (user) {
-            localStorage.setItem("user", JSON.stringify(user));
-        } else {
-            localStorage.removeItem("user");
-        }
-    }, [user]);
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, loading }}>
             {children}
         </UserContext.Provider>
-    )
-}
+    );
+};

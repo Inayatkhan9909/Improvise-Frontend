@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignupPage from './features/auth/pages/SignupPage.tsx'
 import LoginPage from './features/auth/pages/LoginPage.tsx'
-import { UserContextProvider } from './features/Context/UserContextProvider.tsx'
+import { UserContextProvider } from './features/Context/user/UserContextProvider.tsx'
 import Navbar from './features/layout/Navbar.tsx'
 import { HomePage } from './features/pages/HomePage.tsx'
 import { ProfilePage } from './features/pages/ProfilePage.tsx'

@@ -6,14 +6,13 @@ import { InstructorDetails } from "../../instructor/components/InstructorDetails
 import axios from "axios";
 export const InstructorDashboard = () => {
   const navigate = useNavigate();
-  const { user } = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
   const [isApproved, setIsApproved] = useState(false);
   const [detailsAvaliable, setDetailsAvaliable] = useState(true);
   const [instructorId, setInstructorId] = useState(null);
 
   useEffect(() => {
     setInstructorId(user?._id)
-    console.log(user)
     if (!user?.roleDetails?.instructor?.bio || !user?.roleDetails?.instructor?.resume || !user?.roleDetails?.instructor?.qualifications
       || !user?.roleDetails?.instructor?.skills
     ) {
@@ -43,6 +42,9 @@ export const InstructorDashboard = () => {
 
   const handleEdit = () => {
 
+  }
+  if (loading) {
+    return <div>loading</div>
   }
 
   return (
