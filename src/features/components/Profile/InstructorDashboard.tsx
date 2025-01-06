@@ -6,10 +6,11 @@ import { InstructorDetails } from "../../instructor/components/InstructorDetails
 import axios from "axios";
 export const InstructorDashboard = () => {
   const navigate = useNavigate();
-  const { user, loading } = useContext(UserContext);
+  const {setUser, user, loading } = useContext(UserContext);
   const [isApproved, setIsApproved] = useState(false);
   const [detailsAvaliable, setDetailsAvaliable] = useState(true);
   const [instructorId, setInstructorId] = useState(null);
+  const [resetData,setResetData]= useState(false);
 
   useEffect(() => {
     setInstructorId(user?._id)
@@ -21,8 +22,7 @@ export const InstructorDashboard = () => {
     if (user?.roleDetails?.instructor?.approvedByAdmin) {
       setIsApproved(true);
     }
-  }, [user]);
-  console.log(detailsAvaliable);
+  }, [user,resetData]);
   const handleFormSubmit = async (details: any) => {
     try {
 
@@ -31,7 +31,10 @@ export const InstructorDashboard = () => {
       });
 
       if (response.status === 201) {
+        
         alert("Details submitted successfully! Waiting for admin approval.");
+        setUser(response?.data?.isUser);
+        setResetData(true);
       } else {
         alert("Error submitting details. Please try again.");
       }

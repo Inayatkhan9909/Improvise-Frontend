@@ -55,7 +55,7 @@ export const InstructorDetails = ({ onEdit }: { onEdit: () => void }) => {
             <a
               href={instructor.resume}
               target="_blank"
-              rel="noopener noreferrer"
+              download
               className="text-blue-500 hover:text-blue-700 underline"
             >
               View Resume
