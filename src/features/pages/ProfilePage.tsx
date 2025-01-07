@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../Context/user/userContext';
-import { Dashboard } from '../components/Profile/Dashboard';
 import { MyClasses } from '../components/Profile/MyClasses';
 import { InstructorDashboard } from '../components/Profile/InstructorDashboard';
 import { AdminDashboard } from '../components/Profile/AdminDashboard';
+import { UserDashboard } from '../components/Profile/user/UserDashboard';
 
 export const ProfilePage = () => {
     const { user } = useContext(UserContext);
@@ -11,7 +11,7 @@ export const ProfilePage = () => {
     const renderComponent = () => {
         switch (activeComponent) {
             case 'Dashboard':
-                return <Dashboard />
+                return <UserDashboard />
             case 'MyClasses':
                 return <MyClasses />
             case 'InstructorPanel':
@@ -21,7 +21,7 @@ export const ProfilePage = () => {
             case 'Settings':
                 return <div>Settings</div>;
             default:
-                return <Dashboard />
+                return <UserDashboard />
         }
     };
 
