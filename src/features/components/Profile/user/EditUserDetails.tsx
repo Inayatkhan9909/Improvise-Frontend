@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react';
 import {
     Box,
     Button,
-    Grid,
     MenuItem,
     TextField,
     Typography,
     Snackbar,
     Alert,
     IconButton,
+    Grid2,
 } from '@mui/material';
 import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
@@ -111,13 +111,6 @@ export const EditUserDetails = ({ onClose }: any) => {
         <div className="bg-white ">
             {/* Cross Icon for Closing Modal */}
 
-            <IconButton
-                onClick={onClose}
-                className=" text-gray-600 hover:text-gray-800"
-                title="Close"
-            >
-                <RxCross2 />
-            </IconButton>
 
 
             <Box
@@ -132,12 +125,21 @@ export const EditUserDetails = ({ onClose }: any) => {
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 }}
             >
+            <div className='w-full flex justify-between'>
                 <Typography variant="h4" gutterBottom>
-                    Edit Profile
+                    Edit Details
                 </Typography>
+                <IconButton
+                    onClick={onClose}
+                    className=" text-gray-600 hover:text-gray-800"
+                    title="Close"
+                >
+                    <RxCross2 />
+                </IconButton>
+            </div>
 
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                <Grid2 container spacing={2}>
+                    <Grid2 size={{ xs: 12 }}>
                         <TextField
                             fullWidth
                             label="Full Name"
@@ -147,9 +149,9 @@ export const EditUserDetails = ({ onClose }: any) => {
                             error={!!errors.name}
                             helperText={errors.name}
                         />
-                    </Grid>
+                    </Grid2>
 
-                    <Grid item xs={6}>
+                    <Grid2 size={{ xs: 6 }}>
                         <TextField
                             fullWidth
                             label="Contact"
@@ -159,9 +161,9 @@ export const EditUserDetails = ({ onClose }: any) => {
                             error={!!errors.contact}
                             helperText={errors.contact}
                         />
-                    </Grid>
+                    </Grid2>
 
-                    <Grid item xs={6}>
+                    <Grid2 size={{ xs: 6 }}>
                         <TextField
                             fullWidth
                             label="Date of Birth"
@@ -175,9 +177,9 @@ export const EditUserDetails = ({ onClose }: any) => {
                                 shrink: true,
                             }}
                         />
-                    </Grid>
+                    </Grid2>
 
-                    <Grid item xs={6}>
+                    <Grid2 size={{ xs: 6 }}>
                         <TextField
                             fullWidth
                             select
@@ -195,11 +197,10 @@ export const EditUserDetails = ({ onClose }: any) => {
                             <MenuItem value="female">Female</MenuItem>
                             <MenuItem value="other">Other</MenuItem>
                         </TextField>
-                    </Grid>
+                    </Grid2>
 
-                    <Grid
-                        item
-                        xs={12}
+                    <Grid2
+                      size={{ xs: 12 }}
                         sx={{ display: 'flex', justifyContent: 'center' }}
                     >
                         <Button
@@ -210,8 +211,8 @@ export const EditUserDetails = ({ onClose }: any) => {
                         >
                             {loading ? 'Updating...' : 'Save Changes'}
                         </Button>
-                    </Grid>
-                </Grid>
+                    </Grid2>
+                </Grid2>
 
                 <Snackbar
                     open={!!successMessage}
