@@ -12,12 +12,10 @@ import {
 } from '@mui/material';
 import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../../Context/user/userContext';
 
 export const EditUserDetails = ({ onClose }: any) => {
     const { user, setUser } = useContext(UserContext);
-    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         name: user?.name || '',
@@ -36,6 +34,7 @@ export const EditUserDetails = ({ onClose }: any) => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     useEffect(() => {
+        console.log('User context data:', user);
         if (user) {
             setFormData({
                 name: user.name || '',
@@ -62,20 +61,21 @@ export const EditUserDetails = ({ onClose }: any) => {
         e.preventDefault();
         if (!validate()) return;
 
-        const data = new FormData();
-        Object.entries(formData).forEach(([key, value]) => {
-            data.append(key, value as string);
-        });
+
 
         setLoading(true);
         try {
-            const response = await axios.put('/api/user/update', data);
+            const token = localStorage.getItem('authToken');
+            console.log(formData)
+            const response = await axios.put('http://localhost:4000/auth/edituserdetails', formData,{
+                headers: { Authorization: `Bearer ${token}` },
+            });
             setSuccessMessage('Profile updated successfully!');
             setErrorMessage(null);
             setUser(response.data.user);
             setTimeout(() => {
-                navigate('/dashboard');
-                // Close the modal after success
+                
+             
             }, 1000);
         } catch (err: any) {
             setErrorMessage(err.response?.data?.message || 'Failed to update profile.');
