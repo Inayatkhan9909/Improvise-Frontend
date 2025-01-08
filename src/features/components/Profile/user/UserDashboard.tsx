@@ -1,11 +1,18 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../../Context/user/userContext";
 import { FaEdit, FaEllipsisV } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
+import { EditUserDetails } from "./EditUserDetails";
+import { EditUserEmail } from "./EditUserEmail";
+import { EditUserPassword } from "./EditUserPassword";
 
 export const UserDashboard = () => {
     const { user } = useContext(UserContext);
     const [showOptions, setShowOptions] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [editDetailsModal, setEditDetailsModal] = useState(false);
+    const [editEmailModal,setEditEmailModal] = useState(false);
+    const [editPasswordModal,setEditPasswordModal] = useState(false);
 
     if (!user) {
         return (
@@ -27,6 +34,16 @@ export const UserDashboard = () => {
         closeDeleteModal();
     };
 
+    const handleeditDetails = () => {
+        setEditDetailsModal(true);
+    }
+    const handleEditEmail = () =>{
+        setEditEmailModal(true);
+    }
+    const handleEditPassword = () =>{
+        setEditPasswordModal(true);
+    }
+
     const handleEdit = () => {
 
     };
@@ -45,19 +62,19 @@ export const UserDashboard = () => {
                     {showOptions && (
                         <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md">
                             <button
-                                onClick={() => console.log("Change Password")}
+                                onClick={handleeditDetails}
                                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                             >
                                 Change Details
                             </button>
                             <button
-                                onClick={() => console.log("Change Password")}
+                              onClick={handleEditEmail}
                                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                             >
                                 Change email
                             </button>
                             <button
-                                onClick={() => console.log("Change Password")}
+                                onClick={handleEditPassword}
                                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                             >
                                 Change Password
@@ -138,6 +155,28 @@ export const UserDashboard = () => {
                     </div>
                 </div>
             )}
+            {/* Edit Details Modal */}
+            {editDetailsModal && (
+                <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
+                    <EditUserDetails onClose={() => setEditDetailsModal(false)} />   
+                </div>
+            )}
+
+            {/* Edit Email Modal */}
+            {editEmailModal && (
+                <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
+                    <EditUserEmail onClose={() => setEditEmailModal(false)} />   
+                </div>
+            )}
+
+            {/* Edit Email Modal */}
+            {editPasswordModal && (
+                <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
+                    <EditUserPassword onClose={() => setEditPasswordModal(false)} />   
+                </div>
+            )}
+
+
         </div>
     );
 };
