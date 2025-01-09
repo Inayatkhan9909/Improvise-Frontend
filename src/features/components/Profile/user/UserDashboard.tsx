@@ -6,15 +6,19 @@ import { EditUserDetails } from "./EditUserDetails";
 import { EditUserEmail } from "./EditUserEmail";
 import { EditUserPassword } from "./EditUserPassword";
 import { EditProfilePic } from "./EditProfilePicDetails";
+import { auth } from "../../../lib/firebase/firebaseConfig";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export const UserDashboard = () => {
-    const { user } = useContext(UserContext);
+    const navigate = useNavigate();
+    const { user, setUser } = useContext(UserContext);
     const [showOptions, setShowOptions] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [editDetailsModal, setEditDetailsModal] = useState(false);
-    const [editEmailModal,setEditEmailModal] = useState(false);
-    const [editPasswordModal,setEditPasswordModal] = useState(false);
-    const [editProfilePicModal,setEditProfilePicModal]= useState(false);
+    const [editEmailModal, setEditEmailModal] = useState(false);
+    const [editPasswordModal, setEditPasswordModal] = useState(false);
+    const [editProfilePicModal, setEditProfilePicModal] = useState(false);
 
     if (!user) {
         return (
@@ -30,28 +34,46 @@ export const UserDashboard = () => {
     const openDeleteModal = () => setShowDeleteModal(true);
     const closeDeleteModal = () => setShowDeleteModal(false);
 
-    const handleDeleteAccount = () => {
-        // Placeholder for account deletion logic
-        console.log("Account deletion confirmed");
-        closeDeleteModal();
+    const handleDeleteAccount = async() => {
+
+        try {
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.delete("http://localhost:4000/auth/deleteuser",{
+                    headers: { Authorization: `Bearer ${token}` },
+            });
+            if(response.status === 201){
+                setUser(null);
+                navigate("/login")
+            }
+            else{
+                console.log(response.data.message)
+            }
+
+        } catch (error) {
+
+        } finally {
+            closeDeleteModal();
+        }
+
+
     };
 
     const handleeditDetails = () => {
         setShowOptions(false);
         setEditDetailsModal(true);
-        
+
     }
-    const handleEditEmail = () =>{
+    const handleEditEmail = () => {
         setShowOptions(false);
         setEditEmailModal(true);
     }
-    const handleEditPassword = () =>{
+    const handleEditPassword = () => {
         setShowOptions(false);
         setEditPasswordModal(true);
     }
 
     const handleEditProfilePic = () => {
-          setEditProfilePicModal(true);
+        setEditProfilePicModal(true);
     };
 
     return (
@@ -74,7 +96,7 @@ export const UserDashboard = () => {
                                 Change Details
                             </button>
                             <button
-                              onClick={handleEditEmail}
+                                onClick={handleEditEmail}
                                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                             >
                                 Change email
@@ -164,27 +186,27 @@ export const UserDashboard = () => {
             {/* Edit Details Modal */}
             {editDetailsModal && (
                 <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
-                    <EditUserDetails onClose={() => setEditDetailsModal(false)} />   
+                    <EditUserDetails onClose={() => setEditDetailsModal(false)} />
                 </div>
             )}
 
             {/* Edit Email Modal */}
             {editEmailModal && (
                 <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
-                    <EditUserEmail onClose={() => setEditEmailModal(false)} />   
+                    <EditUserEmail onClose={() => setEditEmailModal(false)} />
                 </div>
             )}
 
             {/* Edit Email Modal */}
             {editPasswordModal && (
                 <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
-                    <EditUserPassword onClose={() => setEditPasswordModal(false)} />   
+                    <EditUserPassword onClose={() => setEditPasswordModal(false)} />
                 </div>
             )}
             {/* Edit ProfilePic Modal */}
             {editProfilePicModal && (
                 <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
-                    <EditProfilePic onClose={() => setEditProfilePicModal(false)} />   
+                    <EditProfilePic onClose={() => setEditProfilePicModal(false)} />
                 </div>
             )}
 

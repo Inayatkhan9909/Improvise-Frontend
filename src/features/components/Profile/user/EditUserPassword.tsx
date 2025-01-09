@@ -48,7 +48,6 @@ export const EditUserPassword = ({ onClose }: any) => {
                 newPassword,
             }, {
                 headers: {
-                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}` ,
                 },
             });

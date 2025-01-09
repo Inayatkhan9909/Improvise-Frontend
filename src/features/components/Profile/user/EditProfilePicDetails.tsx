@@ -7,7 +7,7 @@ import { auth } from '../../../lib/firebase/firebaseConfig';
 import axios from 'axios';
 
 export const EditProfilePic = ({ onClose }: any) => {
-    const { user,setUser } = useContext(UserContext)
+    const { user, setUser } = useContext(UserContext)
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -42,20 +42,20 @@ export const EditProfilePic = ({ onClose }: any) => {
             if (!profilePictureUrl) {
                 throw new Error('Failed to generate file preview URL.');
             }
-             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put("http://localhost:4000/auth/edituserprofilepic",{profilePic:profilePictureUrl},
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.put("http://localhost:4000/auth/edituserprofilepic", { profilePic: profilePictureUrl },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }
             )
-         if(response.status === 201){
-            setSuccessMessage('Profile picture updated successfully!');
-            setUser(response.data.user)
-         }else{
-            setErrorMessage('Failed to update profile picture.');
-         }
-            
- 
+            if (response.status === 201) {
+                setSuccessMessage('Profile picture updated successfully!');
+                setUser(response.data.user)
+            } else {
+                setErrorMessage('Failed to update profile picture.');
+            }
+
+
         } catch (error: any) {
             console.error('Error updating profile picture:', error);
             setErrorMessage(error.message || 'Failed to update profile picture.');
@@ -80,12 +80,12 @@ export const EditProfilePic = ({ onClose }: any) => {
             }}
         >
             <div className='flex justify-between'>
-            <Typography variant="h5" gutterBottom>
-                Edit Profile Picture
-            </Typography>
-            <button onClick={onClose}>
-                <RxCross2 size={30}/>
-            </button>
+                <Typography variant="h5" gutterBottom>
+                    Edit Profile Picture
+                </Typography>
+                <button onClick={onClose}>
+                    <RxCross2 size={30} />
+                </button>
             </div>
 
             {/* Current Profile Picture */}

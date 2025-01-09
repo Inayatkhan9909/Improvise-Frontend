@@ -59,7 +59,7 @@ const Login: React.FC = () => {
         try {
 
             console.log('Logging in with Google...');
-            navigate('/dashboard');
+            navigate('/');
         } catch (err: any) {
             setErrorMessage(err.message);
         }

@@ -39,7 +39,6 @@ export const EditUserEmail = ({ onClose }: any) => {
                 newEmail
             }, {
                 headers: {
-                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}` ,
                 },
             });
