@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
     };
 
     if (loading) {
-        // Optionally show a loader or nothing until the user data is ready
+        
         return null;
     }
 

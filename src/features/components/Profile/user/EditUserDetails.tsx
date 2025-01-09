@@ -67,7 +67,6 @@ export const EditUserDetails = ({ onClose }: any) => {
         setLoading(true);
         try {
             const token = await auth.currentUser?.getIdToken(true);
-            console.log(formData)
             const response = await axios.put('http://localhost:4000/auth/edituserdetails', formData,{
                 headers: { Authorization: `Bearer ${token}` },
             });

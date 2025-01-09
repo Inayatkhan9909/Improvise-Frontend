@@ -1,8 +1,11 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
+import { auth } from '../../../lib/firebase/firebaseConfig';
+import { UserContext } from '../../../Context/user/userContext';
 
 export const EditUserEmail = ({ onClose }: any) => {
+    const {setUser} = useContext(UserContext);
     const [oldEmail, setOldEmail] = useState('');
     const [newEmail, setNewEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
@@ -23,18 +26,26 @@ export const EditUserEmail = ({ onClose }: any) => {
             return;
         }
 
+        if (oldEmail === newEmail) {
+            setError('Old email and new email cannot be the same.');
+            return;
+        }
+
         setLoading(true);
         try {
-
+            const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.put('http://localhost:4000/auth/edituseremail', {
+                oldEmail,
+                newEmail
+            }, {
                 headers: {
                     'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}` ,
                 },
-                body: JSON.stringify({ oldEmail, newEmail }),
             });
 
-
             if (response.status === 201) {
+                setUser(response?.data?.user)
                 setSuccess('Email updated successfully! Please verify the new email.');
             } else {
                 setError(response?.data.message || 'Failed to update email.');
