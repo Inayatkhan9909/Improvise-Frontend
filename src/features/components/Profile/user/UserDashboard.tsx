@@ -5,6 +5,7 @@ import { RxCross2 } from "react-icons/rx";
 import { EditUserDetails } from "./EditUserDetails";
 import { EditUserEmail } from "./EditUserEmail";
 import { EditUserPassword } from "./EditUserPassword";
+import { EditProfilePic } from "./EditProfilePicDetails";
 
 export const UserDashboard = () => {
     const { user } = useContext(UserContext);
@@ -13,6 +14,7 @@ export const UserDashboard = () => {
     const [editDetailsModal, setEditDetailsModal] = useState(false);
     const [editEmailModal,setEditEmailModal] = useState(false);
     const [editPasswordModal,setEditPasswordModal] = useState(false);
+    const [editProfilePicModal,setEditProfilePicModal]= useState(false);
 
     if (!user) {
         return (
@@ -35,17 +37,21 @@ export const UserDashboard = () => {
     };
 
     const handleeditDetails = () => {
+        setShowOptions(false);
         setEditDetailsModal(true);
+        
     }
     const handleEditEmail = () =>{
+        setShowOptions(false);
         setEditEmailModal(true);
     }
     const handleEditPassword = () =>{
+        setShowOptions(false);
         setEditPasswordModal(true);
     }
 
-    const handleEdit = () => {
-
+    const handleEditProfilePic = () => {
+          setEditProfilePicModal(true);
     };
 
     return (
@@ -101,7 +107,7 @@ export const UserDashboard = () => {
                     <button
                         className="absolute bottom-0 right-0 bg-yellow-500 hover:bg-yellow-600 text-white p-1 rounded-full"
                         title="Edit Profile Picture"
-                        onClick={handleEdit}
+                        onClick={handleEditProfilePic}
                     >
                         <FaEdit className="text-sm" />
                     </button>
@@ -173,6 +179,12 @@ export const UserDashboard = () => {
             {editPasswordModal && (
                 <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
                     <EditUserPassword onClose={() => setEditPasswordModal(false)} />   
+                </div>
+            )}
+            {/* Edit ProfilePic Modal */}
+            {editProfilePicModal && (
+                <div className="fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50 z-50 text-black">
+                    <EditProfilePic onClose={() => setEditProfilePicModal(false)} />   
                 </div>
             )}
 
