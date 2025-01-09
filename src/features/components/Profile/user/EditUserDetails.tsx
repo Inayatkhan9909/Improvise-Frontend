@@ -13,6 +13,7 @@ import {
 import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
 import { UserContext } from '../../../Context/user/userContext';
+import { auth } from '../../../lib/firebase/firebaseConfig';
 
 export const EditUserDetails = ({ onClose }: any) => {
     const { user, setUser } = useContext(UserContext);
@@ -65,7 +66,7 @@ export const EditUserDetails = ({ onClose }: any) => {
 
         setLoading(true);
         try {
-            const token = localStorage.getItem('authToken');
+            const token = await auth.currentUser?.getIdToken(true);
             console.log(formData)
             const response = await axios.put('http://localhost:4000/auth/edituserdetails', formData,{
                 headers: { Authorization: `Bearer ${token}` },

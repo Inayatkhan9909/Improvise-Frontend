@@ -48,7 +48,6 @@ export const useAuth = () => {
             const token = await userCredential.user.getIdToken();
             const response = await axios.post('http://localhost:4000/auth/login', { token });
             setLoading(false);
-            localStorage.setItem('authToken', token);
             setUser(response.data.user);
             return response.data;
         } catch (err: any) {
@@ -60,8 +59,8 @@ export const useAuth = () => {
 
     const logout = async () => {
         setLoading(true);
+         await auth.signOut();
         setUser(null);
-        await localStorage.removeItem("authToken");
         setLoading(false);
     };
 
