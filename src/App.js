@@ -11,6 +11,7 @@ import { Unauthorized } from './features/pages/Unauthorized.tsx'
 import AuthRoutes from './features/routes/AuthRoutes.tsx'
 import InstructorRoutes from './features/routes/InstructorRoutes.tsx'
 
+
 function App() {
   return (
     <div className="App">
@@ -32,7 +33,6 @@ function App() {
             <Route element={<InstructorRoutes />}>
               <Route path="/createclass" element={<CreateClassPage />} />
             </Route>
-
 
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>

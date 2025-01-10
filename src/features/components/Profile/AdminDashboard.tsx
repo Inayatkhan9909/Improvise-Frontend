@@ -1,16 +1,16 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../Context/user/userContext";
+import React, { useEffect, useState } from "react";
 import { auth } from "../../lib/firebase/firebaseConfig";
-
-
-
+import { useNavigate } from "react-router-dom";
+import InstructorDetails from "./admin/InstructorDetails";
 
 export const AdminDashboard: React.FC = () => {
-  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   const [showApproved, setShowApproved] = useState(true);
-  const [requests, setRequests] = useState([]);
-  const [approvedInstructors, setApprovedInstructors] = useState([]);
+  const [requests, setRequests] = useState<any[]>([]);
+  const [approvedInstructors, setApprovedInstructors] = useState<any[]>([]);
+  const [selectedInstructor, setSelectedInstructor] = useState<any | null>(null);
+  const [instructorDetailsModal, setInstructorDetailsModal] = useState(false);
 
   useEffect(() => {
     const fetchInstructors = async () => {
@@ -20,14 +20,17 @@ export const AdminDashboard: React.FC = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (response.status === 201) {
-          const instructors = response?.data?.instructors;
-          setApprovedInstructors(instructors.filter((instructor: any) => instructor.roleDetails.instructor?.approvedByAdmin));
-          setRequests(instructors.filter((instructor: any) => !instructor.roleDetails.instructor?.approvedByAdmin));
+        if (response.status === 200) {
+          const instructors = response.data;
+          setApprovedInstructors(
+            instructors.filter((instructor: any) => instructor.roleDetails.instructor?.approvedByAdmin)
+          );
+          setRequests(
+            instructors.filter((instructor: any) => !instructor.roleDetails.instructor?.approvedByAdmin)
+          );
         } else {
           console.error("Instructors not found");
         }
-
       } catch (error) {
         console.error("Error fetching instructors:", error);
       }
@@ -36,43 +39,15 @@ export const AdminDashboard: React.FC = () => {
     fetchInstructors();
   }, []);
 
-  const handleApprove = async (id: any) => {
-    try {
-      // const token = await auth.currentUser?.getIdToken(true);
-      // await axios.post(
-      //   "http://localhost:4000/admin/approveinstructor",
-      //   { id },
-      //   { headers: { Authorization: `Bearer ${token}` } }
-      // );
-
-      // const approved = requests.find((req) => req._id === id);
-      // if (!approved) return;
-
-      // setApprovedInstructors([...approvedInstructors, approved]);
-      // setRequests(requests.filter((req) => req._id !== id));
-    } catch (error) {
-      console.error("Error approving instructor:", error);
-    }
+  const openInstructorDetails = (instructor: any) => {
+    setSelectedInstructor(instructor);
+    setInstructorDetailsModal(true);
   };
 
-  const handleReject = async (id: any) => {
-    try {
-      // const token = await auth.currentUser?.getIdToken(true);
-      // await axios.post(
-      //   "http://localhost:4000/admin/rejectinstructor",
-      //   { id },
-      //   { headers: { Authorization: `Bearer ${token}` } }
-      // );
-
-      // setRequests(requests.filter((req) => req._id !== id));
-    } catch (error) {
-      console.error("Error rejecting instructor:", error);
-    }
+  const closeInstructorDetails = () => {
+    setSelectedInstructor(null);
+    setInstructorDetailsModal(false);
   };
-
-  const handleInstructors = () => {
-
-  }
 
   return (
     <div className="p-6 max-w-6xl mx-auto bg-white shadow-lg rounded-lg">
@@ -102,12 +77,12 @@ export const AdminDashboard: React.FC = () => {
 
       {showApproved ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {approvedInstructors.map((instructor: any) => (
-            <div key={instructor._id.toString()} className="border rounded-lg p-4 shadow">
+          {approvedInstructors.map((instructor) => (
+            <div key={instructor._id} className="border rounded-lg p-4 shadow">
               <h3 className="text-lg font-semibold">{instructor.name}</h3>
               <p className="text-sm text-gray-600">{instructor.email}</p>
               <button
-                onClick={handleInstructors}
+                onClick={() => openInstructorDetails(instructor)}
                 className="mt-2 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md"
               >
                 View Details
@@ -117,22 +92,35 @@ export const AdminDashboard: React.FC = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {requests.map((request: any) => (
-            <div key={request._id.toString()} className="border rounded-lg p-4 shadow">
+          {requests.map((request) => (
+            <div key={request._id} className="border rounded-lg p-4 shadow">
               <h3 className="text-lg font-semibold">{request.name}</h3>
               <p className="text-sm text-gray-600">{request.email}</p>
               <p className="text-sm text-gray-500">Role: {request.role}</p>
-              <div className=" mt-4 space-x-2">
+              <div className="mt-4 space-x-2">
                 <button
-                  onClick={handleInstructors}
+                  onClick={() => openInstructorDetails(request)}
                   className="px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md"
                 >
                   View Details
                 </button>
-
               </div>
             </div>
           ))}
+        </div>
+      )}
+
+      {instructorDetailsModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 text-black">
+          <div className="relative bg-white p-6 rounded-lg max-w-4xl w-full">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-black font-semibold"
+              onClick={closeInstructorDetails}
+            >
+              ✕
+            </button>
+            <InstructorDetails instructor={selectedInstructor} onClose={closeInstructorDetails} />
+          </div>
         </div>
       )}
     </div>
