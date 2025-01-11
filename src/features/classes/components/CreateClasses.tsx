@@ -9,14 +9,11 @@ import {
     Snackbar,
     Alert,
 } from '@mui/material';
-
 import { useClassAuth } from '../hooks/useClassAuth';
-import { useNavigate } from 'react-router-dom';
 import { getFilePreview, uploadFile } from '../../lib/appwrite/uploadImage';
 
 const CreateClass = () => {
     const { createclass, loading } = useClassAuth();
-    const navigate = useNavigate();
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [formData, setFormData] = useState({
         title: '',
@@ -106,7 +103,7 @@ const CreateClass = () => {
             if (response?.status === 201) {
                 setSuccessMessage('Class created successfully!');
                 setErrorMessage(null);
-                setTimeout(() => navigate('/classes'), 1000);
+                
             } else {
                 setErrorMessage(response?.data?.message || 'Class creation failed.');
                 setSuccessMessage(null);

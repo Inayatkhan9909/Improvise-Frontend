@@ -80,7 +80,7 @@ export const Classes = () => {
               <div className="text-center">
                 <p className="text-xs text-gray-500">Duration</p>
                 <span className="text-sm bg-purple-100 text-purple-600 py-1 px-3 rounded-lg">
-                  {cls.duration} hrs
+                  {cls.duration} minutes
                 </span>
               </div>
             </div>

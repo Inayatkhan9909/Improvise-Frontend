@@ -1,24 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../Context/user/userContext";
 import { AddInstructorDetails } from "../../instructor/components/AddInstructorDetails";
 import { InstructorDetails } from "../../instructor/components/InstructorDetails";
 import axios from "axios";
 import { auth } from "../../lib/firebase/firebaseConfig";
-import CreateClass from "../../classes/components/CreateClasses";
 import CreateClassPage from "../../instructor/pages/CreateClassPage";
+import { InstructorClasses } from "../../instructor/components/InstrucotorClasses";
 
 export const InstructorDashboard = () => {
-  const navigate = useNavigate();
   const { setUser, user, loading } = useContext(UserContext);
   const [isApproved, setIsApproved] = useState(false);
   const [detailsAvailable, setDetailsAvailable] = useState(true);
-  const [instructorId, setInstructorId] = useState(null);
   const [resetData, setResetData] = useState(false);
   const [activeSection, setActiveSection] = useState("details");
 
   useEffect(() => {
-    setInstructorId(user?._id);
 
     if (
       !user?.roleDetails?.instructor?.bio ||
@@ -135,8 +131,9 @@ export const InstructorDashboard = () => {
 
         {activeSection === "my-classes" && (
           <div>
-            <h2 className="text-xl font-semibold mb-4">My Classes</h2>
-            {/* My classes list with edit/delete functionality */}
+          {
+            isApproved ? <InstructorClasses/> :<div>You are not approved to add classes</div>
+          }
           </div>
         )}
 

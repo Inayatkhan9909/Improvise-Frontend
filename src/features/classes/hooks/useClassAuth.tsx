@@ -1,13 +1,11 @@
-import { useContext, useState } from 'react';
-
+import { useState } from 'react';
 import axios from 'axios';
-import { UserContext } from '../../Context/user/userContext';
+import { auth } from '../../lib/firebase/firebaseConfig';
 
 export const useClassAuth = () => {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { user } = useContext(UserContext)
     const createclass = async (classData: {
         title: string,
         description: string,
@@ -23,9 +21,9 @@ export const useClassAuth = () => {
         setError(null);
         try {
 
-            const instructorId = user?._id;
+            const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.post("http://localhost:4000/classes/createclass", classData, {
-                headers: { Authorization: `Bearer ${instructorId}` },
+                headers: { Authorization: `Bearer ${token}` },
 
             });
             setLoading(false);
