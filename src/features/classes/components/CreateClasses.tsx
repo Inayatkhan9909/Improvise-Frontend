@@ -146,7 +146,7 @@ const CreateClass = () => {
                 boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
             }}
         >
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Create Class
             </Typography>
 
@@ -173,7 +173,7 @@ const CreateClass = () => {
                         helperText={errors.description}
                     />
                 </Grid2>
-                <Grid2 size={{ xs: 12 }}>
+                <Grid2 size={{ xs: 6 }}>
                     <TextField
                         fullWidth
                         label="Date"
@@ -189,7 +189,7 @@ const CreateClass = () => {
                         }}
                     />
                 </Grid2>
-                <Grid2 size={{ xs: 12 }}>
+                <Grid2 size={{ xs: 6 }}>
                     <TextField
                         fullWidth
                         label="Timing"
@@ -292,15 +292,6 @@ const CreateClass = () => {
                     >
                         {loading ? 'Creating...' : 'Create Class'}
                     </Button>
-                </Grid2>
-
-                <Grid2 size={{ xs: 12 }} sx={{ textAlign: 'center', mt: 2 }}>
-                    <Typography variant="body2">
-                        Class created successfully?{' '}
-                        <Button onClick={() => navigate('/classes')} size="small">
-                            View Classes
-                        </Button>
-                    </Typography>
                 </Grid2>
             </Grid2>
             <Snackbar
