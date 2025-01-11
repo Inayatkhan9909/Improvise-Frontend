@@ -4,6 +4,7 @@ import { UserContext } from "../../Context/user/userContext";
 import { AddInstructorDetails } from "../../instructor/components/AddInstructorDetails";
 import { InstructorDetails } from "../../instructor/components/InstructorDetails";
 import axios from "axios";
+import { auth } from "../../lib/firebase/firebaseConfig";
 export const InstructorDashboard = () => {
   const navigate = useNavigate();
   const {setUser, user, loading } = useContext(UserContext);
@@ -25,9 +26,9 @@ export const InstructorDashboard = () => {
   }, [user,resetData]);
   const handleFormSubmit = async (details: any) => {
     try {
-
+         const token = await auth.currentUser?.getIdToken(true);
       const response = await axios.post("http://localhost:4000/instructor/addinstructordetails", details, {
-        headers: { Authorization: `Bearer ${instructorId}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       if (response.status === 201) {

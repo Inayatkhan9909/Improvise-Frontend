@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { getFilePreview, uploadFile } from "../../lib/appwrite/uploadImage";
 import { RxCross2 } from 'react-icons/rx';
+import { auth } from "../../lib/firebase/firebaseConfig";
+import axios from "axios";
+import { UserContext } from "../../Context/user/userContext";
 
 interface Instructor {
   bio: string;
@@ -18,6 +21,7 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
   instructor,
   onClose,
 }) => {
+    const {setUser} = useContext(UserContext);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     bio: instructor.bio || "",
@@ -94,8 +98,25 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
     }
 
     const updatedDetails = { ...formData, resume: resumeUrl };
-    console.log("Updated Details:", updatedDetails);
-    onClose();
+    const token = await auth.currentUser?.getIdToken(true);
+    try {
+
+        const response = await axios.post("http://localhost:4000/instructor/addinstructordetails", updatedDetails, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        if (response.status === 201) {
+          
+          alert("Details submitted successfully! Waiting for admin approval.");
+          setUser(response?.data?.isUser);
+          
+        } else {
+          alert("Error submitting details. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+    
   };
 
   return (
