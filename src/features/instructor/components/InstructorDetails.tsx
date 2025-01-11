@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../../Context/user/userContext";
 import { FaEdit } from "react-icons/fa";
+import { EditInstructorDetails } from "./EditInstructorDetails";
 
 export const InstructorDetails = ({ onEdit }: { onEdit: () => void }) => {
   const { user } = useContext(UserContext);
+  const [openEditModal, setOpenEditModal] = useState(false);
   const instructor = user?.roleDetails?.instructor;
 
   if (!instructor) {
@@ -18,7 +20,7 @@ export const InstructorDetails = ({ onEdit }: { onEdit: () => void }) => {
     <div className="bg-white shadow-md rounded-lg p-6 relative">
       {/* Edit Icon */}
       <button
-        onClick={onEdit}
+        onClick={() => setOpenEditModal(true)}
         className="absolute top-4 right-4 text-blue-600 hover:text-blue-800"
         aria-label="Edit Details"
       >
@@ -55,7 +57,7 @@ export const InstructorDetails = ({ onEdit }: { onEdit: () => void }) => {
             <a
               href={instructor.resume}
               target="_blank"
-              download
+              rel="noopener noreferrer"
               className="text-blue-500 hover:text-blue-700 underline"
             >
               View Resume
@@ -65,6 +67,16 @@ export const InstructorDetails = ({ onEdit }: { onEdit: () => void }) => {
           )}
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {openEditModal && (
+        <div className="fixed inset-0 w-2/3 m-auto max-h-1.5 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <EditInstructorDetails
+            instructor={instructor}
+            onClose={() => setOpenEditModal(false)}
+          />
+        </div>
+      )}
     </div>
   );
 };

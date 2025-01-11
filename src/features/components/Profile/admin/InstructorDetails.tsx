@@ -9,11 +9,13 @@ interface InstructorDetailsProps {
 
 const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClose }) => {
     const [isRejectModalOpen, setIsRejectModalOpen] = useState(false);
+    const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
     const [rejectReason, setRejectReason] = useState("");
+    const [removeReason, setRemoveReason] = useState("");
 
     const handleApproval = async (approve: boolean, reason?: string) => {
         try {
-            const token = await auth.currentUser?.getIdToken(true); 
+            const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.put(
                 `http://localhost:4000/admin/${approve ? "approve" : "reject"}-instructor`,
                 { instructorId: instructor._id, reason },
@@ -32,11 +34,16 @@ const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClo
         }
     };
 
-    const handleRemoveInstructor = async () => {
+    const handleRemoveInstructor = async (reason: string) => {
         try {
-            const response = await axios.post(`http://localhost:4000/admin/remove-instructor`, {
-                instructorId: instructor._id,
-            });
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.put(
+                `http://localhost:4000/admin/remove-instructor`,
+                { instructorId: instructor._id, reason },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
 
             if (response.status === 200) {
                 alert("Instructor has been removed successfully.");
@@ -117,7 +124,7 @@ const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClo
                 </div>
             ) : (
                 <button
-                    onClick={handleRemoveInstructor}
+                    onClick={() => setIsRemoveModalOpen(true)}
                     className="px-4 py-2 bg-red-500 text-white rounded-md"
                 >
                     Remove as Instructor
@@ -127,11 +134,11 @@ const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClo
             {/* Rejection Modal */}
             {isRejectModalOpen && (
                 <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
-                    <div className="bg-white p-6 rounded-md shadow-md">
+                    <div className="bg-white w-1/3 p-6 rounded-md shadow-md">
                         <h3 className="text-lg font-semibold mb-4">Reason for Rejection</h3>
                         <textarea
                             className="w-full p-2 border rounded-md"
-                            rows={4}
+                            rows={6}
                             value={rejectReason}
                             onChange={(e) => setRejectReason(e.target.value)}
                             placeholder="Enter reason here..."
@@ -147,6 +154,39 @@ const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClo
                                 onClick={() => {
                                     handleApproval(false, rejectReason);
                                     setIsRejectModalOpen(false);
+                                }}
+                                className="px-4 py-2 bg-red-500 text-white rounded-md"
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Remove Modal */}
+            {isRemoveModalOpen && (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+                    <div className="bg-white w-1/3 p-6 rounded-md shadow-md">
+                        <h3 className="text-lg font-semibold mb-4">Reason for Removal</h3>
+                        <textarea
+                            className="w-full p-2 border rounded-md"
+                            rows={6}
+                            value={removeReason}
+                            onChange={(e) => setRemoveReason(e.target.value)}
+                            placeholder="Enter reason here..."
+                        />
+                        <div className="flex justify-end space-x-4 mt-4">
+                            <button
+                                onClick={() => setIsRemoveModalOpen(false)}
+                                className="px-4 py-2 bg-gray-400 text-white rounded-md"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => {
+                                    handleRemoveInstructor(removeReason);
+                                    setIsRemoveModalOpen(false);
                                 }}
                                 className="px-4 py-2 bg-red-500 text-white rounded-md"
                             >

@@ -18,8 +18,7 @@ export const ProfilePage = () => {
                 return <InstructorDashboard />
             case 'AdminPanel':
                 return <AdminDashboard />
-            case 'Settings':
-                return <div>Settings</div>;
+
             default:
                 return <UserDashboard />
         }
@@ -82,13 +81,7 @@ export const ProfilePage = () => {
                             Admin Panel
                         </button>
                     }
-                    <button
-                        className={`py-2 px-4 text-center rounded-md ${activeComponent === 'Settings' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'
-                            }`}
-                        onClick={() => setActiveComponent('Settings')}
-                    >
-                        Settings
-                    </button>
+
                 </div>
 
                 {/* Logout Button */}
