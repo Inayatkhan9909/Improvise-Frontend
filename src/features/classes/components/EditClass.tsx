@@ -16,6 +16,7 @@ export const EditClass = ({ classDetails, onClose }: any) => {
     const { updateClass, loading } = useClassAuth();
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [formData, setFormData] = useState({
+        classId:'',
         title: '',
         description: '',
         date: '',
@@ -43,6 +44,7 @@ export const EditClass = ({ classDetails, onClose }: any) => {
     useEffect(() => {
         if (classDetails) {
             setFormData({
+                classId:classDetails._id || '',
                 title: classDetails.title || '',
                 description: classDetails.description || '',
                 date: classDetails.date || '',

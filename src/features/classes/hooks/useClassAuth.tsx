@@ -5,6 +5,7 @@ import { auth } from '../../lib/firebase/firebaseConfig';
 export const useClassAuth = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+   
     const createclass = async (classData: {
         title: string,
         description: string,
@@ -19,7 +20,6 @@ export const useClassAuth = () => {
         setLoading(true);
         setError(null);
         try {
-
             const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.post("http://localhost:4000/classes/createclass", classData, {
                 headers: { Authorization: `Bearer ${token}` },
@@ -38,14 +38,15 @@ export const useClassAuth = () => {
 
     const updateClass = async (classId: string, updatedData: any) => {
         try {
-            // Validate input
             if (!classId || typeof updatedData !== 'object') {
                 throw new Error('Invalid input data for updating class.');
             }
-            const response = await axios.put("");
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.post("http://localhost:4000/classes/update-class", updatedData, {
+                headers: { Authorization: `Bearer ${token}` },
 
-
-            return response
+            });
+            return response;
         } catch (error: any) {
             console.error('Error updating class:', error);
             return {

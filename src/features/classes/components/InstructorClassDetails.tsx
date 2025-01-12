@@ -115,12 +115,12 @@ export const InstructorClassDetails = ({
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <DeleteClass
-          classTitle={classDetails.title}
-          onClose={() => setDeleteModalOpen(false)}
-          onConfirm={() => {
-            onDelete(classDetails._id);
-            setDeleteModalOpen(false);
-          }}
+        classId={classDetails._id}
+        classTitle={classDetails.title}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={() => {
+          onDelete(classDetails._id); 
+        }}
         />
       )}
     </>
