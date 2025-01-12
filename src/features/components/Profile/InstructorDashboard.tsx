@@ -6,6 +6,7 @@ import axios from "axios";
 import { auth } from "../../lib/firebase/firebaseConfig";
 import CreateClassPage from "../../instructor/pages/CreateClassPage";
 import { InstructorClasses } from "../../classes/components/InstrucotorClasses";
+import CreateCourse from "../../courses/components/CreateCourse";
 
 export const InstructorDashboard = () => {
   const { setUser, user, loading } = useContext(UserContext);
@@ -135,7 +136,7 @@ export const InstructorDashboard = () => {
         {activeSection === "add-course" && (
           <div>
             <h2 className="text-xl font-semibold mb-4">Add Course</h2>
-            {/* Add course form component here */}
+            <CreateCourse/>
           </div>
         )}
 
