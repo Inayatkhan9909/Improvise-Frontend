@@ -3,7 +3,6 @@ import axios from 'axios';
 import { auth } from '../../lib/firebase/firebaseConfig';
 
 export const useClassAuth = () => {
-
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const createclass = async (classData: {
@@ -35,6 +34,26 @@ export const useClassAuth = () => {
             return error;
         }
     };
-    return { createclass, loading, error };
+
+
+    const updateClass = async (classId: string, updatedData: any) => {
+        try {
+            // Validate input
+            if (!classId || typeof updatedData !== 'object') {
+                throw new Error('Invalid input data for updating class.');
+            }
+            const response = await axios.put("");
+
+
+            return response
+        } catch (error: any) {
+            console.error('Error updating class:', error);
+            return {
+                status: error?.response?.status || 500,
+                message: error?.message || 'Failed to update class.',
+            };
+        }
+    };
+    return { createclass, updateClass, loading, error };
 };
 
