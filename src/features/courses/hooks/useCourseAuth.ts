@@ -35,13 +35,13 @@ export const useCourseAuth = () => {
     };
 
 
-    const updateClass = async (classId: string, updatedData: any) => {
+    const updateCourse = async (classId: string, updatedData: any) => {
         try {
             if (!classId || typeof updatedData !== 'object') {
                 throw new Error('Invalid input data for updating class.');
             }
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.post("http://localhost:4000/classes/update-class", updatedData, {
+            const response = await axios.put("http://localhost:4000/courses/update-course", updatedData, {
                 headers: { Authorization: `Bearer ${token}` },
 
             });
@@ -54,6 +54,6 @@ export const useCourseAuth = () => {
             };
         }
     };
-    return { createCourse, updateClass, loading, error };
+    return { createCourse, updateCourse, loading, error };
 };
 

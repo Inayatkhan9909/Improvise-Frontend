@@ -7,6 +7,7 @@ import { auth } from "../../lib/firebase/firebaseConfig";
 import CreateClassPage from "../../instructor/pages/CreateClassPage";
 import { InstructorClasses } from "../../classes/components/InstrucotorClasses";
 import CreateCourse from "../../courses/components/CreateCourse";
+import { InstructorCourses } from "../../courses/components/InstructorCourses";
 
 export const InstructorDashboard = () => {
   const { setUser, user, loading } = useContext(UserContext);
@@ -143,7 +144,7 @@ export const InstructorDashboard = () => {
         {activeSection === "my-courses" && (
           <div>
             <h2 className="text-xl font-semibold mb-4">My Courses</h2>
-            {/* My courses list with edit/delete functionality */}
+           <InstructorCourses/>
           </div>
         )}
       </main>
