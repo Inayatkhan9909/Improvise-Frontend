@@ -43,7 +43,7 @@ const Login: React.FC = () => {
 
         try {
             const response = await login(formData.email, formData.password);
-            if (response) {
+            if (response.status===200) {
                 navigate('/');
             }
         } catch (err: any) {

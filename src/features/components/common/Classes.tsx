@@ -64,7 +64,7 @@ export const Classes = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-6 p-6 bg-gray-50">
+      <div className="w-full flex flex-col gap-6 p-6 bg-gray-50">
         {currentClasses.map((cls:any) => (
           <div
             key={cls._id}
