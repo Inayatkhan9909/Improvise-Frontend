@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../Context/user/userContext';
-import { MyClasses } from '../components/Profile/MyClasses';
 import { InstructorDashboard } from '../components/Profile/InstructorDashboard';
 import { AdminDashboard } from '../components/Profile/AdminDashboard';
 import { UserDashboard } from '../components/Profile/user/UserDashboard';
+import { UserBookedClasses } from '../classes/components/UserBookedClasses';
 
 export const ProfilePage = () => {
     const { user } = useContext(UserContext);
@@ -14,7 +14,7 @@ export const ProfilePage = () => {
             case 'Dashboard':
                 return <UserDashboard />;
             case 'MyClasses':
-                return <MyClasses />;
+                return <UserBookedClasses />;
             case 'InstructorPanel':
                 return <InstructorDashboard />;
             case 'AdminPanel':
@@ -54,12 +54,15 @@ export const ProfilePage = () => {
                     >
                         Dashboard
                     </button>
-                    <button
+                    {
+                        user?.role.includes('student') &&                     <button
                         className={`py-2 px-2 text-sm md:text-lg text-center rounded-md ${activeComponent === 'MyClasses' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'}`}
                         onClick={() => setActiveComponent('MyClasses')}
                     >
                         My Classes
                     </button>
+                    }
+
                     {user?.role.includes('instructor') && (
                         <button
                             className={`py-2 px-2 text-sm md:text-lg text-center rounded-md ${activeComponent === 'InstructorPanel' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'}`}
