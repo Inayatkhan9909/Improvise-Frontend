@@ -4,6 +4,7 @@ import { InstructorDashboard } from '../components/Profile/InstructorDashboard';
 import { AdminDashboard } from '../components/Profile/AdminDashboard';
 import { UserDashboard } from '../components/Profile/user/UserDashboard';
 import { UserBookedClasses } from '../classes/components/UserBookedClasses';
+import { UserBookedCourses } from '../courses/components/UserBookedCourses';
 
 export const ProfilePage = () => {
     const { user } = useContext(UserContext);
@@ -15,6 +16,8 @@ export const ProfilePage = () => {
                 return <UserDashboard />;
             case 'MyClasses':
                 return <UserBookedClasses />;
+            case 'MyCourses':
+                return <UserBookedCourses />;
             case 'InstructorPanel':
                 return <InstructorDashboard />;
             case 'AdminPanel':
@@ -55,12 +58,20 @@ export const ProfilePage = () => {
                         Dashboard
                     </button>
                     {
-                        user?.role.includes('student') &&                     <button
-                        className={`py-2 px-2 text-sm md:text-lg text-center rounded-md ${activeComponent === 'MyClasses' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'}`}
-                        onClick={() => setActiveComponent('MyClasses')}
-                    >
-                        My Classes
-                    </button>
+                        user?.role.includes('student') && <button
+                            className={`py-2 px-2 text-sm md:text-lg text-center rounded-md ${activeComponent === 'MyClasses' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'}`}
+                            onClick={() => setActiveComponent('MyClasses')}
+                        >
+                            My Classes
+                        </button>
+                    }
+                    {
+                        user?.role.includes('student') && <button
+                            className={`py-2 px-2 text-sm md:text-lg text-center rounded-md ${activeComponent === 'MyCourses' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'}`}
+                            onClick={() => setActiveComponent('MyCourses')}
+                        >
+                            My Courses
+                        </button>
                     }
 
                     {user?.role.includes('instructor') && (
