@@ -28,15 +28,34 @@ export const BookCourse = ({ crs, onClose }:any) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-96">
-        <h3 className="text-xl font-bold mb-4">Book Class</h3>
-        <p className="mb-2">Title: {crs.title}</p>
-        <p className="mb-2">Instructor: {crs.instructorname}</p>
-        <p className="mb-4">Date: {dayjs(crs.date).format("DD MMM YYYY")}</p>
-        <p className="mb-2">Timing: {crs.timing}</p>
-        <div className="flex gap-4">
-          <button
+<>
+<div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+      <div className="bg-white w-11/12 md:w-3/4 lg:w-1/2 p-6 rounded-lg shadow-lg">
+        <button onClick={onClose} className="text-gray-500 hover:text-gray-800 float-right">✕</button>
+        <h2 className="text-2xl font-bold mb-4">{crs.title}</h2>
+        <img src={crs.thumbnail} alt={crs.title} className="w-full h-64 object-cover rounded-lg mb-4" />
+        <p className="text-gray-700 mb-4">{crs.description}</p>
+        <div className="flex justify-between items-center mb-4">
+          <span className="text-blue-600 bg-blue-100 py-1 px-3 rounded-full">{crs.category}</span>
+          <span className="font-bold text-gray-800">Price: ${crs.price}</span>
+        </div>
+        <div className="text-gray-600 mb-4">
+          <p><strong>Launch Date:</strong> {new Date(crs.date).toLocaleDateString()}</p>
+          <p><strong>Level:</strong> {crs.level}</p>
+          <p><strong>Max Students:</strong> {crs.maxStudents}</p>
+        </div>
+        <div>
+          <h3 className="text-lg font-bold mb-2">Modules:</h3>
+          <ul className="list-disc pl-5">
+            {crs.modules.map((module:any, index:any) => (
+              <li key={index}>
+                <strong>{module.title}</strong>: {module.content} ({module.duration} mins)
+              </li>
+            ))}
+          </ul>
+        </div>
+<div className="flex justify-between">
+<button
             onClick={handleConfirm}
             disabled={loading}
             className={`py-2 px-4 rounded-lg font-semibold ${
@@ -53,8 +72,11 @@ export const BookCourse = ({ crs, onClose }:any) => {
           >
             Cancel
           </button>
-        </div>
+</div>
       </div>
     </div>
+
+
+</>
   );
 };

@@ -21,7 +21,7 @@ export const HomePage = () => {
       </section>
 
       {/* Classes and Courses */}
-      <section className="flex flex-col lg:flex-row w-5/6 m-auto gap-6 mt-6">
+      <section className="flex flex-col lg:flex-row w-11/12 m-auto gap-6 mt-6">
         {/* Classes Section */}
         <div className="lg:w-4/6 w-full">
           <Classes />
