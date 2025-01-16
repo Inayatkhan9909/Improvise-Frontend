@@ -1,6 +1,6 @@
 import React from 'react'
 import { Classes } from '../components/common/Classes'
-import { Courses } from '../components/common/Courses'
+import { AsideCourses } from '../components/common/AsideCourses'
 
 export const HomePage = () => {
   return (
@@ -29,7 +29,7 @@ export const HomePage = () => {
 
         {/* Courses Section */}
         <div className="lg:w-2/6 w-full">
-          <Courses />
+          <AsideCourses />
         </div>
       </section>
     </>

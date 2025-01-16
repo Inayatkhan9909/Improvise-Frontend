@@ -13,7 +13,7 @@ interface Course {
   date: string;
 }
 
-export const Courses = () => {
+export const AsideCourses = () => {
   const [bookClassModal, setBookClassModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState<Course | null>(null);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -24,6 +24,7 @@ export const Courses = () => {
     try {
       const response = await axios.get("http://localhost:4000/courses/getallcourses");
       setCourses(response?.data?.courses || []);
+      console.log(response.data)
     } catch (error) {
       console.error(error);
     }
@@ -46,7 +47,9 @@ export const Courses = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % courses.length);
   };
 
+
   return (
+   
     <div className="relative w-full h-screen flex items-center justify-center">
       {courses.length > 0 ? (
         <div
@@ -57,6 +60,8 @@ export const Courses = () => {
       )}
 
       <div className="relative z-10 bg-white/90 shadow-lg rounded-lg  p-6">
+      {courses.length > 0 && courses[currentIndex] ? (
+      <>
       <img src={courses[currentIndex].thumbnail} alt="thumbnail" />
         <h2 className="text-3xl font-bold text-blue-700 mb-4 text-center">{courses[currentIndex]?.title}</h2>
         <p className="text-gray-600 text-center">{courses[currentIndex]?.description}</p>
@@ -82,7 +87,12 @@ export const Courses = () => {
         >
           Enroll
         </button>
+        </>
+  ) : (
+    <p>Loading course data...</p>
+  )}
       </div>
+      
 
       <button
         onClick={handlePrev}
@@ -104,5 +114,6 @@ export const Courses = () => {
         />
       )}
     </div>
+
   );
 };

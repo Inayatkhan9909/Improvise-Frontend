@@ -103,7 +103,7 @@ const Navbar: React.FC = () => {
                             About Us
                         </li>
                         <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/classes')}>
-                            Find Class
+                            Courses
                         </li>
                         {user ? (
                             <>
