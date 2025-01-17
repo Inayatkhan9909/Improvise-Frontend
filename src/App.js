@@ -9,7 +9,8 @@ import { HomePage } from './features/pages/HomePage.tsx';
 import { ProfilePage } from './features/pages/ProfilePage.tsx';
 import { CreateClassPage } from './features/instructor/pages/CreateClassPage.tsx';
 import { Unauthorized } from './features/pages/Unauthorized.tsx';
-import {CoursesPage} from './features/pages/CoursesPage.tsx'
+import { CoursesPage } from './features/pages/CoursesPage.tsx'
+import { AboutUs } from './features/pages/AboutUs.tsx'
 import AuthRoutes from './features/routes/AuthRoutes.tsx';
 import InstructorRoutes from './features/routes/InstructorRoutes.tsx';
 
@@ -23,7 +24,8 @@ function App() {
           <Navbar />
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/courses" element={<CoursesPage/>}/>
+            <Route path="/courses" element={<CoursesPage />} />
+            <Route path="/about" element={<AboutUs />} />
 
             <Route element={<AuthRoutes />}>
               <Route path="/signup" element={<SignupPage />} />
@@ -39,7 +41,7 @@ function App() {
 
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
-          <Footer/>
+          <Footer />
         </Router>
       </UserContextProvider>
     </div>

@@ -15,12 +15,12 @@ const Navbar: React.FC = () => {
     };
 
     if (loading) {
-        
+
         return null;
     }
 
     return (
-        <header className="border-blue-300 border-2 shadow-md">
+        <header className="border-blue-300 border-2 shadow-md sticky top-0 z-50 bg-white">
             <nav className="flex items-center justify-between px-6 py-4">
                 <div
                     className="text-3xl font-bold cursor-pointer text-yellow-400"
@@ -35,8 +35,8 @@ const Navbar: React.FC = () => {
                     <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/about')}>
                         About Us
                     </li>
-                    <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/classes')}>
-                        Find Class
+                    <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/courses')}>
+                        Courses
                     </li>
                     {user ? (
                         <>
@@ -102,7 +102,7 @@ const Navbar: React.FC = () => {
                         <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/about')}>
                             About Us
                         </li>
-                        <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/classes')}>
+                        <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/courses')}>
                             Courses
                         </li>
                         {user ? (

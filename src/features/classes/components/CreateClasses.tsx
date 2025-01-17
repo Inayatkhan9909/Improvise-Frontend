@@ -14,7 +14,6 @@ import { getFilePreview, uploadFile } from '../../lib/appwrite/uploadImage';
 import { ClassContext } from '../../Context/class/ClassContext';
 
 const CreateClass = () => {
-    const {setClasses} = useContext(ClassContext);
     const { createclass, loading } = useClassAuth();
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [formData, setFormData] = useState({
@@ -103,7 +102,6 @@ const CreateClass = () => {
             console.log('CreateClass response', response);
 
             if (response?.status === 201) {
-                setClasses(response.data.class)
                 setSuccessMessage('Class created successfully!');
                 setErrorMessage(null);
 

@@ -16,7 +16,7 @@ export const Classes = () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        "http://localhost:4000/classes/getallclasses"
+        `http://localhost:4000/classes/getallclasses`
       );
       setClasses(response?.data?.classes || []);
       setLoading(false);
