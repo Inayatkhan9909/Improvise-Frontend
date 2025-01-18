@@ -23,7 +23,7 @@ const Footer = () => {
             <footer className="absolute inset-0 px-4 pt-8 pb-6">
                 <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start space-y-8 lg:space-y-0">
                     {/* Left Section */}
-                    <div className="w-full lg:w-1/3">
+                    <div className="w-full ">
                         <h1 className="text-2xl font-bold">Improvise</h1>
                         <p className="mt-4 text-sm leading-relaxed">
                             Subscribe to our newsletter to stay updated with the latest news and offers.
@@ -45,7 +45,7 @@ const Footer = () => {
                     </div>
 
                     {/* Right Section */}
-                    <div className="w-full lg:w-2/3 grid grid-cols-2 gap-6">
+                    <div className=" flex  gap-6">
                         {/* Sitemap Section */}
                         <div>
                             <h2 className="text-lg font-semibold">Sitemap</h2>
