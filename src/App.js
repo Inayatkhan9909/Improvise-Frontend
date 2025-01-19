@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import SignupPage from './features/auth/pages/SignupPage.tsx';
 import LoginPage from './features/auth/pages/LoginPage.tsx';
 import { UserContextProvider } from './features/Context/user/UserContextProvider.tsx';
+import { ClassContextProvider } from './features/Context/class/ClassContextProvider.tsx';
 import Navbar from './features/layout/Navbar.tsx';
 import Footer from './features/layout/Footer.tsx';
 import { HomePage } from './features/pages/HomePage.tsx';
@@ -19,7 +20,7 @@ function App() {
   return (
     <div className="App">
       <UserContextProvider>
-
+         <ClassContextProvider>
         <Router>
           <Navbar />
           <Routes>
@@ -32,7 +33,6 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
             </Route>
 
-
             <Route path="/profile" element={<ProfilePage />} />
 
             <Route element={<InstructorRoutes />}>
@@ -43,6 +43,7 @@ function App() {
           </Routes>
           <Footer />
         </Router>
+        </ClassContextProvider>
       </UserContextProvider>
     </div>
   );

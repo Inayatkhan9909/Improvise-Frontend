@@ -13,6 +13,7 @@ import { useClassAuth } from '../hooks/useClassAuth';
 import { getFilePreview, uploadFile } from '../../lib/appwrite/uploadImage';
 
 export const EditClass = ({ classDetails, onClose }: any) => {
+         
     const { updateClass, loading } = useClassAuth();
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [formData, setFormData] = useState({

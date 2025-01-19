@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { BookClass } from "../../classes/components/BookClass";
+import { ClassContext } from "../../Context/class/ClassContext";
 
 export const Classes = () => {
-  const [classes, setClasses] = useState([]);
+  const {classes, setClasses} = useContext(ClassContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [bookClassModal, setBookClassModal] = useState(false);
@@ -61,6 +62,7 @@ export const Classes = () => {
       </div>
     );
   }
+
 
   return (
     <>

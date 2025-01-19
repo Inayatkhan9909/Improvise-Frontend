@@ -32,7 +32,7 @@ const Footer = () => {
                             <input
                                 type="email"
                                 placeholder="Enter your email"
-                                className="px-4 py-2 rounded-lg text-gray-800 w-full sm:w-auto sm:rounded-l-lg sm:rounded-none"
+                                className="px-4 py-2 rounded-lg text-gray-800 w-auto sm:rounded-l-lg sm:rounded-none"
                             />
                             <button
                                 type="submit"
