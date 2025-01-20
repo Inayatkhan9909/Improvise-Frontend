@@ -18,7 +18,7 @@ export const Search: React.FC<SearchProps> = ({ query }) => {
     );
 
     return (
-        <div className="w-full flex flex-col gap-6">
+        <div className="w-full flex flex-col gap-6 mb-4">
             <div className="text-xl font-bold">Search Results for "{query}"</div>
 
             {filteredClasses.length === 0 && filteredCourses.length === 0 ? (

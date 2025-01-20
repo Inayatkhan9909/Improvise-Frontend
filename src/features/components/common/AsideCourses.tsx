@@ -52,14 +52,14 @@ export const AsideCourses = () => {
   };
 
   return (
-    <div className="relative flex items-center justify-center w-full px-4 py-6 sm:py-8 sm:px-6 max-h-screen">
+    <div className="relative flex  justify-center w-full px-4 py-4 sm:py-8 sm:px-6 ">
       {courses.length > 0 ? (
         <div className="absolute inset-0 bg-gray-100"></div>
       ) : (
         <div className="absolute inset-0 bg-gray-200"></div>
       )}
 
-      <div className="relative w-full max-w-full bg-white/90 shadow-lg rounded-lg p-4 sm:p-6">
+      <div className="relative w-full max-w-full bg-white/90 shadow-lg rounded-lg px-2 sm:p-6">
         {courses.length > 0 && courses[currentIndex] ? (
           <>
             <img
@@ -67,7 +67,7 @@ export const AsideCourses = () => {
               alt="thumbnail"
               className="w-full h-60 sm:h-96 rounded-lg object-contain "
             />
-            <h2 className="mt-4 text-lg font-bold text-blue-700 sm:text-xl">
+            <h2 className="mt-2 text-lg font-bold text-blue-700 sm:text-xl">
               {courses[currentIndex]?.title}
             </h2>
             <p className="mt-2 text-sm text-gray-600 sm:text-base">

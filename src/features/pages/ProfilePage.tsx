@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState,useEffect } from 'react';
 import { UserContext } from '../Context/user/userContext';
 import { InstructorDashboard } from '../components/Profile/InstructorDashboard';
 import { AdminDashboard } from '../components/Profile/AdminDashboard';
@@ -8,7 +8,18 @@ import { UserBookedCourses } from '../courses/components/UserBookedCourses';
 
 export const ProfilePage = () => {
     const { user } = useContext(UserContext);
-    const [activeComponent, setActiveComponent] = useState<string>('Dashboard');
+    const [activeComponent, setActiveComponent] = useState<string>('');
+
+    useEffect(() => {
+        const savedPanel = localStorage.getItem('activeComponent');
+        if (savedPanel) {
+            setActiveComponent(savedPanel);
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('activeComponent', activeComponent);
+    }, [activeComponent]);
 
     const renderComponent = () => {
         switch (activeComponent) {

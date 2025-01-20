@@ -2,25 +2,11 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <div className="relative bg-blue-600 text-white overflow-hidden">
-            {/* SVG Wave Background */}
-            <div className="relative -z-10">
-                <svg
-                    viewBox="0 0 1440 320"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="w-full h-auto"
-                    preserveAspectRatio="none"
-                >
-                    <path
-                        fill="#007bff"
-                        fillOpacity="1"
-                        d="M0,160 C360,280 720,40 1080,160 C1320,240 1440,80 1440,450 L0,450 Z"
-                    ></path>
-                </svg>
-            </div>
+        <div className=" bg-blue-600 text-white overflow-hidden">
+
 
             {/* Footer Content */}
-            <footer className="absolute inset-0 px-4 pt-8 pb-6">
+            <footer className=" inset-0 px-4 pt-8 pb-6">
                 <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start space-y-8 lg:space-y-0">
                     {/* Left Section */}
                     <div className="w-full ">

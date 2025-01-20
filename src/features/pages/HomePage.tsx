@@ -37,9 +37,9 @@ export const HomePage = () => {
           <Search query={searchQuery} />
         </section>
       ) : (
-        <section className="flex flex-col w-11/12 m-auto gap-6  lg:flex-row-reverse ">
+        <section className="flex flex-col w-full m-auto gap-6  lg:flex-row-reverse ">
           {/* Courses Section */}
-          <div className="lg:w-2/6 w-full order-1 lg:order-2">
+          <div className="lg:w-2/6 w-full order-1 lg:order-2 ">
             <AsideCourses />
           </div>
 
