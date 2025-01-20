@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BookCourse } from "../../courses/components/BookCourse";
 import { SlArrowRight,SlArrowLeft } from "react-icons/sl";
+import { ClassContext } from "../../Context/class/ClassContext";
 
 interface Course {
   _id: string;
@@ -16,7 +17,7 @@ interface Course {
 export const AsideCourses = () => {
   const [bookClassModal, setBookClassModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState<Course | null>(null);
-  const [courses, setCourses] = useState<Course[]>([]);
+  const {courses, setCourses} = useContext(ClassContext);
   const [currentIndex, setCurrentIndex] = useState(0);
   
 
