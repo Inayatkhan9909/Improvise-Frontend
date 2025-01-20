@@ -76,7 +76,7 @@ export const Classes = () => {
               <img
                 src={cls.thumbnail}
                 alt="Thumbnail"
-                className="w-full object-contain rounded-lg"
+                className="w-full max-h-96 object-contain rounded-lg"
               />
             </div>
 

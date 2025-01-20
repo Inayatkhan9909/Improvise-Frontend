@@ -6,7 +6,7 @@ import { Search } from "../components/common/Search";
 export const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSearchChange = (event:any) => {
+  const handleSearchChange = (event: any) => {
     setSearchQuery(event.target.value);
   };
 
@@ -15,7 +15,7 @@ export const HomePage = () => {
   return (
     <>
       {/* Find Class */}
-      <section className="w-5/6 m-auto p-4">
+      <section className="w-5/6 m-auto p-4 mb-2">
         <div className="text-2xl">
           <span>Find </span>
           <span className="text-orange-400">Class</span>
@@ -37,15 +37,15 @@ export const HomePage = () => {
           <Search query={searchQuery} />
         </section>
       ) : (
-        <section className="flex flex-col lg:flex-row w-11/12 m-auto gap-6 mt-6">
-          {/* Classes Section */}
-          <div className="lg:w-4/6 w-full">
-            <Classes />
+        <section className="flex flex-col w-11/12 m-auto gap-6  lg:flex-row-reverse ">
+          {/* Courses Section */}
+          <div className="lg:w-2/6 w-full order-1 lg:order-2">
+            <AsideCourses />
           </div>
 
-          {/* Courses Section */}
-          <div className="lg:w-2/6 w-full">
-            <AsideCourses />
+          {/* Classes Section */}
+          <div className="lg:w-4/6 w-full order-2 lg:order-1">
+            <Classes />
           </div>
         </section>
       )}
