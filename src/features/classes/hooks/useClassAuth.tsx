@@ -1,12 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { auth } from '../../lib/firebase/firebaseConfig';
-
-export const useClassAuth = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-   
-    const createclass = async (classData: {
+ interface ClassData{
+    
         title: string,
         description: string,
         date: string,
@@ -16,7 +12,14 @@ export const useClassAuth = () => {
         category: string,
         level: string,
         thumbnail: string,
-    }) => {
+    
+}
+
+export const useClassAuth = () => {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+   
+    const createclass = async (classData:ClassData) => {
         setLoading(true);
         setError(null);
         try {
@@ -36,7 +39,7 @@ export const useClassAuth = () => {
     };
 
 
-    const updateClass = async (classId: string, updatedData: any) => {
+    const updateClass = async (classId: string, updatedData: ClassData) => {
         try {
             if (!classId || typeof updatedData !== 'object') {
                 throw new Error('Invalid input data for updating class.');
@@ -55,6 +58,8 @@ export const useClassAuth = () => {
             };
         }
     };
+
+    
     return { createclass, updateClass, loading, error };
 };
 

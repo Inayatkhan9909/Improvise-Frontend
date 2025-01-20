@@ -17,7 +17,7 @@ export const CancelUserClassBooking = ({
       const response = await axios.delete(`http://localhost:4000/classes/cancel-user-classbooking/${classId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-
+      
       if (response.status === 200) {
         setMessage("Class successfully deleted!");
         setTimeout(() => {

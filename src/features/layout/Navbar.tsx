@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useAuth } from '../auth/hooks/useAuth'; // Access global user data
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../Context/user/userContext';
@@ -8,14 +8,27 @@ const Navbar: React.FC = () => {
     const { user, loading } = useContext(UserContext);
     const navigate = useNavigate();
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const handleLogout = async () => {
         await logout();
+        setMobileMenuOpen(false); // Close menu on logout
         navigate('/login');
     };
 
-    if (loading) {
+    // Close menu if clicked outside
+    useEffect(() => {
+        const handleOutsideClick = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setMobileMenuOpen(false);
+            }
+        };
 
+        document.addEventListener('mousedown', handleOutsideClick);
+        return () => document.removeEventListener('mousedown', handleOutsideClick);
+    }, []);
+
+    if (loading) {
         return null;
     }
 
@@ -94,22 +107,46 @@ const Navbar: React.FC = () => {
             </nav>
 
             {isMobileMenuOpen && (
-                <div className="md:hidden bg-blue-400 text-white shadow-lg">
+                <div
+                    ref={menuRef}
+                    className="absolute top-16 left-0 w-full bg-blue-400 text-white shadow-lg z-40"
+                >
                     <ul className="flex flex-col gap-4 p-4">
-                        <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/')}>
+                        <li
+                            className="cursor-pointer hover:text-yellow-400"
+                            onClick={() => {
+                                setMobileMenuOpen(false);
+                                navigate('/');
+                            }}
+                        >
                             Home
                         </li>
-                        <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/about')}>
+                        <li
+                            className="cursor-pointer hover:text-yellow-400"
+                            onClick={() => {
+                                setMobileMenuOpen(false);
+                                navigate('/about');
+                            }}
+                        >
                             About Us
                         </li>
-                        <li className="cursor-pointer hover:text-yellow-400" onClick={() => navigate('/courses')}>
+                        <li
+                            className="cursor-pointer hover:text-yellow-400"
+                            onClick={() => {
+                                setMobileMenuOpen(false);
+                                navigate('/courses');
+                            }}
+                        >
                             Courses
                         </li>
                         {user ? (
                             <>
                                 <li
                                     className="cursor-pointer hover:text-yellow-400"
-                                    onClick={() => navigate('/profile')}
+                                    onClick={() => {
+                                        setMobileMenuOpen(false);
+                                        navigate('/profile');
+                                    }}
                                 >
                                     Profile
                                 </li>
@@ -124,13 +161,19 @@ const Navbar: React.FC = () => {
                             <>
                                 <li
                                     className="cursor-pointer hover:text-yellow-400"
-                                    onClick={() => navigate('/login')}
+                                    onClick={() => {
+                                        setMobileMenuOpen(false);
+                                        navigate('/login');
+                                    }}
                                 >
                                     Login
                                 </li>
                                 <li
                                     className="cursor-pointer hover:text-yellow-400"
-                                    onClick={() => navigate('/signup')}
+                                    onClick={() => {
+                                        setMobileMenuOpen(false);
+                                        navigate('/signup');
+                                    }}
                                 >
                                     Join Us
                                 </li>

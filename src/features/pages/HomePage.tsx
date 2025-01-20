@@ -4,7 +4,7 @@ import { AsideCourses } from "../components/common/AsideCourses";
 import { Search } from "../components/common/Search";
 
 export const HomePage = () => {
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchChange = (event:any) => {
     setSearchQuery(event.target.value);

@@ -75,7 +75,6 @@ const CreateClass = () => {
         }
     };
 
-
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
@@ -89,7 +88,6 @@ const CreateClass = () => {
         if (!validate()) return;
 
         try {
-
             const thumbnailUrl = await uploadImage();
             if (!thumbnailUrl) {
                 setErrorMessage('Thumbnail upload failed. Please check the file.');
@@ -104,7 +102,7 @@ const CreateClass = () => {
             if (response?.status === 201) {
                 setSuccessMessage('Class created successfully!');
                 setErrorMessage(null);
-
+                resetForm();
             } else {
                 setErrorMessage(response?.data?.message || 'Class creation failed.');
                 setSuccessMessage(null);
@@ -118,6 +116,9 @@ const CreateClass = () => {
 
     const validate = () => {
         const tempErrors = { ...errors };
+        const now = new Date();
+        const selectedDate = new Date(`${formData.date}T${formData.timing}`);
+        
         tempErrors.title = formData.title ? '' : 'Title is required';
         tempErrors.description = formData.description ? '' : 'Description is required';
         tempErrors.date = formData.date ? '' : 'Date is required';
@@ -127,8 +128,40 @@ const CreateClass = () => {
         tempErrors.category = formData.category ? '' : 'Category is required';
         tempErrors.level = formData.level ? '' : 'Level is required';
         tempErrors.thumbnailFile = thumbnailFile ? '' : 'Thumbnail is required';
+
+        if (selectedDate < now) {
+            tempErrors.date = 'Cannot select a past date or time';
+            tempErrors.timing = 'Cannot select a past date or time';
+        }
+
         setErrors(tempErrors);
         return Object.values(tempErrors).every((x) => x === '');
+    };
+
+    const resetForm = () => {
+        setFormData({
+            title: '',
+            description: '',
+            date: '',
+            timing: '',
+            duration: '',
+            maxStudents: '',
+            category: '',
+            level: '',
+            thumbnail: '',
+        });
+        setThumbnailFile(null);
+        setErrors({
+            title: '',
+            description: '',
+            date: '',
+            timing: '',
+            duration: '',
+            maxStudents: '',
+            category: '',
+            level: '',
+            thumbnailFile: '',
+        });
     };
 
     return (
