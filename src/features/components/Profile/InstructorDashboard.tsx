@@ -14,10 +14,11 @@ export const InstructorDashboard = () => {
   const [isApproved, setIsApproved] = useState(false);
   const [detailsAvailable, setDetailsAvailable] = useState(true);
   const [resetData, setResetData] = useState(false);
-  const [activeSection, setActiveSection] = useState("details");
+  const [activeSection, setActiveSection] = useState(
+    localStorage.getItem("activeSection") || "details"
+  );
 
   useEffect(() => {
-
     if (
       !user?.roleDetails?.instructor?.bio ||
       !user?.roleDetails?.instructor?.resume ||
@@ -30,6 +31,10 @@ export const InstructorDashboard = () => {
       setIsApproved(true);
     }
   }, [user, resetData]);
+
+  useEffect(() => {
+    localStorage.setItem("activeSection", activeSection);
+  }, [activeSection]);
 
   const handleFormSubmit = async (details: any) => {
     try {
@@ -54,8 +59,33 @@ export const InstructorDashboard = () => {
     }
   };
 
-  const handleEdit = () => {
-    // Logic for handling edits
+  const renderContent = () => {
+    switch (activeSection) {
+      case "details":
+        return detailsAvailable ? (
+          <InstructorDetails onEdit={() => {}} />
+        ) : (
+          <AddInstructorDetails onSubmit={handleFormSubmit} />
+        );
+      case "add-class":
+        return isApproved ? (
+          <CreateClassPage />
+        ) : (
+          <div>You are not approved to add classes.</div>
+        );
+      case "my-classes":
+        return isApproved ? (
+          <InstructorClasses />
+        ) : (
+          <div>You are not approved to view classes.</div>
+        );
+      case "add-course":
+        return <CreateCourse />;
+      case "my-courses":
+        return <InstructorCourses />;
+      default:
+        return <div>Invalid Section</div>;
+    }
   };
 
   if (loading) {
@@ -63,91 +93,32 @@ export const InstructorDashboard = () => {
   }
 
   return (
-    <div className="flex flex-col md:flex-row">
-      {/* Sidebar */}
-      <aside className="w-full md:w-1/4 bg-gray-100 p-4 max-h-fit sticky ">
-        <nav className="space-y-4">
+    <div className="flex flex-col">
+      {/* Navigation Bar */}
+      <nav className="flex flex-wrap justify-start md:justify-center gap-2 p-4 bg-gray-100 shadow-md">
+        {[
+          { label: "Instructor Details", key: "details" },
+          { label: "Add Class", key: "add-class" },
+          { label: "My Classes", key: "my-classes" },
+          { label: "Add Course", key: "add-course" },
+          { label: "My Courses", key: "my-courses" },
+        ].map(({ label, key }) => (
           <button
-            className={`w-full text-left py-2 px-4 rounded-lg ${activeSection === "details" ? "bg-blue-500 text-white" : "bg-white text-gray-700"
-              } hover:bg-blue-600 hover:text-white`}
-            onClick={() => setActiveSection("details")}
+            key={key}
+            className={`py-2 px-4 rounded-lg text-sm ${
+              activeSection === key
+                ? "bg-blue-500 text-white"
+                : "bg-white text-gray-700 hover:bg-blue-600 hover:text-white"
+            }`}
+            onClick={() => setActiveSection(key)}
           >
-            Instructor Details
+            {label}
           </button>
-          <button
-            className={`w-full text-left py-2 px-4 rounded-lg ${activeSection === "add-class" ? "bg-blue-500 text-white" : "bg-white text-gray-700"
-              } hover:bg-blue-600 hover:text-white`}
-            onClick={() => setActiveSection("add-class")}
-          >
-            Add Class
-          </button>
-          <button
-            className={`w-full text-left py-2 px-4 rounded-lg ${activeSection === "my-classes" ? "bg-blue-500 text-white" : "bg-white text-gray-700"
-              } hover:bg-blue-600 hover:text-white`}
-            onClick={() => setActiveSection("my-classes")}
-          >
-            My Classes
-          </button>
-          <button
-            className={`w-full text-left py-2 px-4 rounded-lg ${activeSection === "add-course" ? "bg-blue-500 text-white" : "bg-white text-gray-700"
-              } hover:bg-blue-600 hover:text-white`}
-            onClick={() => setActiveSection("add-course")}
-          >
-            Add Course
-          </button>
-          <button
-            className={`w-full text-left py-2 px-4 rounded-lg ${activeSection === "my-courses" ? "bg-blue-500 text-white" : "bg-white text-gray-700"
-              } hover:bg-blue-600 hover:text-white`}
-            onClick={() => setActiveSection("my-courses")}
-          >
-            My Courses
-          </button>
-        </nav>
-      </aside>
+        ))}
+      </nav>
 
       {/* Main Content */}
-      <main className="w-full md:w-3/4 p-4">
-        <h1 className="text-xl font-bold mb-4">Instructor Dashboard</h1>
-
-        {activeSection === "details" && (
-
-          detailsAvailable ? (
-            <InstructorDetails onEdit={handleEdit} />
-          ) : (
-            <AddInstructorDetails onSubmit={handleFormSubmit} />
-          )
-        )}
-
-        {activeSection === "add-class" && (
-          <div>
-            {
-              isApproved ? <CreateClassPage /> : <div>You are not approved to add classes</div>
-            }
-          </div>
-        )}
-
-        {activeSection === "my-classes" && (
-          <div>
-            {
-              isApproved ? <InstructorClasses /> : <div>You are not approved to add classes</div>
-            }
-          </div>
-        )}
-
-        {activeSection === "add-course" && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4">Add Course</h2>
-            <CreateCourse/>
-          </div>
-        )}
-
-        {activeSection === "my-courses" && (
-          <div>
-            <h2 className="text-xl font-semibold mb-4">My Courses</h2>
-           <InstructorCourses/>
-          </div>
-        )}
-      </main>
+      <main className="flex-grow p-4">{renderContent()}</main>
     </div>
   );
 };

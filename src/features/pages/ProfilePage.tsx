@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { UserContext } from '../Context/user/userContext';
 import { InstructorDashboard } from '../components/Profile/InstructorDashboard';
 import { AdminDashboard } from '../components/Profile/AdminDashboard';
@@ -41,7 +41,7 @@ export const ProfilePage = () => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
             {/* Sidebar */}
-            <aside className="bg-blue-600 text-white rounded-lg flex flex-col items-center p-4 shadow-lg md:col-span-1 max-h-fit">
+            <aside className="bg-blue-600 text-white rounded-lg flex flex-col items-center p-2 shadow-lg md:col-span-1 max-h-fit">
                 {/* Profile Picture */}
                 <div className="w-20 h-20 md:w-16 md:h-16 rounded-full overflow-hidden border-2 border-yellow-400 mb-4">
                     {user?.profilePic ? (
@@ -61,7 +61,7 @@ export const ProfilePage = () => {
                 <h1 className="text-lg  font-semibold text-center">{user?.name || 'User Name'}</h1>
 
                 {/* Sidebar Buttons */}
-                <div className="flex flex-col gap-3 mt-4 w-full">
+                <div className="flex flex-col gap-3 mt-4 w-full md:w-fit">
                     <button
                         className={`py-2 px-2 text-sm md:text-lg text-center rounded-md ${activeComponent === 'Dashboard' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'}`}
                         onClick={() => setActiveComponent('Dashboard')}
@@ -90,7 +90,7 @@ export const ProfilePage = () => {
                             className={`py-2 px-2 text-sm md:text-lg text-center rounded-md ${activeComponent === 'InstructorPanel' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'}`}
                             onClick={() => setActiveComponent('InstructorPanel')}
                         >
-                            Instructor Panel
+                            Instructor
                         </button>
                     )}
                     {user?.isAdmin && (
@@ -98,18 +98,10 @@ export const ProfilePage = () => {
                             className={`py-2 px-2 text-sm md:text-lg text-center rounded-md ${activeComponent === 'AdminPanel' ? 'bg-yellow-400 text-blue-800' : 'hover:bg-yellow-400'}`}
                             onClick={() => setActiveComponent('AdminPanel')}
                         >
-                            Admin Panel
+                            Admin
                         </button>
                     )}
                 </div>
-
-                {/* Logout Button */}
-                <button
-                    className="mt-6 bg-red-500 hover:bg-red-700 text-white py-1 px-4 rounded-md text-sm md:text-lg w-3/4"
-                    onClick={() => console.log('Logout')}
-                >
-                    Logout
-                </button>
             </aside>
 
             {/* Main Content */}
