@@ -59,7 +59,45 @@ export const useClassAuth = () => {
         }
     };
 
+   const bookClass = async (classId:any)=>{
+    try {
+        setLoading(true);
+        const token = await auth.currentUser?.getIdToken(true);
+      const response =  await axios.put(
+          `${ApiUrl}/classes/bookclass`,
+          classId,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setLoading(false);
+        return response;
+    } catch (error:any) {
+        setLoading(false);
+        console.error('Error updating class:', error);
+        return {
+            status: error?.response?.status || 500,
+            message: error?.message || 'Failed to update class.',
+        };
+    }
+   }
+   const cancelBookedClass = async (classId:any)=>{
+    try {
+        setLoading(true);
+        const token = await auth.currentUser?.getIdToken(true);
+        const response = await axios.delete(`${ApiUrl}/classes/cancel-user-classbooking/${classId}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+        setLoading(false);
+        return response;
+    } catch (error:any) {
+        setLoading(false);
+        console.error('Error updating class:', error);
+        return {
+            status: error?.response?.status || 500,
+            message: error?.message || 'Failed to update class.',
+        };
+    }
+   }
 
-    return { createclass, updateClass, loading, error };
+    return { createclass, updateClass,bookClass,cancelBookedClass, loading, error };
 };
 

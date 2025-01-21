@@ -1,29 +1,21 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { auth } from "../../lib/firebase/firebaseConfig";
 
+import { useClassAuth } from '../hooks/useClassAuth';
 
 
 export const BookClass = ({ cls, onClose }:any) => {
-  const [loading, setLoading] = useState(false);
+  const { bookClass, loading } = useClassAuth();
 
   const handleConfirm = async () => {
     try {
-      setLoading(true);
-      const token = await auth.currentUser?.getIdToken(true);
-      await axios.put(
-        "http://localhost:4000/classes/bookclass",
-        { classId: cls._id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+     const response=  await bookClass({classId:cls._id})
       alert("Class booked successfully!");
-      setLoading(false);
       onClose();
     } catch (error) {
       console.error(error);
       alert("Failed to book class. Please try again.");
-      setLoading(false);
     }
   };
 
