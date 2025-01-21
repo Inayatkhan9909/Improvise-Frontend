@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { BookClass } from "../../classes/components/BookClass";
 import { ClassContext } from "../../Context/class/ClassContext";
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const Classes = () => {
   const {classes, setClasses} = useContext(ClassContext);
@@ -10,14 +11,13 @@ export const Classes = () => {
   const [loading, setLoading] = useState(false);
   const [bookClassModal, setBookClassModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
-
   const itemsPerPage = 4;
 
   const fetchClasses = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `http://localhost:4000/classes/getallclasses`
+        `${ApiUrl}/classes/getallclasses`
       );
       setClasses(response?.data?.classes || []);
       setLoading(false);
@@ -28,6 +28,7 @@ export const Classes = () => {
   };
 
   useEffect(() => {
+    console.log(ApiUrl)
     fetchClasses();
   }, []);
 

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { BookCourse } from "../../courses/components/BookCourse";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
 import { ClassContext } from "../../Context/class/ClassContext";
-
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 interface Course {
   _id: string;
   title: string;
@@ -23,10 +23,9 @@ export const AsideCourses = () => {
   const fetchCourses = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:4000/courses/getallcourses"
+        `${ApiUrl}/courses/getallcourses`
       );
       setCourses(response?.data?.courses || []);
-      console.log(response.data);
     } catch (error) {
       console.error(error);
     }

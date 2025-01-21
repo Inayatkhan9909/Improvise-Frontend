@@ -1,30 +1,30 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { auth } from '../../lib/firebase/firebaseConfig';
- interface ClassData{
-    
-        title: string,
-        description: string,
-        date: string,
-        timing: string,
-        duration: string,
-        maxStudents: string,
-        category: string,
-        level: string,
-        thumbnail: string,
-    
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
+
+interface ClassData {
+    title: string,
+    description: string,
+    date: string,
+    timing: string,
+    duration: string,
+    maxStudents: string,
+    category: string,
+    level: string,
+    thumbnail: string,
 }
 
 export const useClassAuth = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-   
-    const createclass = async (classData:ClassData) => {
+
+    const createclass = async (classData: ClassData) => {
         setLoading(true);
         setError(null);
         try {
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.post("http://localhost:4000/classes/createclass", classData, {
+            const response = await axios.post(`${ApiUrl}/classes/createclass`, classData, {
                 headers: { Authorization: `Bearer ${token}` },
 
             });
@@ -45,7 +45,7 @@ export const useClassAuth = () => {
                 throw new Error('Invalid input data for updating class.');
             }
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.post("http://localhost:4000/classes/update-class", updatedData, {
+            const response = await axios.post(`${ApiUrl}/classes/update-class`, updatedData, {
                 headers: { Authorization: `Bearer ${token}` },
 
             });
@@ -59,7 +59,7 @@ export const useClassAuth = () => {
         }
     };
 
-    
+
     return { createclass, updateClass, loading, error };
 };
 
