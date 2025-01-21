@@ -31,7 +31,6 @@ export const InstructorClasses = () => {
         fetchClasses();
     }, []);
 
-    // Delete class handler
     const handleDelete = async (classId: any) => {
         try {
             const token = await auth.currentUser?.getIdToken(true);
@@ -52,8 +51,6 @@ export const InstructorClasses = () => {
     const handleEdit = (classId: any) => {
         console.log("Edit class:", classId);
     };
-
-
 
     const indexOfLastClass = currentPage * classesPerPage;
     const indexOfFirstClass = indexOfLastClass - classesPerPage;
@@ -86,15 +83,15 @@ export const InstructorClasses = () => {
                         {currentClasses.map((classItem: any) => (
                             <div
                                 key={classItem._id}
-                                className="flex items-center justify-between bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition duration-300"
+                                className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-white shadow-md rounded-lg p-4 hover:shadow-lg transition duration-300"
                             >
-                                <div className="flex items-center space-x-4">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center sm:space-x-4 w-full">
                                     <img
                                         src={classItem.thumbnail}
                                         alt={classItem.title}
-                                        className="w-20 h-20 object-cover rounded-lg"
+                                        className="w-full sm:w-20 sm:h-20 h-36 object-cover rounded-lg mb-2 sm:mb-0"
                                     />
-                                    <div >
+                                    <div className="w-full">
                                         <h2 className="text-lg font-bold text-gray-800">{classItem.title}</h2>
                                         <p className="text-gray-600 text-sm">Category: {classItem.category}</p>
                                         <p className="text-gray-600 text-sm">Date: {new Date(classItem.date).toLocaleDateString()}</p>
@@ -103,7 +100,7 @@ export const InstructorClasses = () => {
                                 </div>
                                 <button
                                     onClick={() => setSelectedClass(classItem)}
-                                    className="bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-600 transition"
+                                    className="mt-2 sm:mt-0 bg-blue-500 text-white py-1 px-4 rounded-md hover:bg-blue-600 transition w-full sm:w-auto"
                                 >
                                     View
                                 </button>
@@ -111,7 +108,6 @@ export const InstructorClasses = () => {
                         ))}
                     </div>
 
-                    {/* Pagination controls */}
                     <div className="flex justify-center items-center space-x-4 mt-6">
                         <button
                             onClick={prevPage}
@@ -134,17 +130,13 @@ export const InstructorClasses = () => {
                 </div>
             )}
 
-            {/* Modal for viewing details */}
             {selectedClass && (
-
                 <InstructorClassDetails
                     classDetails={selectedClass}
                     onClose={() => setSelectedClass(null)}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
                 />
-
-
             )}
         </div>
     );
