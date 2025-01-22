@@ -59,6 +59,7 @@ export const useAuth = () => {
 
     const logout = async () => {
         setLoading(true);
+        localStorage.setItem('activeComponent', 'Dashboard');
          await auth.signOut();
         setUser(null);
         setLoading(false);

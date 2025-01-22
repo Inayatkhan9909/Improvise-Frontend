@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { useClassAuth } from '../hooks/useClassAuth';
 import { getFilePreview, uploadFile } from '../../lib/appwrite/uploadImage';
-import { ClassContext } from '../../Context/class/ClassContext';
 
 const CreateClass = () => {
     const { createclass, loading } = useClassAuth();
@@ -93,9 +92,7 @@ const CreateClass = () => {
                 setErrorMessage('Thumbnail upload failed. Please check the file.');
                 return;
             }
-
             const updatedFormData = { ...formData, thumbnail: thumbnailUrl };
-
             const response = await createclass(updatedFormData);
             console.log('CreateClass response', response);
 

@@ -1,52 +1,72 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import { auth } from '../../lib/firebase/firebaseConfig';
 import { InstructorClassDetails } from './InstructorClassDetails';
+import { useClassAuth } from '../hooks/useClassAuth';
+import { ClassContext } from '../../Context/class/ClassContext';
+import { Snackbar, Alert } from '@mui/material';
 
 export const InstructorClasses = () => {
-    const [classes, setClasses] = useState<any>([]);
-    const [loading, setLoading] = useState(true);
+    const { instructorClasses, setInstructorClasses } = useContext(ClassContext);
+    const { fetchInstructorClasses, deleteInstructorClasses, loading } = useClassAuth();
+    const [authLoading, setAuthLoading] = useState(true);
     const [error, setError] = useState("");
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [selectedClass, setSelectedClass] = useState<any>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const classesPerPage = 3;
-
-    const fetchClasses = async () => {
+    const fetchClasses = async (token: string) => {
         try {
-            setLoading(true);
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.get("http://localhost:4000/instructor/get-instructor-classes", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setClasses(response.data.classes);
+            const response = await fetchInstructorClasses(token);
+            if (response.status === 200) {
+                setInstructorClasses(response.data.classes);
+            }
+            else {
+                setError("Failed to load classes. Please try again later.");
+            }
+
         } catch (err) {
             console.error("Error fetching classes:", err);
             setError("Failed to load classes. Please try again later.");
-        } finally {
-            setLoading(false);
+        }
+    };
+
+
+
+
+    const handleDelete = async (classId: any) => {
+        try {
+            const response = await deleteInstructorClasses(classId);
+            if (response.status === 200) {
+                setSelectedClass("Class deleted successfully!");
+                setSelectedClass(null);
+            }
+            else{
+                setErrorMessage(response.data.message)
+            }
+        } catch (err) {
+            console.error("Error deleting class:", err);
+            setErrorMessage("Failed to delete class. Please try again.");
         }
     };
 
     useEffect(() => {
-        fetchClasses();
-    }, []);
-
-    const handleDelete = async (classId: any) => {
-        try {
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.delete(`http://localhost:4000/instructor/classes/${classId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            if (response.status === 200) {
-                alert("Class deleted successfully!");
-                fetchClasses();
-                setSelectedClass(null);
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const token = await user.getIdToken(true);
+                    await fetchClasses(token);
+                } catch (err) {
+                    console.error("Error fetching token:", err);
+                    setError("Failed to authenticate. Please try again later.");
+                }
+            } else {
+                setError("No user logged in. Please log in again.");
             }
-        } catch (err) {
-            console.error("Error deleting class:", err);
-            alert("Failed to delete class. Please try again.");
-        }
-    };
+            setAuthLoading(false);
+        });
+        return () => unsubscribe();
+    }, [handleDelete]);
 
     const handleEdit = (classId: any) => {
         console.log("Edit class:", classId);
@@ -54,10 +74,10 @@ export const InstructorClasses = () => {
 
     const indexOfLastClass = currentPage * classesPerPage;
     const indexOfFirstClass = indexOfLastClass - classesPerPage;
-    const currentClasses = classes.slice(indexOfFirstClass, indexOfLastClass);
+    const currentClasses = instructorClasses.slice(indexOfFirstClass, indexOfLastClass);
 
     const nextPage = () => {
-        if (currentPage < Math.ceil(classes.length / classesPerPage)) {
+        if (currentPage < Math.ceil(instructorClasses.length / classesPerPage)) {
             setCurrentPage(currentPage + 1);
         }
     };
@@ -67,7 +87,7 @@ export const InstructorClasses = () => {
             setCurrentPage(currentPage - 1);
         }
     };
-
+    if (authLoading || loading) return <div className="text-center py-6">Loading classes...</div>;
     if (loading) return <div className="text-center py-6">Loading classes...</div>;
     if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
 
@@ -75,7 +95,7 @@ export const InstructorClasses = () => {
         <div className="p-4 bg-gray-50 min-h-screen">
             <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">My Classes</h1>
 
-            {classes.length === 0 ? (
+            {instructorClasses.length === 0 ? (
                 <div className="text-center text-gray-500">You haven't created any classes yet.</div>
             ) : (
                 <div>
@@ -117,11 +137,11 @@ export const InstructorClasses = () => {
                             Back
                         </button>
                         <span className="text-gray-800">
-                            Page {currentPage} of {Math.ceil(classes.length / classesPerPage)}
+                            Page {currentPage} of {Math.ceil(instructorClasses.length / classesPerPage)}
                         </span>
                         <button
                             onClick={nextPage}
-                            disabled={currentPage === Math.ceil(classes.length / classesPerPage)}
+                            disabled={currentPage === Math.ceil(instructorClasses.length / classesPerPage)}
                             className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition disabled:opacity-50"
                         >
                             Next
@@ -138,6 +158,33 @@ export const InstructorClasses = () => {
                     onDelete={handleDelete}
                 />
             )}
+
+            <Snackbar
+                open={!!successMessage}
+                autoHideDuration={6000}
+                onClose={() => setSuccessMessage(null)}
+            >
+                <Alert
+                    onClose={() => setSuccessMessage(null)}
+                    severity="success"
+                    sx={{ width: '100%' }}
+                >
+                    {successMessage}
+                </Alert>
+            </Snackbar>
+            <Snackbar
+                open={!!errorMessage}
+                autoHideDuration={6000}
+                onClose={() => setErrorMessage(null)}
+            >
+                <Alert
+                    onClose={() => setErrorMessage(null)}
+                    severity="error"
+                    sx={{ width: '100%' }}
+                >
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

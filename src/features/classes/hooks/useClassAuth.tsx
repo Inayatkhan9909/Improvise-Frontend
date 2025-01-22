@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { auth } from '../../lib/firebase/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 interface ClassData {
@@ -18,12 +19,28 @@ interface ClassData {
 export const useClassAuth = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [token, setToken] = useState<string | null>(null);
+
+    useEffect(() => { 
+        const unsubscribe = onAuthStateChanged(auth, async (user:any) => {
+            if (user) {
+                const fetchedToken = await user.getIdToken(true);
+                console.log("token inuser "+token)
+                setToken(fetchedToken);
+            } else {
+                setToken(null);
+            }
+            setLoading(false); 
+        });
+
+        return () => unsubscribe(); 
+    }, []);
 
     const createclass = async (classData: ClassData) => {
         setLoading(true);
         setError(null);
         try {
-            const token = await auth.currentUser?.getIdToken(true);
+           
             const response = await axios.post(`${ApiUrl}/classes/createclass`, classData, {
                 headers: { Authorization: `Bearer ${token}` },
 
@@ -38,13 +55,11 @@ export const useClassAuth = () => {
         }
     };
 
-
     const updateClass = async (classId: string, updatedData: ClassData) => {
         try {
             if (!classId || typeof updatedData !== 'object') {
                 throw new Error('Invalid input data for updating class.');
             }
-            const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.post(`${ApiUrl}/classes/update-class`, updatedData, {
                 headers: { Authorization: `Bearer ${token}` },
 
@@ -63,8 +78,7 @@ export const useClassAuth = () => {
             if (!classId ) {
                 throw new Error('Invalid input data for delete class.');
             }
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.delete(`http://localhost:4000/classes/delete-class/${classId}`, {
+            const response = await axios.delete(`${ApiUrl}/classes/delete-class/${classId}`, {
                 headers: { Authorization: `Bearer ${token}` },
               });
             return response;
@@ -77,13 +91,49 @@ export const useClassAuth = () => {
         }
     };
 
+    const fetchInstructorClasses = async (token:string)=>{
+        try {     
+            setLoading(true);
+            console.log(token);
+            const response = await axios.get(`${ApiUrl}/instructor/get-instructor-classes`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setLoading(false);
+            return response;
+            
+        } catch (error:any) {
+            setLoading(false);
+            console.error('Error fetching class:', error);
+            return {
+                status: error?.response?.status || 500,
+                data: error?.response?.data || 'Failed to fetching class.',
+            };
+        }
+    }
+    const deleteInstructorClasses = async (classId:string)=>{
+        setLoading(true);
+        try {
+            const response = await axios.delete(`http://localhost:4000/instructor/classes/${classId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setLoading(false);
+            return response
+            
+        } catch (error:any) {
+            setLoading(false);
+            console.error('Error delete class:', error);
+            return {
+                status: error?.response?.status || 500,
+                data: error?.response?.data || 'Failed to deleting class.',
+            };
+        }
+    }
 
 
 
     const bookClass = async (classId: any) => {
         try {
             setLoading(true);
-            const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.put(
                 `${ApiUrl}/classes/bookclass`,
                 classId,
@@ -104,7 +154,6 @@ export const useClassAuth = () => {
     const cancelBookedClass = async (classId: any) => {
         try {
             setLoading(true);
-            const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.delete(`${ApiUrl}/classes/cancel-user-classbooking/${classId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -120,6 +169,8 @@ export const useClassAuth = () => {
         }
     }
 
-    return { createclass, updateClass, deleteClass, bookClass, cancelBookedClass, loading, error };
+    return { createclass, updateClass, deleteClass,
+        fetchInstructorClasses,deleteInstructorClasses,
+         bookClass, cancelBookedClass, loading, error };
 };
 
