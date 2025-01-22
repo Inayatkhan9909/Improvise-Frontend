@@ -51,7 +51,25 @@ export const useClassAuth = () => {
             });
             return response;
         } catch (error: any) {
-            console.error('Error updating class:', error);
+            console.error('Error delete class:', error);
+            return {
+                status: error?.response?.status || 500,
+                message: error?.message || 'Failed to delete class.',
+            };
+        }
+    };
+    const deleteClass = async (classId: string) => {
+        try {
+            if (!classId ) {
+                throw new Error('Invalid input data for delete class.');
+            }
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.delete(`http://localhost:4000/classes/delete-class/${classId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+            return response;
+        } catch (error: any) {
+            console.error('Error delete class:', error);
             return {
                 status: error?.response?.status || 500,
                 message: error?.message || 'Failed to update class.',
@@ -59,45 +77,49 @@ export const useClassAuth = () => {
         }
     };
 
-   const bookClass = async (classId:any)=>{
-    try {
-        setLoading(true);
-        const token = await auth.currentUser?.getIdToken(true);
-      const response =  await axios.put(
-          `${ApiUrl}/classes/bookclass`,
-          classId,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        setLoading(false);
-        return response;
-    } catch (error:any) {
-        setLoading(false);
-        console.error('Error updating class:', error);
-        return {
-            status: error?.response?.status || 500,
-            message: error?.message || 'Failed to update class.',
-        };
-    }
-   }
-   const cancelBookedClass = async (classId:any)=>{
-    try {
-        setLoading(true);
-        const token = await auth.currentUser?.getIdToken(true);
-        const response = await axios.delete(`${ApiUrl}/classes/cancel-user-classbooking/${classId}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-        setLoading(false);
-        return response;
-    } catch (error:any) {
-        setLoading(false);
-        console.error('Error updating class:', error);
-        return {
-            status: error?.response?.status || 500,
-            message: error?.message || 'Failed to update class.',
-        };
-    }
-   }
 
-    return { createclass, updateClass,bookClass,cancelBookedClass, loading, error };
+
+
+    const bookClass = async (classId: any) => {
+        try {
+            setLoading(true);
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.put(
+                `${ApiUrl}/classes/bookclass`,
+                classId,
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+            setLoading(false);
+            return response;
+
+        } catch (error: any) {
+            setLoading(false);
+            console.error('Error book class:', error);
+            return {
+                status: error?.response?.status || 500,
+                data: error?.response?.data || 'Failed to book class.',
+            };
+        }
+    }
+    const cancelBookedClass = async (classId: any) => {
+        try {
+            setLoading(true);
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.delete(`${ApiUrl}/classes/cancel-user-classbooking/${classId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setLoading(false);
+            return response;
+        } catch (error: any) {
+            setLoading(false);
+            console.error('Error updating class:', error);
+            return {
+                status: error?.response?.status || 500,
+                message: error?.message || 'Failed to update class.',
+            };
+        }
+    }
+
+    return { createclass, updateClass, deleteClass, bookClass, cancelBookedClass, loading, error };
 };
 

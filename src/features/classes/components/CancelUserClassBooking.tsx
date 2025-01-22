@@ -1,5 +1,10 @@
 import React, { useState } from "react";
 import { useClassAuth } from "../hooks/useClassAuth";
+import {
+  Snackbar,
+  Alert,
+} from '@mui/material';
+
 
 export const CancelUserClassBooking = ({
   classId,
@@ -7,29 +12,27 @@ export const CancelUserClassBooking = ({
   onClose
 }: any) => {
   const {cancelBookedClass,loading}= useClassAuth();
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [message, setMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleDelete = async () => {
-    setIsDeleting(true);
+
     try {
       const response = await cancelBookedClass(classId);
     
       if (response.status === 200) {
-        setMessage("Class successfully deleted!");
+        setSuccessMessage("Class successfully deleted!");
         setTimeout(() => {
-          setMessage(""); 
+          
           onClose(); 
         }, 2000);
       } else {
-        setMessage("Failed to delete the class.");
+        setErrorMessage("Failed to delete the class.");
       }
     } catch (error) {
       console.error("Error deleting class:", error);
-      setMessage("An error occurred. Please try again.");
-    } finally {
-      setIsDeleting(false);
-    }
+      setErrorMessage("An error occurred. Please try again.");
+    } 
   };
 
   return (
@@ -41,28 +44,52 @@ export const CancelUserClassBooking = ({
         <p className="text-gray-600 text-center mb-6">
           Are you sure you want to cancel the class booking <strong>{classTitle}</strong>?
         </p>
-        {message && (
-          <p className="text-center text-sm mb-4 text-gray-700">{message}</p>
-        )}
+
         <div className="flex justify-between">
           <button
             onClick={onClose}
             className="bg-gray-300 text-gray-700 py-2 px-6 rounded-md hover:bg-gray-400"
-            disabled={isDeleting}
+            disabled={loading}
           >
             Cancel
           </button>
           <button
             onClick={handleDelete}
             className={`${
-              isDeleting ? "bg-red-400" : "bg-red-500 hover:bg-red-600"
+              loading ? "bg-red-400" : "bg-red-500 hover:bg-red-600"
             } text-white py-2 px-6 rounded-md`}
-            disabled={isDeleting}
+            disabled={loading}
           >
-            {isDeleting ? "Deleting..." : "confirm"}
+            {loading ? "Deleting..." : "confirm"}
           </button>
         </div>
       </div>
+            <Snackbar
+              open={!!successMessage}
+              autoHideDuration={6000}
+              onClose={() => setSuccessMessage(null)}
+            >
+              <Alert
+                onClose={() => setSuccessMessage(null)}
+                severity="success"
+                sx={{ width: '100%' }}
+              >
+                {successMessage}
+              </Alert>
+            </Snackbar>
+            <Snackbar
+              open={!!errorMessage}
+              autoHideDuration={6000}
+              onClose={() => setErrorMessage(null)}
+            >
+              <Alert
+                onClose={() => setErrorMessage(null)}
+                severity="error"
+                sx={{ width: '100%' }}
+              >
+                {errorMessage}
+              </Alert>
+            </Snackbar>
     </div>
   );
 };

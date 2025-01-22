@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { auth } from "../../lib/firebase/firebaseConfig";
+import { useClassAuth } from "../hooks/useClassAuth";
 
 export const DeleteClass = ({
   classId,
@@ -10,14 +11,14 @@ export const DeleteClass = ({
 }: any) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [message, setMessage] = useState("");
+  const {deleteClass,loading} = useClassAuth();
 
   const handleDelete = async () => {
     setIsDeleting(true);
     try {
       const token = await auth.currentUser?.getIdToken(true);
-      const response = await axios.delete(`http://localhost:4000/classes/delete-class/${classId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await deleteClass(classId);
+
 
       if (response.status === 200) {
         setMessage("Class successfully deleted!");
