@@ -55,6 +55,25 @@ export const useCourseAuth = () => {
         }
     };
 
+    const deleteCourse = async (courseId: string) => {
+        try {
+            if (!courseId ) {
+                throw new Error('Invalid input data for delete class.');
+            }
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.delete(`${ApiUrl}/delete-course/${courseId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            return response;
+        } catch (error: any) {
+            console.error('Error delete course:', error);
+            return {
+                status: error?.response?.status || 500,
+                message: error?.message || 'Failed to update course',
+            };
+        }
+    };
+
     const fetchInstructorCourses = async (token:string)=>{
         try {     
             setLoading(true);
@@ -73,6 +92,68 @@ export const useCourseAuth = () => {
             };
         }
     }
-    return { createCourse, updateCourse,fetchInstructorCourses, loading, error };
+
+    const fetchUserCourses = async (token:string)=>{
+        try {     
+            setLoading(true);
+            const response = await axios.get(`${ApiUrl}/courses/get-userbooked-courses`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setLoading(false);
+            return response;
+            
+        } catch (error:any) {
+            setLoading(false);
+            console.error('Error fetching courses:', error);
+            return {
+                status: error?.response?.status || 500,
+                data: error?.response?.data || 'Failed to fetching courses',
+            };
+        }
+    }
+
+    const bookCourse = async (courseId: any) => {
+        try {
+            setLoading(true);
+            const token = await auth.currentUser?.getIdToken(true);
+          const response =  await axios.put(
+              `${ApiUrl}/courses/bookcourse`,
+              courseId,
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+     
+            setLoading(false);
+            return response;
+
+        } catch (error: any) {
+            setLoading(false);
+            console.error('Error book course:', error);
+            return {
+                status: error?.response?.status || 500,
+                data: error?.response?.data || 'Failed to book course.',
+            };
+        }
+    }
+
+    const cancelBookedCourse = async (courseId: any) => {
+        try {
+            setLoading(true);
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.delete(`${ApiUrl}/courses/cancel-user-coursebooking/${courseId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            setLoading(false);
+            return response;
+        } catch (error: any) {
+            setLoading(false);
+            console.error('Error updating course:', error);
+            return {
+                status: error?.response?.status || 500,
+                message: error?.message || 'Failed to update course',
+            };
+        }
+    }
+    return { createCourse, updateCourse,fetchInstructorCourses,bookCourse,
+        cancelBookedCourse,deleteCourse,fetchUserCourses, loading, error };
 };
 

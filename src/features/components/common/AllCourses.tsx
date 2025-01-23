@@ -1,16 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import axios from "axios";
-import { ClassContext } from "../../Context/class/ClassContext";
+import { CourseContext } from "../../Context/course/CourseContext";
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 
 export const AllCourses = () => {
-  const {courses, setCourses} = useContext(ClassContext);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const {courses, setCourses} = useContext(CourseContext);
 
   const fetchCourses = async () => {
     try {
-      const response = await axios.get("http://localhost:4000/courses/getallcourses");
+      const response = await axios.get(`${ApiUrl}/courses/getallcourses`);
       const fetchedCourses = response?.data?.courses || [];
       setCourses(fetchedCourses);
 

@@ -69,7 +69,7 @@ export const EditCourse = ({ courseDetails, onClose }: any) => {
     };
 
     const uploadImage = async (): Promise<string | null> => {
-        if (!thumbnailFile) return formData.thumbnail; // Use the existing thumbnail if no new file is uploaded
+        if (!thumbnailFile) return formData.thumbnail; 
         try {
             const uploadedFile = await uploadFile(thumbnailFile);
             if (!uploadedFile || !uploadedFile.$id) {

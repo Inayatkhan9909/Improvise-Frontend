@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import { auth } from '../../lib/firebase/firebaseConfig';
 import { InstructorCourseDetails } from './InstructorCourseDetails';
 import { useCourseAuth } from '../hooks/useCourseAuth';

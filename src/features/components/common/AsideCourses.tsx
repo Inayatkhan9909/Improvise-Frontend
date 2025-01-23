@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { BookCourse } from "../../courses/components/BookCourse";
 import { SlArrowRight, SlArrowLeft } from "react-icons/sl";
-import { ClassContext } from "../../Context/class/ClassContext";
+import { CourseContext } from "../../Context/course/CourseContext";
 const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 interface Course {
   _id: string;
@@ -17,7 +17,7 @@ interface Course {
 export const AsideCourses = () => {
   const [bookClassModal, setBookClassModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState<Course | null>(null);
-  const { courses, setCourses } = useContext(ClassContext);
+  const { courses, setCourses } = useContext(CourseContext);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const fetchCourses = async () => {
@@ -42,7 +42,7 @@ export const AsideCourses = () => {
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? courses.length - 1 : prevIndex - 1
+     courses && prevIndex === 0 ? courses.length - 1 : prevIndex - 1
     );
   };
 
@@ -52,14 +52,14 @@ export const AsideCourses = () => {
 
   return (
     <div className="relative flex  justify-center w-full px-4 py-4 sm:py-8 sm:px-6 ">
-      {courses.length > 0 ? (
+      {courses && courses.length > 0 ? (
         <div className="absolute inset-0 bg-gray-100"></div>
       ) : (
         <div className="absolute inset-0 bg-gray-200"></div>
       )}
 
       <div className="relative w-full max-w-full bg-white/90 shadow-lg rounded-lg px-2 sm:p-6">
-        {courses.length > 0 && courses[currentIndex] ? (
+        {courses && courses.length > 0 && courses[currentIndex] ? (
           <>
             <img
               src={courses[currentIndex].thumbnail}
