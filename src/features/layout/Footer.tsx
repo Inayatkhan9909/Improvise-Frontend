@@ -4,7 +4,6 @@ const Footer = () => {
     return (
         <div className=" bg-blue-600 text-white overflow-hidden">
 
-
             {/* Footer Content */}
             <footer className=" inset-0 px-4 pt-8 pb-6">
                 <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start space-y-8 lg:space-y-0">

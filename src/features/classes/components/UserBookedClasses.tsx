@@ -2,33 +2,46 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { auth } from '../../lib/firebase/firebaseConfig';
 import { UserBookedClassDetails } from './UserBookedClassDetails';
+import { useClassAuth } from '../hooks/useClassAuth';
 
 export const UserBookedClasses = () => {
+    const { fetchUserClasses, loading } = useClassAuth();
+    const [authLoading, setAuthLoading] = useState(true);
     const [classes, setClasses] = useState<any>([]);
-    const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [selectedClass, setSelectedClass] = useState<any>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const classesPerPage = 3;
 
-    const fetchClasses = async () => {
+    const fetchClasses = async (token: string) => {
+
         try {
-            setLoading(true);
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.get("http://localhost:4000/classes/get-userbooked-classes", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setClasses(response.data.classes);
+            const response = await fetchUserClasses(token);
+            if (response.status === 200) {
+                setClasses(response.data.classes);
+            }
         } catch (err) {
             console.error("Error fetching classes:", err);
             setError("Failed to load classes. Please try again later.");
-        } finally {
-            setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchClasses();
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const token = await user.getIdToken(true);
+                    await fetchClasses(token);
+                } catch (err) {
+                    console.error("Error fetching token:", err);
+                    setError("Failed to authenticate. Please try again later.");
+                }
+            } else {
+                setError("No user logged in. Please log in again.");
+            }
+            setAuthLoading(false);
+        });
+        return () => unsubscribe();
     }, []);
 
     const indexOfLastClass = currentPage * classesPerPage;
@@ -49,6 +62,7 @@ export const UserBookedClasses = () => {
 
     if (loading) return <div className="text-center py-6">Loading classes...</div>;
     if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
+    if (authLoading || loading) return <div className="text-center py-6">Loading classes...</div>;
 
     return (
         <div className="p-4 bg-gray-50 min-h-screen">
@@ -117,8 +131,6 @@ export const UserBookedClasses = () => {
                     classDetails={selectedClass}
                     onClose={() => setSelectedClass(null)}
                 />
-
-
             )}
         </div>
     );

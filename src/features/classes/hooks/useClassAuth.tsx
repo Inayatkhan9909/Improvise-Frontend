@@ -94,7 +94,6 @@ export const useClassAuth = () => {
     const fetchInstructorClasses = async (token:string)=>{
         try {     
             setLoading(true);
-            console.log(token);
             const response = await axios.get(`${ApiUrl}/instructor/get-instructor-classes`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -129,8 +128,6 @@ export const useClassAuth = () => {
         }
     }
 
-
-
     const bookClass = async (classId: any) => {
         try {
             setLoading(true);
@@ -151,6 +148,7 @@ export const useClassAuth = () => {
             };
         }
     }
+
     const cancelBookedClass = async (classId: any) => {
         try {
             setLoading(true);
@@ -169,8 +167,28 @@ export const useClassAuth = () => {
         }
     }
 
+    const fetchUserClasses = async (token:string)=>{
+        try {     
+            setLoading(true);
+            const response = await axios.get("http://localhost:4000/classes/get-userbooked-classes", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setLoading(false);
+            return response;
+            
+        } catch (error:any) {
+            setLoading(false);
+            console.error('Error fetching class:', error);
+            return {
+                status: error?.response?.status || 500,
+                data: error?.response?.data || 'Failed to fetching class.',
+            };
+        }
+    }
+
     return { createclass, updateClass, deleteClass,
         fetchInstructorClasses,deleteInstructorClasses,
-         bookClass, cancelBookedClass, loading, error };
+         bookClass, cancelBookedClass,fetchUserClasses,
+          loading, error };
 };
 
