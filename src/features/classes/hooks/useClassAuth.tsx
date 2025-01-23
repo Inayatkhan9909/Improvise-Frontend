@@ -170,7 +170,7 @@ export const useClassAuth = () => {
     const fetchUserClasses = async (token:string)=>{
         try {     
             setLoading(true);
-            const response = await axios.get("http://localhost:4000/classes/get-userbooked-classes", {
+            const response = await axios.get(`${ApiUrl}/classes/get-userbooked-classes`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setLoading(false);

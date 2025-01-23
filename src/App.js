@@ -4,6 +4,7 @@ import SignupPage from './features/auth/pages/SignupPage.tsx';
 import LoginPage from './features/auth/pages/LoginPage.tsx';
 import { UserContextProvider } from './features/Context/user/UserContextProvider.tsx';
 import { ClassContextProvider } from './features/Context/class/ClassContextProvider.tsx';
+import { CourseContextProvider } from './features/Context/course/CourseContextProvider.tsx';
 import Navbar from './features/layout/Navbar.tsx';
 import Footer from './features/layout/Footer.tsx';
 import { HomePage } from './features/pages/HomePage.tsx';
@@ -21,6 +22,7 @@ function App() {
     <div className="App">
       <UserContextProvider>
          <ClassContextProvider>
+         <CourseContextProvider>
         <Router>
           <Navbar />
           <Routes>
@@ -43,6 +45,7 @@ function App() {
           </Routes>
           <Footer />
         </Router>
+        </CourseContextProvider>
         </ClassContextProvider>
       </UserContextProvider>
     </div>

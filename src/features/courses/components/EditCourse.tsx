@@ -16,13 +16,13 @@ export const EditCourse = ({ courseDetails, onClose }: any) => {
     const { updateCourse, loading } = useCourseAuth();
     const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
     const [formData, setFormData] = useState({
-        courseId:'',
+        courseId: '',
         title: '',
         description: '',
         date: '',
         timing: '',
         duration: '',
-        price:'',
+        price: '',
         maxStudents: '',
         category: '',
         level: '',
@@ -34,7 +34,7 @@ export const EditCourse = ({ courseDetails, onClose }: any) => {
         date: '',
         timing: '',
         duration: '',
-        price:'',
+        price: '',
         maxStudents: '',
         category: '',
         level: '',
@@ -46,12 +46,12 @@ export const EditCourse = ({ courseDetails, onClose }: any) => {
     useEffect(() => {
         if (courseDetails) {
             setFormData({
-                courseId:courseDetails._id || '',
+                courseId: courseDetails._id || '',
                 title: courseDetails.title || '',
                 description: courseDetails.description || '',
                 date: courseDetails.date || '',
                 timing: courseDetails.timing || '',
-                price:courseDetails.price || '',
+                price: courseDetails.price || '',
                 duration: courseDetails.duration || '',
                 maxStudents: courseDetails.maxStudents || '',
                 category: courseDetails.category || '',
@@ -102,9 +102,7 @@ export const EditCourse = ({ courseDetails, onClose }: any) => {
         try {
             const thumbnailUrl = await uploadImage();
             if (!thumbnailUrl) return;
-
             const updatedFormData = { ...formData, thumbnail: thumbnailUrl };
-
             const response = await updateCourse(courseDetails._id, updatedFormData);
             if (response?.status === 200) {
                 setSuccessMessage('Course updated successfully!');
@@ -132,9 +130,9 @@ export const EditCourse = ({ courseDetails, onClose }: any) => {
         setErrors(tempErrors);
         return Object.values(tempErrors).every((x) => x === '');
     };
- if(!courseDetails){
-    return null;
- }
+    if (!courseDetails) {
+        return null;
+    }
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <Box
@@ -309,6 +307,33 @@ export const EditCourse = ({ courseDetails, onClose }: any) => {
 
 
                 </Grid2>
+
+                <Snackbar
+                    open={!!successMessage}
+                    autoHideDuration={6000}
+                    onClose={() => setSuccessMessage(null)}
+                >
+                    <Alert
+                        onClose={() => setSuccessMessage(null)}
+                        severity="success"
+                        sx={{ width: '100%' }}
+                    >
+                        {successMessage}
+                    </Alert>
+                </Snackbar>
+                <Snackbar
+                    open={!!errorMessage}
+                    autoHideDuration={6000}
+                    onClose={() => setErrorMessage(null)}
+                >
+                    <Alert
+                        onClose={() => setErrorMessage(null)}
+                        severity="error"
+                        sx={{ width: '100%' }}
+                    >
+                        {errorMessage}
+                    </Alert>
+                </Snackbar>
 
             </Box>
         </div>

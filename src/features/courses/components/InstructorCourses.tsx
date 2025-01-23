@@ -1,42 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { auth } from '../../lib/firebase/firebaseConfig';
 import { InstructorCourseDetails } from './InstructorCourseDetails';
+import { useCourseAuth } from '../hooks/useCourseAuth';
+import { CourseContext } from '../../Context/course/CourseContext';
 
 export const InstructorCourses = () => {
-    const [courses, setCourses] = useState<any>([]);
-    const [loading, setLoading] = useState(true);
+    const {instructorCourses, setInstructorCourses} = useContext(CourseContext);
+    const { fetchInstructorCourses, loading } = useCourseAuth();
+    const [authLoading, setAuthLoading] = useState(true);
     const [error, setError] = useState("");
     const [selectedCourses, setSelectedCourses] = useState<any>(null);
     const [currentPage, setCurrentPage] = useState(1);
     const coursesPerPage = 3;
 
-    const fetchCourses = async () => {
+    const fetchCourses = async (token: string) => {
         try {
-            setLoading(true);
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.get("http://localhost:4000/instructor/get-instructor-courses", {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setCourses(response.data.courses);
+            const response = await fetchInstructorCourses(token);
+            if (response.status === 200) {
+                console.log(response)
+                setInstructorCourses(response.data.courses);
+            }
         } catch (err) {
             console.error("Error fetching courses:", err);
             setError("Failed to load courses. Please try again later.");
-        } finally {
-            setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchCourses();
+        const unsubscribe = auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                try {
+                    const token = await user.getIdToken(true);
+                    await fetchCourses(token);
+                } catch (err) {
+                    console.error("Error fetching token:", err);
+                    setError("Failed to authenticate. Please try again later.");
+                }
+            } else {
+                setError("No user logged in. Please log in again.");
+            }
+            setAuthLoading(false);
+        });
+        return () => unsubscribe();
     }, []);
 
-   const indexOfLastCourse = currentPage * coursesPerPage;
+    const indexOfLastCourse = currentPage * coursesPerPage;
     const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-    const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
+    const currentCourses = instructorCourses.slice(indexOfFirstCourse, indexOfLastCourse);
 
     const nextPage = () => {
-        if (currentPage < Math.ceil(courses.length / coursesPerPage)) {
+        if (currentPage < Math.ceil(instructorCourses.length / coursesPerPage)) {
             setCurrentPage(currentPage + 1);
         }
     };
@@ -47,14 +61,14 @@ export const InstructorCourses = () => {
         }
     };
 
-    if (loading) return <div className="text-center py-6">Loading courses...</div>;
+    if (authLoading || loading) return <div className="text-center py-6">Loading classes...</div>;
     if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
 
     return (
         <div className="p-4 bg-gray-50 min-h-screen">
             <h1 className="text-3xl font-bold text-center text-blue-600 mb-6">My Courses</h1>
 
-            {courses.length === 0 ? (
+            {instructorCourses.length === 0 ? (
                 <div className="text-center text-gray-500">You haven't created any courses yet.</div>
             ) : (
                 <div>
@@ -98,11 +112,11 @@ export const InstructorCourses = () => {
                             Back
                         </button>
                         <span className="text-gray-800">
-                            Page {currentPage} of {Math.ceil(courses.length / coursesPerPage)}
+                            Page {currentPage} of {Math.ceil(instructorCourses.length / coursesPerPage)}
                         </span>
                         <button
                             onClick={nextPage}
-                            disabled={currentPage === Math.ceil(courses.length / coursesPerPage)}
+                            disabled={currentPage === Math.ceil(instructorCourses.length / coursesPerPage)}
                             className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition disabled:opacity-50"
                         >
                             Next

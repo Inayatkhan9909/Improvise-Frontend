@@ -31,9 +31,6 @@ export const InstructorClasses = () => {
         }
     };
 
-
-
-
     const handleDelete = async (classId: any) => {
         try {
             const response = await deleteInstructorClasses(classId);
@@ -66,7 +63,7 @@ export const InstructorClasses = () => {
             setAuthLoading(false);
         });
         return () => unsubscribe();
-    }, [handleDelete]);
+    }, []);
 
     const handleEdit = (classId: any) => {
         console.log("Edit class:", classId);
@@ -88,7 +85,6 @@ export const InstructorClasses = () => {
         }
     };
     if (authLoading || loading) return <div className="text-center py-6">Loading classes...</div>;
-    if (loading) return <div className="text-center py-6">Loading classes...</div>;
     if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
 
     return (

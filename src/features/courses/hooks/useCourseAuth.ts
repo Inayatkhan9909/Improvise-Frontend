@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { auth } from '../../lib/firebase/firebaseConfig';
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const useCourseAuth = () => {
     const [loading, setLoading] = useState(false);
@@ -21,7 +22,7 @@ export const useCourseAuth = () => {
         setError(null);
         try {
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.post("http://localhost:4000/courses/create-course", courseData, {
+            const response = await axios.post(`${ApiUrl}/courses/create-course`, courseData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setLoading(false);
@@ -41,9 +42,8 @@ export const useCourseAuth = () => {
                 throw new Error('Invalid input data for updating class.');
             }
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put("http://localhost:4000/courses/update-course", updatedData, {
+            const response = await axios.get(`${ApiUrl}/instructor/get-instructor-courses`, {
                 headers: { Authorization: `Bearer ${token}` },
-
             });
             return response;
         } catch (error: any) {
@@ -54,6 +54,25 @@ export const useCourseAuth = () => {
             };
         }
     };
-    return { createCourse, updateCourse, loading, error };
+
+    const fetchInstructorCourses = async (token:string)=>{
+        try {     
+            setLoading(true);
+            const response = await axios.get(`${ApiUrl}/instructor/get-instructor-courses`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setLoading(false);
+            return response;
+            
+        } catch (error:any) {
+            setLoading(false);
+            console.error('Error fetching class:', error);
+            return {
+                status: error?.response?.status || 500,
+                data: error?.response?.data || 'Failed to fetching class.',
+            };
+        }
+    }
+    return { createCourse, updateCourse,fetchInstructorCourses, loading, error };
 };
 
