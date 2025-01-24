@@ -71,7 +71,12 @@ export const AdminDashboard: React.FC = () => {
     <div className="p-6 max-w-6xl mx-auto bg-white shadow-lg rounded-lg">
       <div className="flex justify-between items-center border-b pb-4 mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Admin Dashboard</h2>
-        <div className="space-x-4">
+      </div>
+      <div className="flex justify-between items-center  pb-4 mb-4">
+        <h2 className="text-xl font-bold text-gray-800">Instructors</h2>
+      </div>
+
+      <div className="flex gap-2 mb-2">
           <button
             onClick={() => setShowApproved(true)}
             className={`px-4 py-2 rounded-md ${showApproved
@@ -79,7 +84,7 @@ export const AdminDashboard: React.FC = () => {
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
           >
-            Approved Instructors
+            Approved 
           </button>
           <button
             onClick={() => setShowApproved(false)}
@@ -88,10 +93,9 @@ export const AdminDashboard: React.FC = () => {
               : "bg-gray-200 text-gray-700 hover:bg-gray-300"
               }`}
           >
-            Approval Requests
+            Requests
           </button>
         </div>
-      </div>
 
       {showApproved ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
