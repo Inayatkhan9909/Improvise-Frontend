@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { auth } from "../../lib/firebase/firebaseConfig";
 import { useNavigate } from "react-router-dom";
 import InstructorDetails from "./admin/InstructorDetails";
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export const AdminDashboard: React.FC = () => {
     const fetchInstructors = async () => {
       try {
         const token = await auth.currentUser?.getIdToken(true);
-        const response = await axios.get("http://localhost:4000/admin/getallinstructors", {
+        const response = await axios.get(`${ApiUrl}/admin/getallinstructors`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

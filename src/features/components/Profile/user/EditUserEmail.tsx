@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { auth } from '../../../lib/firebase/firebaseConfig';
 import { UserContext } from '../../../Context/user/userContext';
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const EditUserEmail = ({ onClose }: any) => {
     const {setUser} = useContext(UserContext);
@@ -34,7 +35,7 @@ export const EditUserEmail = ({ onClose }: any) => {
         setLoading(true);
         try {
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put('http://localhost:4000/auth/edituseremail', {
+            const response = await axios.put(`${ApiUrl}/auth/edituseremail`, {
                 oldEmail,
                 newEmail
             }, {

@@ -14,6 +14,7 @@ import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
 import { UserContext } from '../../../Context/user/userContext';
 import { auth } from '../../../lib/firebase/firebaseConfig';
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const EditUserDetails = ({ onClose }: any) => {
     const { user, setUser } = useContext(UserContext);
@@ -67,7 +68,7 @@ export const EditUserDetails = ({ onClose }: any) => {
         setLoading(true);
         try {
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put('http://localhost:4000/auth/edituserdetails', formData,{
+            const response = await axios.put(`${ApiUrl}/auth/edituserdetails`, formData,{
                 headers: { Authorization: `Bearer ${token}` },
             });
             setSuccessMessage('Profile updated successfully!');
@@ -109,10 +110,7 @@ export const EditUserDetails = ({ onClose }: any) => {
 
     return (
         <div className="bg-white ">
-            {/* Cross Icon for Closing Modal */}
-
-
-
+            
             <Box
                 component="form"
                 onSubmit={handleSubmit}

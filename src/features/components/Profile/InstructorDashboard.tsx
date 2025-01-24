@@ -8,6 +8,7 @@ import CreateClassPage from "../../instructor/pages/CreateClassPage";
 import { InstructorClasses } from "../../classes/components/InstrucotorClasses";
 import CreateCourse from "../../courses/components/CreateCourse";
 import { InstructorCourses } from "../../courses/components/InstructorCourses";
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const InstructorDashboard = () => {
   const { setUser, user, loading } = useContext(UserContext);
@@ -40,7 +41,7 @@ export const InstructorDashboard = () => {
     try {
       const token = await auth.currentUser?.getIdToken(true);
       const response = await axios.post(
-        "http://localhost:4000/instructor/addinstructordetails",
+        `${ApiUrl}/instructor/addinstructordetails`,
         details,
         {
           headers: { Authorization: `Bearer ${token}` },

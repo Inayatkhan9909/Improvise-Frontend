@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { auth } from "../../../lib/firebase/firebaseConfig";
-
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 interface InstructorDetailsProps {
     instructor: any;
     onClose: () => void;
@@ -17,7 +17,7 @@ const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClo
         try {
             const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.put(
-                `http://localhost:4000/admin/${approve ? "approve" : "reject"}-instructor`,
+                `${ApiUrl}/admin/${approve ? "approve" : "reject"}-instructor`,
                 { instructorId: instructor._id, reason },
                 {
                     headers: { Authorization: `Bearer ${token}` },
@@ -38,7 +38,7 @@ const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClo
         try {
             const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.put(
-                `http://localhost:4000/admin/remove-instructor`,
+                `${ApiUrl}/admin/remove-instructor`,
                 { instructorId: instructor._id, reason },
                 {
                     headers: { Authorization: `Bearer ${token}` },

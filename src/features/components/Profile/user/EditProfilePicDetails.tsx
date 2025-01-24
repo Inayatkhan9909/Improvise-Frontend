@@ -5,6 +5,7 @@ import { getFilePreview, uploadFile } from '../../../lib/appwrite/uploadImage';
 import { UserContext } from '../../../Context/user/userContext';
 import { auth } from '../../../lib/firebase/firebaseConfig';
 import axios from 'axios';
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const EditProfilePic = ({ onClose }: any) => {
     const { user, setUser } = useContext(UserContext)
@@ -18,7 +19,7 @@ export const EditProfilePic = ({ onClose }: any) => {
         const selectedFile = e.target.files?.[0];
         if (selectedFile) {
             setFile(selectedFile);
-            setPreview(URL.createObjectURL(selectedFile)); // Generate a local URL for preview
+            setPreview(URL.createObjectURL(selectedFile)); 
         }
     };
 
@@ -43,7 +44,7 @@ export const EditProfilePic = ({ onClose }: any) => {
                 throw new Error('Failed to generate file preview URL.');
             }
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put("http://localhost:4000/auth/edituserprofilepic", { profilePic: profilePictureUrl },
+            const response = await axios.put(`${ApiUrl}/auth/edituserprofilepic`, { profilePic: profilePictureUrl },
                 {
                     headers: { Authorization: `Bearer ${token}` },
                 }

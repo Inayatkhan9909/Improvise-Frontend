@@ -9,6 +9,7 @@ import { EditProfilePic } from "./EditProfilePicDetails";
 import { auth } from "../../../lib/firebase/firebaseConfig";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const UserDashboard = () => {
     const navigate = useNavigate();
@@ -38,7 +39,7 @@ export const UserDashboard = () => {
 
         try {
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.delete("http://localhost:4000/auth/deleteuser",{
+            const response = await axios.delete(`${ApiUrl}/auth/deleteuser`,{
                     headers: { Authorization: `Bearer ${token}` },
             });
             if(response.status === 201){
@@ -54,8 +55,6 @@ export const UserDashboard = () => {
         } finally {
             closeDeleteModal();
         }
-
-
     };
 
     const handleeditDetails = () => {

@@ -73,6 +73,7 @@ export const useClassAuth = () => {
             };
         }
     };
+    
     const deleteClass = async (classId: string) => {
         try {
             if (!classId ) {

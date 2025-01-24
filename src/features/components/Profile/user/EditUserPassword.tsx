@@ -3,6 +3,7 @@ import { RxCross2 } from 'react-icons/rx';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import axios from 'axios';
 import { auth } from '../../../lib/firebase/firebaseConfig';
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const EditUserPassword = ({ onClose }: any) => {
     const [oldPassword, setOldPassword] = useState('');
@@ -43,7 +44,7 @@ export const EditUserPassword = ({ onClose }: any) => {
         setLoading(true);
         try {
            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put('http://localhost:4000/auth/edituserpassword', {
+            const response = await axios.put(`${ApiUrl}/auth/edituserpassword`, {
                 oldPassword,
                 newPassword,
             }, {
