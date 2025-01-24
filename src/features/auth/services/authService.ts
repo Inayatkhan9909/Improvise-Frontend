@@ -1,9 +1,7 @@
 import axios from 'axios';
 import { signInWithPopup, GoogleAuthProvider, User } from "firebase/auth";
 import { auth, googleProvider } from "../../lib/firebase/firebaseConfig";
-
-
-const API_URL = 'http://localhost:4000';
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const signup = async (userData: {
   email: string;
@@ -24,7 +22,7 @@ export const signup = async (userData: {
     }
   });
        
-  const response = await axios.post(`${API_URL}/auth/signup`, formData, {
+  const response = await axios.post(`${ApiUrl}/auth/signup`, formData, {
     headers: {
       'Content-Type': 'application/json',
     },

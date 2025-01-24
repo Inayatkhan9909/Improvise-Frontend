@@ -4,7 +4,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/firebase/firebaseConfig';
 import axios from 'axios';
 import { UserContext } from '../../Context/user/userContext';
-
+const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const useAuth = () => {
     const [loading, setLoading] = useState(false);
@@ -46,7 +46,7 @@ export const useAuth = () => {
             }
 
             const token = await userCredential.user.getIdToken();
-            const response = await axios.post('http://localhost:4000/auth/login', { token });
+            const response = await axios.post(`${ApiUrl}/auth/login`, { token });
             setLoading(false);
             setUser(response.data.user);
             return response.data;
