@@ -1,15 +1,12 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "../../../Context/user/userContext";
 import { FaEdit, FaEllipsisV } from "react-icons/fa";
-import { RxCross2 } from "react-icons/rx";
 import { EditUserDetails } from "./EditUserDetails";
 import { EditUserEmail } from "./EditUserEmail";
 import { EditUserPassword } from "./EditUserPassword";
 import { EditProfilePic } from "./EditProfilePicDetails";
-import { auth } from "../../../lib/firebase/firebaseConfig";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
+import { useProfileAuth } from "../hooks/useProfileAuth";
 
 export const UserDashboard = () => {
     const navigate = useNavigate();
@@ -20,33 +17,20 @@ export const UserDashboard = () => {
     const [editEmailModal, setEditEmailModal] = useState(false);
     const [editPasswordModal, setEditPasswordModal] = useState(false);
     const [editProfilePicModal, setEditProfilePicModal] = useState(false);
-
-    if (!user) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <div className="text-center">
-                    <p className="text-gray-500 text-xl">Loading user data...</p>
-                </div>
-            </div>
-        );
-    }
-
+    const {deleteUser,loading} = useProfileAuth();
     const toggleOptions = () => setShowOptions(!showOptions);
     const openDeleteModal = () => setShowDeleteModal(true);
     const closeDeleteModal = () => setShowDeleteModal(false);
 
-    const handleDeleteAccount = async() => {
+    const handleDeleteAccount = async () => {
 
         try {
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.delete(`${ApiUrl}/auth/deleteuser`,{
-                    headers: { Authorization: `Bearer ${token}` },
-            });
-            if(response.status === 201){
+            const response = await deleteUser();
+            if (response.status === 201) {
                 setUser(null);
                 navigate("/login")
             }
-            else{
+            else {
                 console.log(response.data.message)
             }
 
@@ -74,6 +58,16 @@ export const UserDashboard = () => {
     const handleEditProfilePic = () => {
         setEditProfilePicModal(true);
     };
+
+    if (!user) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+                <div className="text-center">
+                    <p className="text-gray-500 text-xl">Loading user data...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="p-6 max-w-4xl mx-auto bg-white shadow-lg rounded-lg relative">
@@ -108,9 +102,10 @@ export const UserDashboard = () => {
                             </button>
                             <button
                                 onClick={openDeleteModal}
+                                disabled={loading}
                                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                             >
-                                Delete Account
+                              {loading ? 'Deleting...' : 'Delete Account'}  
                             </button>
                         </div>
                     )}

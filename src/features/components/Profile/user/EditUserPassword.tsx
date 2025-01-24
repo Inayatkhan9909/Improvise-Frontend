@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
-import axios from 'axios';
-import { auth } from '../../../lib/firebase/firebaseConfig';
-const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
+import { useProfileAuth } from '../hooks/useProfileAuth';
+
 
 export const EditUserPassword = ({ onClose }: any) => {
     const [oldPassword, setOldPassword] = useState('');
@@ -14,7 +13,7 @@ export const EditUserPassword = ({ onClose }: any) => {
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+    const { editUserPassword, loading } = useProfileAuth();
 
     const handleSubmit = async () => {
         setError(null);
@@ -41,27 +40,18 @@ export const EditUserPassword = ({ onClose }: any) => {
             return;
         }
 
-        setLoading(true);
         try {
-           const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put(`${ApiUrl}/auth/edituserpassword`, {
-                oldPassword,
-                newPassword,
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}` ,
-                },
-            });
-
+            const response = await editUserPassword(oldPassword, newPassword);
             if (response.status === 200) {
                 setSuccess('Password updated successfully!');
+                setTimeout(() => {
+                    onClose();
+                }, 1000);
             } else {
                 setError(response?.data?.message || 'Failed to update password.');
             }
         } catch (err) {
             setError('An unexpected error occurred. Please try again later.');
-        } finally {
-            setLoading(false);
         }
     };
 
