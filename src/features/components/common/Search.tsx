@@ -1,14 +1,16 @@
 import React, { useContext } from "react";
 import dayjs from "dayjs";
 import { ClassContext } from "../../Context/class/ClassContext";
+import { CourseContext } from "../../Context/course/CourseContext";
 
 interface SearchProps {
     query: string;
 }
 
 export const Search: React.FC<SearchProps> = ({ query }) => {
-    const { classes, courses } = useContext(ClassContext);
-
+    const { classes } = useContext(ClassContext);
+    const {courses} = useContext(CourseContext);
+ 
     const filteredClasses = classes.filter((cls: any) =>
         cls.title.toLowerCase().includes(query.toLowerCase())
     );
