@@ -22,7 +22,9 @@ export const AllCourses = () => {
     fetchCourses();
   }, []);
 
-
+if(!courses){
+  return <div className="text-center py-6">Loading classes...</div>
+}
 
   return (
     <div className="w-full p-6 bg-gray-100">
