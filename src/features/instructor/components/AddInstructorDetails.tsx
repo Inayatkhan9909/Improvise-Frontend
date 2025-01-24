@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { getFilePreview, uploadFile } from "../../lib/appwrite/uploadImage";
+import { useProfileAuth } from "../../components/Profile/hooks/useProfileAuth";
 
 export const AddInstructorDetails = ({ onSubmit }: { onSubmit: (details: any) => void }) => {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const {loading} = useProfileAuth();
   const [formData, setFormData] = useState({
     bio: "",
     qualifications: "",
@@ -134,10 +136,11 @@ export const AddInstructorDetails = ({ onSubmit }: { onSubmit: (details: any) =>
       </div>
 
       <button
+      disabled={loading}
         type="submit"
         className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
       >
-        Submit
+       {loading ? 'submiting...' : 'Submit'}
       </button>
     </form>
   );

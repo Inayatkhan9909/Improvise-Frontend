@@ -25,16 +25,16 @@ export const useProfileAuth = () => {
         }
     }
 
-    const editUserDetails = async (formData:{
-        name:string,
-        contact:number,
-        dob:string,
-        gender:string,
+    const editUserDetails = async (formData: {
+        name: string,
+        contact: number,
+        dob: string,
+        gender: string,
     }) => {
         try {
             setLoading(true);
             const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put(`${ApiUrl}/auth/edituserdetails`, formData,{
+            const response = await axios.put(`${ApiUrl}/auth/edituserdetails`, formData, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             return response;
@@ -46,7 +46,7 @@ export const useProfileAuth = () => {
         }
     }
 
-    const editUserEmail = async (oldEmail:string,newEmail:string) => {
+    const editUserEmail = async (oldEmail: string, newEmail: string) => {
         try {
             setLoading(true);
             const token = await auth.currentUser?.getIdToken(true);
@@ -55,7 +55,7 @@ export const useProfileAuth = () => {
                 newEmail
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}` ,
+                    Authorization: `Bearer ${token}`,
                 },
             });
             return response;
@@ -66,7 +66,7 @@ export const useProfileAuth = () => {
             setLoading(false);
         }
     }
-    const editUserPassword = async (oldPassword:string,newPassword:string) => {
+    const editUserPassword = async (oldPassword: string, newPassword: string) => {
         try {
             setLoading(true);
             const token = await auth.currentUser?.getIdToken(true);
@@ -75,7 +75,7 @@ export const useProfileAuth = () => {
                 newPassword,
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}` ,
+                    Authorization: `Bearer ${token}`,
                 },
             });
             return response;
@@ -95,6 +95,61 @@ export const useProfileAuth = () => {
             });
             return response;
         } catch (error: any) {
+            setError(error.message || 'delete user failed');
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    }
+    const addinstructorDetails = async (details: {
+        bio: string,
+        resume: string,
+        qualification: string,
+        skills: string
+    }) => {
+        try {
+            setLoading(true);
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.post(
+                `${ApiUrl}/instructor/addinstructordetails`,
+                details,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            return response;
+        } catch (error: any) {
+            setError(error.message || 'Details update failed');
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    };
+    const updateinstructorDetails = async (updatedDetails: any) => {
+        try {
+            setLoading(true);
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.post(`${ApiUrl}/instructor/addinstructordetails`, updatedDetails, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            return response;
+        } catch (error: any) {
+            setError(error.message || 'Details update failed');
+            throw error;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getallInstructors = async () => {
+        try {
+            setLoading(true);
+            const token = await auth.currentUser?.getIdToken(true);
+            const response = await axios.get(`${ApiUrl}/admin/getallinstructors`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            return response;
+        } catch (error: any) {
             setError(error.message || 'Password update failed');
             throw error;
         } finally {
@@ -102,6 +157,9 @@ export const useProfileAuth = () => {
         }
     }
 
-    return { editUserProfilePic,editUserDetails,editUserEmail,
-        editUserPassword,deleteUser, loading, error };
+    return {
+        editUserProfilePic, editUserDetails, editUserEmail,
+        editUserPassword, deleteUser, addinstructorDetails,
+        updateinstructorDetails, getallInstructors, loading, error
+    };
 }

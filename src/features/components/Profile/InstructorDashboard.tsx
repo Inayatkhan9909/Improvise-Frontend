@@ -2,19 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../Context/user/userContext";
 import { AddInstructorDetails } from "../../instructor/components/AddInstructorDetails";
 import { InstructorDetails } from "../../instructor/components/InstructorDetails";
-import axios from "axios";
-import { auth } from "../../lib/firebase/firebaseConfig";
 import CreateClassPage from "../../instructor/pages/CreateClassPage";
 import { InstructorClasses } from "../../classes/components/InstrucotorClasses";
 import CreateCourse from "../../courses/components/CreateCourse";
 import { InstructorCourses } from "../../courses/components/InstructorCourses";
-const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
+import { useProfileAuth } from "./hooks/useProfileAuth";
+import { Snackbar, Alert } from '@mui/material';
+
 
 export const InstructorDashboard = () => {
-  const { setUser, user, loading } = useContext(UserContext);
+  const { setUser, user } = useContext(UserContext);
   const [isApproved, setIsApproved] = useState(false);
   const [detailsAvailable, setDetailsAvailable] = useState(true);
   const [resetData, setResetData] = useState(false);
+  const { addinstructorDetails} = useProfileAuth();
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState(
     localStorage.getItem("activeSection") || "details"
   );
@@ -37,25 +40,23 @@ export const InstructorDashboard = () => {
     localStorage.setItem("activeSection", activeSection);
   }, [activeSection]);
 
-  const handleFormSubmit = async (details: any) => {
+  const handleFormSubmit = async (details: {
+    bio: string,
+    resume: string,
+    qualification: string,
+    skills: string
+  }) => {
     try {
-      const token = await auth.currentUser?.getIdToken(true);
-      const response = await axios.post(
-        `${ApiUrl}/instructor/addinstructordetails`,
-        details,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-
-      if (response.status === 201) {
-        alert("Details submitted successfully! Waiting for admin approval.");
+      const response = await addinstructorDetails(details)
+      if (response.status === 200) {
+        setSuccessMessage("Details submitted successfully! Waiting for admin approval.");
         setUser(response?.data?.isUser);
         setResetData(true);
       } else {
-        alert("Error submitting details. Please try again.");
+        setErrorMessage("Error submitting details. Please try again.");
       }
     } catch (error) {
+      setErrorMessage("Error submitting details. Please try again.")
       console.error("Error submitting form:", error);
     }
   };
@@ -64,9 +65,9 @@ export const InstructorDashboard = () => {
     switch (activeSection) {
       case "details":
         return detailsAvailable ? (
-          <InstructorDetails onEdit={() => {}} />
+          <InstructorDetails onEdit={() => { }} />
         ) : (
-          <AddInstructorDetails onSubmit={handleFormSubmit} />
+          <AddInstructorDetails onSubmit={handleFormSubmit}  />
         );
       case "add-class":
         return isApproved ? (
@@ -89,7 +90,7 @@ export const InstructorDashboard = () => {
     }
   };
 
-  if (loading) {
+  if (!user) {
     return <div>Loading...</div>;
   }
 
@@ -106,20 +107,43 @@ export const InstructorDashboard = () => {
         ].map(({ label, key }) => (
           <button
             key={key}
-            className={`py-2 px-4 rounded-lg text-sm ${
-              activeSection === key
+            className={`py-2 px-4 rounded-lg text-sm ${activeSection === key
                 ? "bg-blue-500 text-white"
                 : "bg-white text-gray-700 hover:bg-blue-600 hover:text-white"
-            }`}
+              }`}
             onClick={() => setActiveSection(key)}
           >
             {label}
           </button>
         ))}
       </nav>
-
-      {/* Main Content */}
       <main className="flex-grow p-4">{renderContent()}</main>
+      <Snackbar
+        open={!!successMessage}
+        autoHideDuration={6000}
+        onClose={() => setSuccessMessage(null)}
+      >
+        <Alert
+          onClose={() => setSuccessMessage(null)}
+          severity="success"
+          sx={{ width: '100%' }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage(null)}
+      >
+        <Alert
+          onClose={() => setErrorMessage(null)}
+          severity="error"
+          sx={{ width: '100%' }}
+        >
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

@@ -1,25 +1,19 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { auth } from "../../lib/firebase/firebaseConfig";
-import { useNavigate } from "react-router-dom";
 import InstructorDetails from "./admin/InstructorDetails";
-const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
+import { useProfileAuth } from "./hooks/useProfileAuth";
 
 export const AdminDashboard: React.FC = () => {
-  const navigate = useNavigate();
   const [showApproved, setShowApproved] = useState(true);
   const [requests, setRequests] = useState<any[]>([]);
   const [approvedInstructors, setApprovedInstructors] = useState<any[]>([]);
   const [selectedInstructor, setSelectedInstructor] = useState<any | null>(null);
   const [instructorDetailsModal, setInstructorDetailsModal] = useState(false);
+  const {getallInstructors,loading} = useProfileAuth();
 
   useEffect(() => {
     const fetchInstructors = async () => {
       try {
-        const token = await auth.currentUser?.getIdToken(true);
-        const response = await axios.get(`${ApiUrl}/admin/getallinstructors`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await getallInstructors();
         if (response.status === 200) {
           const instructors = response.data;
           setApprovedInstructors(
@@ -48,6 +42,16 @@ export const AdminDashboard: React.FC = () => {
     setSelectedInstructor(null);
     setInstructorDetailsModal(false);
   };
+
+  if (!loading) {
+    return (
+        <div className="flex items-center justify-center h-screen">
+            <div className="text-center">
+                <p className="text-gray-500 text-xl">Loading...</p>
+            </div>
+        </div>
+    );
+}
 
   return (
     <div className="p-6 max-w-6xl mx-auto bg-white shadow-lg rounded-lg">
