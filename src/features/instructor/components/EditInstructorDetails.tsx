@@ -20,9 +20,9 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
   instructor,
   onClose,
 }) => {
-    const {setUser} = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const [resumeFile, setResumeFile] = useState<File | null>(null);
-  const {updateinstructorDetails,loading} = useProfileAuth();
+  const { updateinstructorDetails, loading } = useProfileAuth();
   const [formData, setFormData] = useState({
     bio: instructor.bio || "",
     qualifications: instructor.qualifications || "",
@@ -70,12 +70,12 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
 
     try {
       const uploadedFile = await uploadFile(resumeFile);
-      if(!uploadedFile){
+      if (!uploadedFile) {
         console.error("Resume upload failed:");
         return null;
       }
       const resumeUrl = getFilePreview(uploadedFile.$id);
-      if(!resumeUrl){
+      if (!resumeUrl) {
         console.error("Resume upload failed:");
         return null;
       }
@@ -99,28 +99,28 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
 
     const updatedDetails = { ...formData, resume: resumeUrl };
     try {
-       const response = await updateinstructorDetails(updatedDetails);
-        if (response.status === 200) {
-          
-          alert("Details submitted successfully! Waiting for admin approval.");
-          setUser(response?.data?.isUser);
-          
-        } else {
-          alert("Error submitting details. Please try again.");
-        }
-      } catch (error) {
-        console.error("Error submitting form:", error);
+      const response = await updateinstructorDetails(updatedDetails);
+      if (response.status === 200) {
+
+        alert("Details submitted successfully! Waiting for admin approval.");
+        setUser(response?.data?.isUser);
+
+      } else {
+        alert("Error submitting details. Please try again.");
       }
-    
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+
   };
 
   return (
     <form onSubmit={handleSubmit} className="bg-white shadow-md p-6 rounded-lg w-full">
       <div className="flex justify-between">
-      <h2 className="text-xl font-bold mb-4">Edit Your Profile</h2>
-      <button onClick={onClose}>
-<RxCross2/>
-      </button>
+        <h2 className="text-xl font-bold mb-4">Edit Your Profile</h2>
+        <button onClick={onClose}>
+          <RxCross2 />
+        </button>
       </div>
 
       <div className="mb-4">
@@ -129,9 +129,8 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
           name="bio"
           value={formData.bio}
           onChange={handleChange}
-          className={`w-full border rounded-lg p-2 ${
-            errors.bio ? "border-red-500" : "border-gray-300"
-          }`}
+          className={`w-full border rounded-lg p-2 ${errors.bio ? "border-red-500" : "border-gray-300"
+            }`}
         />
         {errors.bio && <p className="text-red-500 text-sm">{errors.bio}</p>}
       </div>
@@ -145,9 +144,8 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
           name="qualifications"
           value={formData.qualifications}
           onChange={handleChange}
-          className={`w-full border rounded-lg p-2 ${
-            errors.qualifications ? "border-red-500" : "border-gray-300"
-          }`}
+          className={`w-full border rounded-lg p-2 ${errors.qualifications ? "border-red-500" : "border-gray-300"
+            }`}
         />
         {errors.qualifications && (
           <p className="text-red-500 text-sm">{errors.qualifications}</p>
@@ -161,9 +159,8 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
           name="skills"
           value={formData.skills}
           onChange={handleChange}
-          className={`w-full border rounded-lg p-2 ${
-            errors.skills ? "border-red-500" : "border-gray-300"
-          }`}
+          className={`w-full border rounded-lg p-2 ${errors.skills ? "border-red-500" : "border-gray-300"
+            }`}
         />
         {errors.skills && <p className="text-red-500 text-sm">{errors.skills}</p>}
       </div>
@@ -192,10 +189,11 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
       </div>
 
       <button
+       disabled={loading}
         type="submit"
         className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"
       >
-        Save Changes
+       {loading ? 'saving...' : 'Save'} 
       </button>
     </form>
   );

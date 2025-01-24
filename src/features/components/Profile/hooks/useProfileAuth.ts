@@ -141,10 +141,9 @@ export const useProfileAuth = () => {
         }
     };
 
-    const getallInstructors = async () => {
+    const getallInstructors = async (token:string) => {
         try {
             setLoading(true);
-            const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.get(`${ApiUrl}/admin/getallinstructors`, {
                 headers: { Authorization: `Bearer ${token}` },
             });

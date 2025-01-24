@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import InstructorDetails from "./admin/InstructorDetails";
 import { useProfileAuth } from "./hooks/useProfileAuth";
+import { auth } from "../../lib/firebase/firebaseConfig";
 
 export const AdminDashboard: React.FC = () => {
   const [showApproved, setShowApproved] = useState(true);
@@ -8,30 +9,32 @@ export const AdminDashboard: React.FC = () => {
   const [approvedInstructors, setApprovedInstructors] = useState<any[]>([]);
   const [selectedInstructor, setSelectedInstructor] = useState<any | null>(null);
   const [instructorDetailsModal, setInstructorDetailsModal] = useState(false);
-  const {getallInstructors,loading} = useProfileAuth();
+  const { getallInstructors, loading } = useProfileAuth();
+  const [authLoading, setAuthLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchInstructors = async () => {
-      try {
-        const response = await getallInstructors();
-        if (response.status === 200) {
-          const instructors = response.data;
-          setApprovedInstructors(
-            instructors.filter((instructor: any) => instructor.roleDetails.instructor?.approvedByAdmin)
-          );
-          setRequests(
-            instructors.filter((instructor: any) => !instructor.roleDetails.instructor?.approvedByAdmin)
-          );
-        } else {
-          console.error("Instructors not found");
-        }
-      } catch (error) {
-        console.error("Error fetching instructors:", error);
+  const fetchInstructors = async (token: string) => {
+    try {
+      const response = await getallInstructors(token);
+      if (response.status === 200) {
+        const instructors = response.data;
+        setApprovedInstructors(
+          instructors.filter((instructor: any) => instructor.roleDetails.instructor?.approvedByAdmin)
+        );
+        setRequests(
+          instructors.filter((instructor: any) => !instructor.roleDetails.instructor?.approvedByAdmin)
+        );
+      } else {
+        console.error("Instructors not found");
       }
-    };
+    } catch (error) {
+      console.error("Error fetching instructors:", error);
+    }
+  };
 
-    fetchInstructors();
-  }, []);
+
+
+
 
   const openInstructorDetails = (instructor: any) => {
     setSelectedInstructor(instructor);
@@ -43,15 +46,26 @@ export const AdminDashboard: React.FC = () => {
     setInstructorDetailsModal(false);
   };
 
-  if (!loading) {
-    return (
-        <div className="flex items-center justify-center h-screen">
-            <div className="text-center">
-                <p className="text-gray-500 text-xl">Loading...</p>
-            </div>
-        </div>
-    );
-}
+  useEffect(() => { 
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const token = await user.getIdToken(true);
+          await fetchInstructors(token);
+        } catch (err) {
+          console.error("Error fetching token:", err);
+          setError("Failed to authenticate. Please try again later.");
+        }
+      } else {
+        setError("No user logged in. Please log in again.");
+      }
+      setAuthLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (authLoading || loading) return <div className="text-center py-6">Loading...</div>;
+  if (error) return <div className="text-center text-red-500 py-6">{error}</div>;
 
   return (
     <div className="p-6 max-w-6xl mx-auto bg-white shadow-lg rounded-lg">
