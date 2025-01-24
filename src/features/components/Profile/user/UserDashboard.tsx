@@ -87,7 +87,7 @@ export const UserDashboard = () => {
                         title="More Options"
                     />
                     {showOptions && (
-                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md">
+                        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-md z-50">
                             <button
                                 onClick={handleeditDetails}
                                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"

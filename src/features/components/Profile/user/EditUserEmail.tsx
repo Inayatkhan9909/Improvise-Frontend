@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { auth } from '../../../lib/firebase/firebaseConfig';
 import { UserContext } from '../../../Context/user/userContext';
+import { useProfileAuth } from '../hooks/useProfileAuth';
 const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const EditUserEmail = ({ onClose }: any) => {
@@ -11,12 +12,11 @@ export const EditUserEmail = ({ onClose }: any) => {
     const [newEmail, setNewEmail] = useState('');
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
+    const {editUserEmail,loading}= useProfileAuth();
 
     const handleSubmit = async () => {
         setError(null);
         setSuccess(null);
-
         if (!oldEmail || !newEmail) {
             setError('Both old and new email fields are required.');
             return;
@@ -32,19 +32,9 @@ export const EditUserEmail = ({ onClose }: any) => {
             return;
         }
 
-        setLoading(true);
         try {
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put(`${ApiUrl}/auth/edituseremail`, {
-                oldEmail,
-                newEmail
-            }, {
-                headers: {
-                    Authorization: `Bearer ${token}` ,
-                },
-            });
-
-            if (response.status === 201) {
+            const response = await editUserEmail(oldEmail,newEmail);
+            if (response.status === 200) {
                 setUser(response?.data?.user)
                 setSuccess('Email updated successfully! Please verify the new email.');
             } else {
@@ -52,8 +42,6 @@ export const EditUserEmail = ({ onClose }: any) => {
             }
         } catch (err) {
             setError('An unexpected error occurred. Please try again later.');
-        } finally {
-            setLoading(false);
         }
     };
 

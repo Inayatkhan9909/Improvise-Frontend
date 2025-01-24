@@ -3,23 +3,21 @@ import { RxCross2 } from 'react-icons/rx';
 import { Box, Button, TextField, Typography, Snackbar, Alert } from '@mui/material';
 import { getFilePreview, uploadFile } from '../../../lib/appwrite/uploadImage';
 import { UserContext } from '../../../Context/user/userContext';
-import { auth } from '../../../lib/firebase/firebaseConfig';
-import axios from 'axios';
-const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
+import { useProfileAuth } from '../hooks/useProfileAuth';
 
 export const EditProfilePic = ({ onClose }: any) => {
     const { user, setUser } = useContext(UserContext)
+    const { editUserProfilePic, loading } = useProfileAuth();
     const [file, setFile] = useState<File | null>(null);
     const [preview, setPreview] = useState<string | null>(null);
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
 
     const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFile = e.target.files?.[0];
         if (selectedFile) {
             setFile(selectedFile);
-            setPreview(URL.createObjectURL(selectedFile)); 
+            setPreview(URL.createObjectURL(selectedFile));
         }
     };
 
@@ -29,8 +27,6 @@ export const EditProfilePic = ({ onClose }: any) => {
             setErrorMessage('Please select a file to upload.');
             return;
         }
-
-        setLoading(true);
 
         try {
             // Upload to Appwrite
@@ -43,15 +39,15 @@ export const EditProfilePic = ({ onClose }: any) => {
             if (!profilePictureUrl) {
                 throw new Error('Failed to generate file preview URL.');
             }
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put(`${ApiUrl}/auth/edituserprofilepic`, { profilePic: profilePictureUrl },
-                {
-                    headers: { Authorization: `Bearer ${token}` },
-                }
-            )
+            
+            const response = await editUserProfilePic(profilePictureUrl);
             if (response.status === 201) {
                 setSuccessMessage('Profile picture updated successfully!');
                 setUser(response.data.user)
+                setTimeout(() => {
+                    onClose()
+                }, 1000)
+
             } else {
                 setErrorMessage('Failed to update profile picture.');
             }
@@ -60,8 +56,6 @@ export const EditProfilePic = ({ onClose }: any) => {
         } catch (error: any) {
             console.error('Error updating profile picture:', error);
             setErrorMessage(error.message || 'Failed to update profile picture.');
-        } finally {
-            setLoading(false);
         }
     };
 

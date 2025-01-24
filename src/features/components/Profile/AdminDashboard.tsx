@@ -20,7 +20,6 @@ export const AdminDashboard: React.FC = () => {
         const response = await axios.get(`${ApiUrl}/admin/getallinstructors`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         if (response.status === 200) {
           const instructors = response.data;
           setApprovedInstructors(

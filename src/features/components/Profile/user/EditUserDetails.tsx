@@ -14,6 +14,7 @@ import { RxCross2 } from 'react-icons/rx';
 import axios from 'axios';
 import { UserContext } from '../../../Context/user/userContext';
 import { auth } from '../../../lib/firebase/firebaseConfig';
+import { useProfileAuth } from '../hooks/useProfileAuth';
 const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const EditUserDetails = ({ onClose }: any) => {
@@ -31,7 +32,7 @@ export const EditUserDetails = ({ onClose }: any) => {
         dob: '',
         gender: '',
     });
-    const [loading, setLoading] = useState(false);
+    const { editUserDetails, loading } = useProfileAuth();
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -63,26 +64,21 @@ export const EditUserDetails = ({ onClose }: any) => {
         e.preventDefault();
         if (!validate()) return;
 
-
-
-        setLoading(true);
         try {
-            const token = await auth.currentUser?.getIdToken(true);
-            const response = await axios.put(`${ApiUrl}/auth/edituserdetails`, formData,{
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setSuccessMessage('Profile updated successfully!');
-            setErrorMessage(null);
-            setUser(response.data.user);
-            setTimeout(() => {
-                
-             
-            }, 1000);
+            const response = await editUserDetails(formData);
+            if (response.status === 200) {
+                setSuccessMessage('Profile updated successfully!');
+                setErrorMessage(null);
+                setUser(response.data.user);
+                setTimeout(() => {
+                    onClose();
+                }, 1000);
+            }else{
+                setErrorMessage(response?.data?.message || 'Failed to update profile.')
+            }
         } catch (err: any) {
             setErrorMessage(err.response?.data?.message || 'Failed to update profile.');
             setSuccessMessage(null);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -110,7 +106,7 @@ export const EditUserDetails = ({ onClose }: any) => {
 
     return (
         <div className="bg-white ">
-            
+
             <Box
                 component="form"
                 onSubmit={handleSubmit}
@@ -123,18 +119,18 @@ export const EditUserDetails = ({ onClose }: any) => {
                     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
                 }}
             >
-            <div className='w-full flex justify-between'>
-                <Typography variant="h4" gutterBottom>
-                    Edit Details
-                </Typography>
-                <IconButton
-                    onClick={onClose}
-                    className=" text-gray-600 hover:text-gray-800"
-                    title="Close"
-                >
-                    <RxCross2 />
-                </IconButton>
-            </div>
+                <div className='w-full flex justify-between'>
+                    <Typography variant="h4" gutterBottom>
+                        Edit Details
+                    </Typography>
+                    <IconButton
+                        onClick={onClose}
+                        className=" text-gray-600 hover:text-gray-800"
+                        title="Close"
+                    >
+                        <RxCross2 />
+                    </IconButton>
+                </div>
 
                 <Grid2 container spacing={2}>
                     <Grid2 size={{ xs: 12 }}>
@@ -198,7 +194,7 @@ export const EditUserDetails = ({ onClose }: any) => {
                     </Grid2>
 
                     <Grid2
-                      size={{ xs: 12 }}
+                        size={{ xs: 12 }}
                         sx={{ display: 'flex', justifyContent: 'center' }}
                     >
                         <Button

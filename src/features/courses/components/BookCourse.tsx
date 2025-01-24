@@ -19,6 +19,9 @@ export const BookCourse = ({ crs, onClose }: any) => {
           onClose();
         }, 1000);
       }
+      else{
+        setErrorMessage(response.data.message)
+      }
 
     } catch (error) {
       console.error(error);
