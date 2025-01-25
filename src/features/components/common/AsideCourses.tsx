@@ -50,11 +50,13 @@ export const AsideCourses = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % courses.length);
   };
 
+ if(!courses){
   return (
     <div className="flex justify-center items-center h-screen">
       <p className="text-xl font-semibold">Loading...</p>
     </div>
   );
+ }
 
   return (
     <div className="relative flex  justify-center w-full px-4 py-4 sm:py-8 sm:px-6 ">
