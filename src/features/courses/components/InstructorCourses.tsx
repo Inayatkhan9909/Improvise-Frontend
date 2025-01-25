@@ -71,7 +71,7 @@ export const InstructorCourses = () => {
                 <div className="text-center text-gray-500">You haven't created any courses yet.</div>
             ) : (
                 <div>
-                    <div className="flex flex-col space-y-4 w-full">
+                    <div className="flex flex-col space-y-4 ">
                         {currentCourses.map((course: any) => (
                             <div
                                 key={course._id}
