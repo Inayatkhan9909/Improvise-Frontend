@@ -29,8 +29,6 @@ if(!courses){
   return (
     <div className="w-full p-6 bg-gray-100">
       <h1 className="text-4xl font-bold text-center text-blue-700 mb-6">All Courses</h1>
-
-
       {/* Courses Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {courses.map((course:any) => (

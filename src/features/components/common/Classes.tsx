@@ -28,7 +28,6 @@ export const Classes = () => {
   };
 
   useEffect(() => {
-    console.log(ApiUrl)
     fetchClasses();
   }, []);
 

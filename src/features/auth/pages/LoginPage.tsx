@@ -3,8 +3,7 @@ import Login from '../components/Login';
 
 const LoginPage: React.FC = () => {
   return (
-    <div>
-      
+    <div className='p-8'>
       <Login />
     </div>
   );

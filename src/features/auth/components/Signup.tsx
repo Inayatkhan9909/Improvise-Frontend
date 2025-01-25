@@ -94,10 +94,6 @@ const Signup: React.FC = () => {
         return Object.values(tempErrors).every((x) => x === '');
     };
 
-    const handleGoogleSignIn = ()=>{
-
-    }
-
     return (
         <Box
             component="form"
@@ -246,18 +242,7 @@ const Signup: React.FC = () => {
                             Sign In
                         </Button>
                     </Typography>
-                </Grid2>
-                <Grid2 size={{xs:12}} sx={{ textAlign: 'center', mt: 2 }}>
-                    <Button
-                        variant="outlined"
-                        color="secondary"
-                        onClick={handleGoogleSignIn}
-                        fullWidth
-                    >
-                        Sign Up with Google
-                    </Button>
-                </Grid2>
-            
+                </Grid2>         
                 
             </Grid2>
             <Snackbar

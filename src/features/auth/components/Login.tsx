@@ -43,8 +43,13 @@ const Login: React.FC = () => {
 
         try {
             const response = await login(formData.email, formData.password);
+            console.log(response);
             if (response.status===200) {
-                navigate('/');
+                console.log("home")
+                navigate("/");
+            }
+            else{
+                setErrorMessage("login failed. Try Agian");
             }
         } catch (err: any) {
             setErrorMessage(err.message);
@@ -55,18 +60,9 @@ const Login: React.FC = () => {
         navigate('/forgot-password');
     };
 
-    const handleGoogleLogin = async () => {
-        try {
-
-            console.log('Logging in with Google...');
-            navigate('/');
-        } catch (err: any) {
-            setErrorMessage(err.message);
-        }
-    };
 
     const handleSignupRedirect = () => {
-        navigate('/signup'); // Redirect to the signup page
+        navigate('/signup'); 
     };
 
     return (
@@ -136,15 +132,7 @@ const Login: React.FC = () => {
                 Forgot Password?
             </Button>
             <Divider sx={{ my: 2 }}>or</Divider>
-            <Button
-                onClick={handleGoogleLogin}
-                variant="outlined"
-                color="primary"
-                fullWidth
-                startIcon={<Google />}
-            >
-                Login with Google
-            </Button>
+
             <Typography variant="body2" align="center" sx={{ mt: 2 }}>
                 Don't have an account?{' '}
                 <Button variant="text" onClick={handleSignupRedirect} color="primary">

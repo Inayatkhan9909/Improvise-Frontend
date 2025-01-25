@@ -3,16 +3,21 @@ import { UserContext } from '../Context/user/userContext';
 import { Outlet, useNavigate } from 'react-router-dom';
 
 const AuthRoutes = () => {
-    const { user } = useContext(UserContext);
+    const { user } = useContext(UserContext); 
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user) {
-            navigate('/unauthorized');
+        const restrictedPaths = ["/signup", "/login"];
+        const currentPath = window.location.pathname;
+
+        if (user && restrictedPaths.includes(currentPath)) {
+            console.log(currentPath);
+            navigate(`/alredyloggedin${currentPath}`);
         }
     }, [user, navigate]); 
 
-    return !user ? <Outlet /> : null;
-}
+    return !user ? <Outlet /> : null; 
+};
+
 
 export default AuthRoutes;

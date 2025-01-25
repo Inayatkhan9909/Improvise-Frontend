@@ -11,6 +11,8 @@ import { HomePage } from './features/pages/HomePage.tsx';
 import { ProfilePage } from './features/pages/ProfilePage.tsx';
 import { CreateClassPage } from './features/instructor/pages/CreateClassPage.tsx';
 import { Unauthorized } from './features/pages/Unauthorized.tsx';
+import { AlredyLoggedIn } from './features/pages/AlreadyLoggedIn.tsx';
+import { PageNotFound } from './features/pages/PageNotFound.tsx';
 import { CoursesPage } from './features/pages/CoursesPage.tsx'
 import { AboutUs } from './features/pages/AboutUs.tsx'
 import AuthRoutes from './features/routes/AuthRoutes.tsx';
@@ -21,31 +23,33 @@ function App() {
   return (
     <div className="App">
       <UserContextProvider>
-         <ClassContextProvider>
-         <CourseContextProvider>
-        <Router>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/about" element={<AboutUs />} />
+        <ClassContextProvider>
+          <CourseContextProvider>
+            <Router>
+              <Navbar />
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/courses" element={<CoursesPage />} />
+                <Route path="/about" element={<AboutUs />} />
 
-            <Route element={<AuthRoutes />}>
-              <Route path="/signup" element={<SignupPage />} />
-              <Route path="/login" element={<LoginPage />} />
-            </Route>
+                <Route element={<AuthRoutes />}>
+                  <Route path="/signup" element={<SignupPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                </Route>
 
-            <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/profile" element={<ProfilePage />} />
 
-            <Route element={<InstructorRoutes />}>
-              <Route path="/createclass" element={<CreateClassPage />} />
-            </Route>
+                <Route element={<InstructorRoutes />}>
+                  <Route path="/createclass" element={<CreateClassPage />} />
+                </Route>
 
-            <Route path="/unauthorized" element={<Unauthorized />} />
-          </Routes>
-          <Footer />
-        </Router>
-        </CourseContextProvider>
+                <Route path="/unauthorized" element={<Unauthorized />} />
+                <Route path="/alredyloggedin/:currentPath" element={<AlredyLoggedIn />} />
+                <Route path="*" element={<PageNotFound/>} />
+              </Routes>
+              <Footer />
+            </Router>
+          </CourseContextProvider>
         </ClassContextProvider>
       </UserContextProvider>
     </div>

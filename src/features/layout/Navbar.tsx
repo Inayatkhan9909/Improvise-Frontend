@@ -12,7 +12,7 @@ const Navbar: React.FC = () => {
 
     const handleLogout = async () => {
         await logout();
-        setMobileMenuOpen(false); // Close menu on logout
+        setMobileMenuOpen(false); 
         navigate('/login');
     };
 
@@ -54,8 +54,8 @@ const Navbar: React.FC = () => {
                     {user ? (
                         <>
                             <li
-                                className="cursor-pointer hover:text-yellow-400"
-                                onClick={() => navigate('/profile')}
+                              className="cursor-pointer hover:text-yellow-400"
+                               onClick={() => navigate('/profile')}
                             >
                                 Profile
                             </li>
@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
                                 Login
                             </li>
                             <li
-                                className="cursor-pointer hover:text-yellow-400 bg-blue-400 rounded-full p-2"
+                                className="cursor-pointer hover:text-blue-600 bg-blue-400 rounded-full p-2 px-4"
                                 onClick={() => navigate('/signup')}
                             >
                                 Join us

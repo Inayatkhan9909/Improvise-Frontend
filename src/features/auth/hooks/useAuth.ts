@@ -49,7 +49,7 @@ export const useAuth = () => {
             const response = await axios.post(`${ApiUrl}/auth/login`, { token });
             setLoading(false);
             setUser(response.data.user);
-            return response.data;
+            return response;
         } catch (err: any) {
             setError(err.message || 'Login failed');
             setLoading(false);
@@ -60,7 +60,6 @@ export const useAuth = () => {
     const logout = async () => {
         setLoading(true);
         localStorage.setItem('activeComponent', 'Dashboard');
-         await auth.signOut();
         setUser(null);
         setLoading(false);
     };
