@@ -3,28 +3,23 @@ import React, { useContext, useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { BookClass } from "../../classes/components/BookClass";
 import { ClassContext } from "../../Context/class/ClassContext";
-
 const ApiUrl = process.env.REACT_APP_BACKEND_API_URL;
 
 export const Classes = () => {
-  const { classes, setClasses } = useContext(ClassContext);
+  const {classes, setClasses} = useContext(ClassContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalClasses, setTotalClasses] = useState(0); // Track total number of posts
   const [loading, setLoading] = useState(false);
   const [bookClassModal, setBookClassModal] = useState(false);
   const [selectedClass, setSelectedClass] = useState(null);
   const itemsPerPage = 4;
 
-  // Fetch classes with pagination
-  const fetchClasses = async (page = 1) => {
+  const fetchClasses = async () => {
     try {
       setLoading(true);
       const response = await axios.get(
-        `${ApiUrl}/classes/getallclasses?page=${page}&limit=${itemsPerPage}`
+        `${ApiUrl}/classes/getallclasses`
       );
-      const newClasses = response?.data?.classes || [];
-      setClasses((prevClasses: any) => [...prevClasses, ...newClasses]);
-      setTotalClasses(response?.data?.totalClasses || 0);
+      setClasses(response?.data?.classes || []);
       setLoading(false);
     } catch (error) {
       console.error(error);
@@ -33,16 +28,20 @@ export const Classes = () => {
   };
 
   useEffect(() => {
-    fetchClasses(); // Load first page on component mount
+    console.log(ApiUrl)
+    fetchClasses();
   }, []);
 
-  const totalPages = Math.ceil(totalClasses / itemsPerPage); // Calculate total pages
+  const totalPages = Math.ceil(classes.length / itemsPerPage);
+
+  const currentClasses = classes.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      const nextPage = currentPage + 1;
-      setCurrentPage(nextPage);
-      fetchClasses(nextPage); // Fetch next page
+      setCurrentPage(currentPage + 1);
     }
   };
 
@@ -52,12 +51,12 @@ export const Classes = () => {
     }
   };
 
-  const handleBookClass = (cls: any) => {
+  const handleBookClass = (cls:any) => {
     setSelectedClass(cls);
     setBookClassModal(true);
   };
 
-  if (loading && currentPage === 1) {
+  if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <p className="text-xl font-semibold">Loading...</p>
@@ -65,12 +64,13 @@ export const Classes = () => {
     );
   }
 
+
   return (
     <>
       <div className="w-full flex flex-col gap-6 p-6 bg-gray-50">
-        {classes.map((cls: any, index: number) => (
+        {currentClasses.map((cls:any) => (
           <div
-            key={index}
+            key={cls._id}
             className="border border-gray-300 rounded-lg shadow-lg flex flex-col lg:flex-row gap-4 p-4 bg-white"
           >
             <div className="lg:w-2/6 w-full">
@@ -131,10 +131,11 @@ export const Classes = () => {
           <button
             onClick={handlePrevPage}
             disabled={currentPage === 1}
-            className={`py-2 px-4 rounded-lg font-semibold ${currentPage === 1
+            className={`py-2 px-4 rounded-lg font-semibold ${
+              currentPage === 1
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
+            }`}
           >
             Previous
           </button>
@@ -144,10 +145,11 @@ export const Classes = () => {
           <button
             onClick={handleNextPage}
             disabled={currentPage === totalPages}
-            className={`py-2 px-4 rounded-lg font-semibold ${currentPage === totalPages
+            className={`py-2 px-4 rounded-lg font-semibold ${
+              currentPage === totalPages
                 ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                 : "bg-blue-500 hover:bg-blue-600 text-white"
-              }`}
+            }`}
           >
             Next
           </button>

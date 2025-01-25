@@ -42,7 +42,7 @@ export const AsideCourses = () => {
 
   const handlePrev = () => {
     setCurrentIndex((prevIndex) =>
-     courses && prevIndex === 0 ? courses.length - 1 : prevIndex - 1
+      courses && prevIndex === 0 ? courses.length - 1 : prevIndex - 1
     );
   };
 
@@ -50,13 +50,13 @@ export const AsideCourses = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % courses.length);
   };
 
- if(!courses){
-  return (
-    <div className="flex justify-center items-center h-screen">
-      <p className="text-xl font-semibold">Loading...</p>
-    </div>
-  );
- }
+  if (!courses) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-xl font-semibold">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex  justify-center w-full px-4 py-4 sm:py-8 sm:px-6 ">
