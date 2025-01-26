@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import {CancelUserCourseBooking} from "./CancelUserCourseBooking";
+import { CancelUserCourseBooking } from "./CancelUserCourseBooking";
+import { RxCross2 } from 'react-icons/rx';
 
 export const UserBookedCourseDetails = ({
   courseDetails,
@@ -16,27 +17,28 @@ export const UserBookedCourseDetails = ({
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
           >
-            &times;
+            <RxCross2 />
           </button>
 
           <img
             src={courseDetails.thumbnail}
             alt={courseDetails.title}
-            className="w-full h-48 object-cover rounded-md mb-4"
+            className="w-full h-48 object-cover rounded-md my-4"
           />
 
-          <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
-            {courseDetails.title}
-          </h2>
+          <div className="flex justify-between items-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
+              {courseDetails.title}
+            </h2>
+            <p className="text-sm bg-blue-100 text-blue-600 py-1 px-3 rounded-full">
+              {courseDetails.category}
+            </p>
+          </div>
 
           <div className="text-gray-700 space-y-2 grid grid-cols-2">
             <p>
               <span className="font-medium">Description:</span>{" "}
               {courseDetails.description}
-            </p>
-            <p>
-              <span className="font-medium">Category:</span>{" "}
-              {courseDetails.category}
             </p>
             <p>
               <span className="font-medium">Level:</span> {courseDetails.level}
@@ -94,9 +96,9 @@ export const UserBookedCourseDetails = ({
       {/* Delete Confirmation Modal */}
       {CancelBookingModal && (
         <CancelUserCourseBooking
-        courseId={courseDetails._id}
-        courseTitle={courseDetails.title}
-        onClose={() => setCancelBookingModal(false)}
+          courseId={courseDetails._id}
+          courseTitle={courseDetails.title}
+          onClose={() => setCancelBookingModal(false)}
         />
       )}
     </>

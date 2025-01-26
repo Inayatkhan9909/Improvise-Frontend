@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import {EditClass} from "./EditClass";
-import {DeleteClass} from "./DeleteClass";
+import { EditClass } from "./EditClass";
+import { DeleteClass } from "./DeleteClass";
+import { RxCross2 } from 'react-icons/rx';
 
 export const InstructorClassDetails = ({
   classDetails,
@@ -21,28 +22,31 @@ export const InstructorClassDetails = ({
             onClick={onClose}
             className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
           >
-            &times;
+            <RxCross2 />
           </button>
 
           <img
             src={classDetails.thumbnail}
             alt={classDetails.title}
-            className="w-full h-48 object-cover rounded-md mb-4"
+            className="w-full h-48 object-cover rounded-md my-4"
           />
 
+          <div className="flex justify-between items-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">
             {classDetails.title}
           </h2>
-
-          <div className="text-gray-700 space-y-2 grid grid-cols-2">
-            <p>
-              <span className="font-medium">Description:</span>{" "}
-              {classDetails.description}
-            </p>
-            <p>
-              <span className="font-medium">Category:</span>{" "}
+            <p className="text-sm bg-blue-100 text-blue-600 py-1 px-3 rounded-full">
               {classDetails.category}
             </p>
+          </div>
+
+
+          <p>
+            <span className="font-medium mb-2">Description:</span>{" "}
+            {classDetails.description}
+          </p>
+
+          <div className="text-gray-700 space-y-2 grid grid-cols-2">
             <p>
               <span className="font-medium">Level:</span> {classDetails.level}
             </p>
@@ -115,12 +119,12 @@ export const InstructorClassDetails = ({
       {/* Delete Confirmation Modal */}
       {isDeleteModalOpen && (
         <DeleteClass
-        classId={classDetails._id}
-        classTitle={classDetails.title}
-        onClose={() => setDeleteModalOpen(false)}
-        onConfirm={() => {
-          onDelete(classDetails._id); 
-        }}
+          classId={classDetails._id}
+          classTitle={classDetails.title}
+          onClose={() => setDeleteModalOpen(false)}
+          onConfirm={() => {
+            onDelete(classDetails._id);
+          }}
         />
       )}
     </>

@@ -84,7 +84,7 @@ export const Classes = () => {
               <div className="flex justify-between items-center">
                 <h3 className="text-xl font-bold text-gray-800">{cls.title}</h3>
                 <span className="text-sm bg-blue-100 text-blue-600 py-1 px-3 rounded-full">
-                  Category: {cls.category}
+                  {cls.category}
                 </span>
               </div>
 

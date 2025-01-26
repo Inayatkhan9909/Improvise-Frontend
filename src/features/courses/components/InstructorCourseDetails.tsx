@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { EditCourse } from "./EditCourse";
 import { DeleteCourse } from "./DeleteCourse";
+import { RxCross2 } from 'react-icons/rx';
 
 export const InstructorCourseDetails = ({ courseDetails, onClose }: any) => {
 
@@ -16,18 +17,20 @@ export const InstructorCourseDetails = ({ courseDetails, onClose }: any) => {
                         onClick={onClose}
                         className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"
                     >
-                        &times;
+                        <RxCross2 />
                     </button>
-
                     <img
                         src={courseDetails.thumbnail}
                         alt={courseDetails.title}
-                        className="w-full h-48 object-cover rounded-md mb-4"
+                        className="w-full h-48 object-cover rounded-md my-4"
                     />
-                    <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">{courseDetails.title}</h2>
+                    <div className="flex justify-between items-center">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">{courseDetails.title}</h2>
+                        <p className="text-sm bg-blue-100 text-blue-600 py-1 px-3 rounded-full"> {courseDetails.category}</p>
+                    </div>
+                    <p><span className="font-medium">Description:</span> {courseDetails.description}</p>
                     <div className="text-gray-700 space-y-2 grid grid-cols-2">
-                        <p><span className="font-medium">Description:</span> {courseDetails.description}</p>
-                        <p><span className="font-medium">Category:</span> {courseDetails.category}</p>
+
                         <p><span className="font-medium">Level:</span> {courseDetails.level}</p>
                         <p><span className="font-medium">Date:</span> {new Date(courseDetails.date).toLocaleDateString()}</p>
                         <p><span className="font-medium">Timing:</span> {courseDetails.timing}</p>
