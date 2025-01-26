@@ -60,6 +60,7 @@ export const useAuth = () => {
     const logout = async () => {
         setLoading(true);
         localStorage.setItem('activeComponent', 'Dashboard');
+        localStorage.setItem("activeSection", 'details');
         setUser(null);
         setLoading(false);
     };
