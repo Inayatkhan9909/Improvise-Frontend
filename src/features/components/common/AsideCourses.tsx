@@ -15,8 +15,8 @@ interface Course {
 }
 
 export const AsideCourses = () => {
-  const [bookClassModal, setBookClassModal] = useState(false);
-  const [selectedClass, setSelectedClass] = useState<Course | null>(null);
+  const [bookCourseModal, setBookCourseModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const { courses, setCourses } = useContext(CourseContext);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -36,8 +36,8 @@ export const AsideCourses = () => {
   }, []);
 
   const handleBookClass = (course: Course) => {
-    setSelectedClass(course);
-    setBookClassModal(true);
+    setSelectedCourse(course);
+    setBookCourseModal(true);
   };
 
   const handlePrev = () => {
@@ -131,10 +131,10 @@ export const AsideCourses = () => {
         <SlArrowRight size={16} />
       </button>
 
-      {bookClassModal && (
+      {bookCourseModal && (
         <BookCourse
-          crs={selectedClass}
-          onClose={() => setBookClassModal(false)}
+          crs={selectedCourse}
+          onClose={() => setBookCourseModal(false)}
         />
       )}
     </div>
