@@ -39,8 +39,6 @@ export const InstructorClassDetails = ({
               {classDetails.category}
             </p>
           </div>
-
-
           <p>
             <span className="font-medium mb-2">Description:</span>{" "}
             {classDetails.description}
