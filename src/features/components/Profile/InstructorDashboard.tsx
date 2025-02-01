@@ -48,11 +48,12 @@ export const InstructorDashboard = () => {
   }) => {
     try {
       const response = await addinstructorDetails(details)
-      if (response.status === 200) {
+      if(response.status === 200) {
         setSuccessMessage("Details updated successfully!");
         setUser(response?.data?.isUser);
         setResetData(true);
       } else {
+        console.log(response.status);
         setErrorMessage(response.data.message || "Error submitting details. Please try again.");
       }
     } catch (error) {
