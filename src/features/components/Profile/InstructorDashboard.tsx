@@ -53,7 +53,7 @@ export const InstructorDashboard = () => {
         setUser(response?.data?.isUser);
         setResetData(true);
       } else {
-        setErrorMessage("Error submitting details. Please try again.");
+        setErrorMessage(response.data.message || "Error submitting details. Please try again.");
       }
     } catch (error) {
       setErrorMessage("Error submitting details. Please try again.")
