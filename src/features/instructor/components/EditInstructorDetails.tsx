@@ -106,7 +106,7 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
         setUser(response?.data?.isUser);
 
       } else {
-        alert("Error submitting details. Please try again.");
+        alert(response.data.message);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
