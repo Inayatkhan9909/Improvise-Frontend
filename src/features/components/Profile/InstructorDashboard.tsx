@@ -49,7 +49,7 @@ export const InstructorDashboard = () => {
     try {
       const response = await addinstructorDetails(details)
       if (response.status === 200) {
-        setSuccessMessage("Details submitted successfully! Waiting for admin approval.");
+        setSuccessMessage("Details updated successfully!");
         setUser(response?.data?.isUser);
         setResetData(true);
       } else {
