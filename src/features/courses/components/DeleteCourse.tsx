@@ -17,7 +17,7 @@ export const DeleteCourse = ({
   const handleDelete = async () => {
     try {
       const response = await deleteCourse(courseId);
-      if (response.status === 200) {
+      if (response.status === 201) {
         setSuccessMessage("Class successfully deleted!");
         setTimeout(() => {
           onClose(); 
