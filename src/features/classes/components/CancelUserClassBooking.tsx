@@ -20,7 +20,7 @@ export const CancelUserClassBooking = ({
     try {
       const response = await cancelBookedClass(classId);
     
-      if (response.status === 200) {
+      if (response.status === 201) {
         setSuccessMessage("Class successfully deleted!");
         setTimeout(() => {
           
