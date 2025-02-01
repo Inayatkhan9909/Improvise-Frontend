@@ -34,7 +34,7 @@ export const EditUserEmail = ({ onClose }: any) => {
 
         try {
             const response = await editUserEmail(oldEmail,newEmail);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setUser(response?.data?.user)
                 setSuccess('Email updated successfully! Please verify the new email.');
             } else {
