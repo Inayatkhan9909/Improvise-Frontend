@@ -104,7 +104,7 @@ export const EditCourse = ({ courseDetails, onClose }: any) => {
             if (!thumbnailUrl) return;
             const updatedFormData = { ...formData, thumbnail: thumbnailUrl };
             const response = await updateCourse(courseDetails._id, updatedFormData);
-            if (response?.status === 200) {
+            if (response?.status === 201) {
                 setSuccessMessage('Course updated successfully!');
                 onClose();
             } else {
