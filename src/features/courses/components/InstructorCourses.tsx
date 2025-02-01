@@ -16,7 +16,7 @@ export const InstructorCourses = () => {
     const fetchCourses = async (token: string) => {
         try {
             const response = await fetchInstructorCourses(token);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 console.log(response)
                 setInstructorCourses(response.data.courses);
             }
