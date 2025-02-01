@@ -17,7 +17,7 @@ export const UserBookedClasses = () => {
 
         try {
             const response = await fetchUserClasses(token);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setClasses(response.data.classes);
             }
         } catch (err) {
