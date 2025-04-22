@@ -53,7 +53,7 @@ export const AsideCourses = () => {
   if (!courses || courses.length < 1) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-xl font-semibold">Loading...</p>
+        <p className="text-xl font-semibold"></p>
       </div>
     );
   }
