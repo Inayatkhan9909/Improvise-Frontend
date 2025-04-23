@@ -17,7 +17,6 @@ export const InstructorCourses = () => {
         try {
             const response = await fetchInstructorCourses(token);
             if (response.status === 201) {
-                console.log(response)
                 setInstructorCourses(response.data.courses);
             }
         } catch (err) {
