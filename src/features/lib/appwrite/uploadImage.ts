@@ -1,5 +1,5 @@
 import { appwriteConfig, storage } from "./config"
-import { ID, ImageGravity } from "appwrite"
+import { ID} from "appwrite"
 
 
 export async function uploadFile(file: File) {
@@ -20,13 +20,9 @@ export async function uploadFile(file: File) {
 
 export function getFilePreview(fileId: any) {
     try {
-        const fileUrl = storage.getFilePreview(
+               const fileUrl = storage.getFileView(
             appwriteConfig.storageId,
-            fileId,
-            2000,
-            2000,
-            ImageGravity.Top,
-            100
+            fileId
         )
         if (!fileUrl) throw Error
 
