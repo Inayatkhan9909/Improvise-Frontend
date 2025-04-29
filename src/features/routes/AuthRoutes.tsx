@@ -11,7 +11,6 @@ const AuthRoutes = () => {
         const currentPath = window.location.pathname;
 
         if (user && restrictedPaths.includes(currentPath)) {
-            console.log(currentPath);
             navigate(`/alredyloggedin${currentPath}`);
         }
     }, [user, navigate]); 

@@ -43,9 +43,7 @@ const Login: React.FC = () => {
 
         try {
             const response = await login(formData.email, formData.password);
-            console.log(response);
-            if (response.status===201) {
-                console.log("home")
+            if (response.status===200) {
                 navigate("/");
             }
             else{
