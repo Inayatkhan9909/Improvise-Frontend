@@ -58,7 +58,7 @@ export const useCourseAuth = () => {
     const deleteCourse = async (courseId: string) => {
         try {
             if (!courseId ) {
-                throw new Error('Invalid input data for delete class.');
+                throw new Error('Invalid input data for delete course.');
             }
             const token = await auth.currentUser?.getIdToken(true);
             const response = await axios.delete(`${ApiUrl}/delete-course/${courseId}`, {

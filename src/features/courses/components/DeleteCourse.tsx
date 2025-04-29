@@ -18,15 +18,16 @@ export const DeleteCourse = ({
     try {
       const response = await deleteCourse(courseId);
       if (response.status === 200) {
-        setSuccessMessage("Class successfully deleted!");
+        setSuccessMessage("Course successfully deleted!");
         setTimeout(() => {
           onClose(); 
         }, 2000);
       } else {
-        setErrorMessage("Failed to delete the class.");
+        console.log(response)
+        setErrorMessage("Failed to delete the course.");
       }
     } catch (error) {
-      console.error("Error deleting class:", error);
+      console.error("Error deleting course:", error);
       setErrorMessage("An error occurred. Please try again.");
     }
   };

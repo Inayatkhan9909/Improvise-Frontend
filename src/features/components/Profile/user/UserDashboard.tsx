@@ -21,7 +21,6 @@ export const UserDashboard = () => {
     const toggleOptions = () => setShowOptions(!showOptions);
     const openDeleteModal = () => setShowDeleteModal(true);
     const closeDeleteModal = () => setShowDeleteModal(false);
-
     const handleDeleteAccount = async () => {
 
         try {
