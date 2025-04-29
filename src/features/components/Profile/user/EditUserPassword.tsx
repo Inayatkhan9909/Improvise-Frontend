@@ -42,7 +42,7 @@ export const EditUserPassword = ({ onClose }: any) => {
 
         try {
             const response = await editUserPassword(oldPassword, newPassword);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setSuccess('Password updated successfully!');
                 setTimeout(() => {
                     onClose();

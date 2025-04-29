@@ -104,7 +104,7 @@ export const EditClass = ({ classDetails, onClose }: any) => {
             const updatedFormData = { ...formData, thumbnail: thumbnailUrl };
 
             const response = await updateClass(classDetails._id, updatedFormData);
-            if (response?.status === 200) {
+            if (response?.status === 201) {
                 setSuccessMessage('Class updated successfully!');
                 onClose();
             } else {

@@ -34,7 +34,7 @@ export const InstructorClasses = () => {
     const handleDelete = async (classId: any) => {
         try {
             const response = await deleteInstructorClasses(classId);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setSelectedClass("Class deleted successfully!");
                 setSelectedClass(null);
             }

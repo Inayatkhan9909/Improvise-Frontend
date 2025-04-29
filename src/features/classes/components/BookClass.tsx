@@ -14,7 +14,7 @@ export const BookClass = ({ cls, onClose }: any) => {
   const handleConfirm = async () => {
     try {
       const response = await bookClass({ classId: cls._id });
-      if(response.status === 200){
+      if(response.status === 201){
         setSuccessMessage("Class booked successfully!");
         setTimeout(() => {
           onClose();

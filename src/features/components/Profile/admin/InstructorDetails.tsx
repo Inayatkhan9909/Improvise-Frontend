@@ -24,7 +24,7 @@ const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClo
                 }
             );
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 alert(`Instructor has been ${approve ? "approved" : "rejected"}`);
                 onClose();
             }
@@ -45,7 +45,7 @@ const InstructorDetails: React.FC<InstructorDetailsProps> = ({ instructor, onClo
                 }
             );
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 alert("Instructor has been removed successfully.");
                 onClose();
             }

@@ -48,12 +48,13 @@ export const InstructorDashboard = () => {
   }) => {
     try {
       const response = await addinstructorDetails(details)
-      if (response.status === 200) {
-        setSuccessMessage("Details submitted successfully! Waiting for admin approval.");
+      if(response.status === 201) {
+        setSuccessMessage("Details updated successfully!");
         setUser(response?.data?.isUser);
         setResetData(true);
       } else {
-        setErrorMessage("Error submitting details. Please try again.");
+        console.log(response.status);
+        setErrorMessage(response.data.message || "Error submitting details. Please try again.");
       }
     } catch (error) {
       setErrorMessage("Error submitting details. Please try again.")

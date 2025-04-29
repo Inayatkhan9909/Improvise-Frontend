@@ -17,7 +17,7 @@ export const CancelUserCourseBooking = ({
   const handleDelete = async () => {
     try {
       const response = await cancelBookedCourse(courseId); 
-      if (response.status === 200) {
+      if (response.status === 201) {
         setSuccessMessage("Course successfully deleted!");
         setTimeout(() => {
           onClose(); 

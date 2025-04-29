@@ -13,7 +13,7 @@ export const BookCourse = ({ crs, onClose }: any) => {
   const handleConfirm = async () => {
     try {
       const response = await bookCourse({ courseId: crs._id })
-      if (response.status === 200) {
+      if (response.status === 201) {
         setSuccessMessage("Course booked successfully!");
         setTimeout(() => {
           onClose();

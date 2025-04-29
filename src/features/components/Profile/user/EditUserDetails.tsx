@@ -66,7 +66,7 @@ export const EditUserDetails = ({ onClose }: any) => {
 
         try {
             const response = await editUserDetails(formData);
-            if (response.status === 200) {
+            if (response.status === 201) {
                 setSuccessMessage('Profile updated successfully!');
                 setErrorMessage(null);
                 setUser(response.data.user);

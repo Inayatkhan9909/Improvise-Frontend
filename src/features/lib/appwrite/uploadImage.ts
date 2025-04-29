@@ -1,7 +1,6 @@
 import { appwriteConfig, storage } from "./config"
 import { ID } from "appwrite"
 
-
 export async function uploadFile(file: File) {
 
     try {
@@ -20,7 +19,8 @@ export async function uploadFile(file: File) {
 
 export function getFilePreview(fileId: any) {
     try {
-        const fileUrl = storage.getFileView(
+               const fileUrl = storage.getFileView(
+
             appwriteConfig.storageId,
             fileId
         )

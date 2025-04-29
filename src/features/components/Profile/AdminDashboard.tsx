@@ -16,7 +16,7 @@ export const AdminDashboard: React.FC = () => {
   const fetchInstructors = async (token: string) => {
     try {
       const response = await getallInstructors(token);
-      if (response.status === 200) {
+      if (response.status === 201) {
         const instructors = response.data;
         setApprovedInstructors(
           instructors.filter((instructor: any) => instructor.roleDetails.instructor?.approvedByAdmin)

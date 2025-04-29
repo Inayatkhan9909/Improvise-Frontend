@@ -100,13 +100,13 @@ export const EditInstructorDetails: React.FC<EditInstructorDetailsProps> = ({
     const updatedDetails = { ...formData, resume: resumeUrl };
     try {
       const response = await updateinstructorDetails(updatedDetails);
-      if (response.status === 200) {
+      if (response.status === 201) {
 
         alert("Details submitted successfully! Waiting for admin approval.");
         setUser(response?.data?.isUser);
 
       } else {
-        alert("Error submitting details. Please try again.");
+        alert(response.data.message);
       }
     } catch (error) {
       console.error("Error submitting form:", error);
